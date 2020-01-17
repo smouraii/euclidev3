@@ -15,7 +15,7 @@ export default function AuthPage() {
               id="kt_login"
               className="kt-grid kt-grid--hor kt-grid--root kt-login kt-login--v1"
           >
-            <div className="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--desktop kt-grid--ver-desktop kt-grid--hor-tablet-and-mobile">
+            <div className="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--desktop kt-grid--ver-desktop kt-grid--hor-tablet-and-mobile" style={{flexDirection:"row-reverse"}}>
               <div
                   className="kt-grid__item kt-grid__item--order-tablet-and-mobile-2 kt-grid kt-grid--hor kt-login__aside"
                   style={{
