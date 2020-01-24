@@ -14,12 +14,12 @@ export default {
         root: true,
         alignment: "left",
         toggle: "click",
-        page: "google-material",
+        page: "lims",
         submenu: [
           {
             title: "New Request",
             bullet: "dot",
-            page: "google-material/layout",
+            page: "newrequest",
            /* submenu: [
               {
                 title: "Box",
@@ -49,9 +49,9 @@ export default {
             ] */
           },
           {
-            title: "Inputs",
+            title: "Folder List",
             bullet: "dot",
-            page: "google-material/inputs/autocomplete",
+            page: "folderlist",
           /*  submenu: [
               {
                 title: "Autocomplete",
@@ -298,7 +298,7 @@ export default {
         root: true,
         alignment: "left",
         toggle: "click",
-        page: "react-bootstrap",
+        page: "eFiles",
        /* submenu: {
           type: "mega",
           width: "800px",
@@ -1011,7 +1011,7 @@ export default {
         root: true,
         bullet: "line",
         icon: "flaticon2-browser-2",
-        page: "google-material",
+        page: "eFiles",
         submenu: [
           {
             title: "New Request",

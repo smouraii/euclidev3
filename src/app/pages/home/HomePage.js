@@ -4,6 +4,9 @@ import Builder from "./Builder";
 import Dashboard from "./Dashboard";
 import DocsPage from "./docs/DocsPage";
 import { LayoutSplashScreen } from "../../../_metronic";
+import FolderList from "./FolderList";
+import NewRequest from "./NewRequest";
+import Efiles from "./Efiles";
 
 const GoogleMaterialPage = lazy(() =>
   import("./google-material/GoogleMaterialPage")
@@ -25,6 +28,9 @@ export default function HomePage() {
         <Route path="/google-material" component={GoogleMaterialPage} />
         <Route path="/react-bootstrap" component={ReactBootstrapPage} />
         <Route path="/docs" component={DocsPage} />
+        <Route path="/folderlist" component={FolderList} />
+        <Route path="/newrequest" component={NewRequest}/>
+        <Route path="/Efiles" component={Efiles}/>
         <Redirect to="/error/error-v1" />
       </Switch>
     </Suspense>

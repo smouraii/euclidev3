@@ -48,26 +48,30 @@ import UseMediaQueryExamplesPage from "./utils/UseMediaQueryExamplesPage";
 import SliderExamplesPage from "./labs/SliderExamplesPage";
 import SpeedDialExamplesPage from "./labs/SpeedDialExamplesPage";
 import ToggleButtonExamplesPage from "./labs/ToggleButtonExamplesPage";
+import FolderList from "../FolderList";
+import NewRequest from "../NewRequest";
 
 export default function GoogleMaterialPage() {
   return (
     <Switch>
       <Redirect
         exact={true}
-        from="/google-material"
-        to="/google-material/layout/box"
+        from="/lims"
+        to="/euclide/lims"
       />
 
       {/* Layout */}
-      <Route 
-        path="/google-material/layout/box" 
-        component={BoxExamplesPage} 
-      />
+
       <Route
         path="/google-material/layout/container"
         component={ContainerExamplesPage}
       />
-      <Route 
+       {/*Lims*/}
+       <Route 
+        path="folderlist" 
+        component={FolderList} 
+      />
+     {/* <Route 
         path="/google-material/layout/grid" 
         component={GridExamplesPage} 
       />
@@ -81,10 +85,12 @@ export default function GoogleMaterialPage() {
       />
 
       {/* Inputs */}
-      <Route 
+     
+     {/*  <Route 
         path="/google-material/inputs/autocomplete" 
         component={AutocompleteExamplesPage} 
-      />
+      />*/}
+     
       <Route
         path="/google-material/inputs/buttons"
         component={ButtonsExamplesPage}

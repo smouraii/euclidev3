@@ -17,6 +17,12 @@ import LatestUpdates from "../../widgets/LatestUpdates";
 import BestSellers from "../../widgets/BestSellers";
 import RecentActivities from "../../widgets/RecentActivities";
 import PortletHeaderDropdown from "../../partials/content/CustomDropdowns/PortletHeaderDropdown";
+import MyResponsivePie from "../../widgets/PieChart";
+import pieData from "./data/pieData.json";
+import MyResponsiveBar from "../../widgets/BarChart";
+import barData from "./data/barData.json";
+import Datatable from "../../widgets/Datatables"
+import datatableData from "./data/datatableData.json"
 
 export default function Dashboard() {
   const { brandColor, dangerColor, successColor, primaryColor } = useSelector(
@@ -71,7 +77,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <div className="row">
+  { /*   <div className="row">
         <div className="col-xl-6">
           <div className="row row-full-height">
             <div className="col-sm-12 col-md-12 col-lg-6">
@@ -131,7 +137,7 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-
+  
         <div className="col-xl-6">
           <Portlet fluidHeight={true}>
             <PortletHeader
@@ -149,22 +155,27 @@ export default function Dashboard() {
           </Portlet>
         </div>
       </div>
-
+  */}
       <Portlet>
         <PortletBody fit={true}>
-          <div className="row row-no-padding row-col-separator-xl">
-            <div className="col-xl-4">
-              <OrdersWidget />
-            </div>
-            <div className="col-xl-4">
+          <div className="row row-no-padding row-col-separator-x1">
+            <div className="col-xl-12">
+              <MyResponsiveBar 
+                title="Bar chart"
+                data={barData}
+                desc="this is a Bar chart"
+              />
+            </div> 
+            <div className="col-xl-12">
               <SalesBarChart
                 title="Daily Sales"
                 desc="Check out each column for more details"
               />
             </div>
-            <div className="col-xl-4">
-              <SalesBarChart
-                title="Revenue Change"
+           <div className="col-xl-12">
+              <MyResponsivePie
+                title="Revenue Change "
+                data={pieData}
                 desc="Revenue change breakdown by cities"
               />
             </div>
@@ -172,7 +183,7 @@ export default function Dashboard() {
         </PortletBody>
       </Portlet>
 
-      <div className="row">
+     {/* <div className="row">
         <div className="col-xl-4">
           <DownloadFiles />
         </div>
@@ -184,12 +195,12 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* <div className="row">
+       <div className="row">
         <div className="col-xl-8"></div>
         <div className="col-xl-4">
           <AuthorsProfit />
         </div>
-      </div> */}
+      </div> 
 
       <div className="row">
         <div className="col-xl-8">
@@ -199,6 +210,7 @@ export default function Dashboard() {
           <RecentActivities />
         </div>
       </div>
+     */}
     </>
   );
 }

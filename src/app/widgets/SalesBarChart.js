@@ -84,7 +84,7 @@ export default function SalesBarChart({ title, desc }) {
         <h3 className="kt-widget14__title">{title}</h3>
         <span className="kt-widget14__desc">{desc}</span>
       </div>
-      <div className="kt-widget14__chart" style={{ height: "120px" }}>
+      <div className="kt-widget14__chart" style={{ height: "500px" }}>
         <canvas ref={ref} />
       </div>
     </div>

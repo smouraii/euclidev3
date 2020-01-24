@@ -4,3 +4,11 @@
 
 // Theme Styles
 @import "./_metronic/_assets/sass/style.react.scss";
+
+.inputContainer {
+  margin: 30px 0;
+}
+
+.errorContainer {
+  color: red;
+}

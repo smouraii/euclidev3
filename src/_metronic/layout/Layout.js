@@ -106,6 +106,7 @@ function Layout({
       <StickyToolbar />
     </LayoutInitializer>
   ) : (
+
     // BLANK LAYOUT
     <div className="kt-grid kt-grid--ver kt-grid--root kt-page">
       <KtContent>{children}</KtContent>
