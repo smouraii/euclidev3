@@ -51,6 +51,7 @@ class StepsComp extends React.Component {
                       onBlur={handleBlur}
                       onChange={handleChange}
                       value={values.RequestNum}
+                      placeholder="RequestNum"
                     />
                     {!touched.RequestNum && !errors.RequestNum && (
                       <span className="errorContainer">
@@ -64,6 +65,7 @@ class StepsComp extends React.Component {
                       onBlur={handleBlur}
                       onChange={handleChange}
                       value={values.Object}
+                      placeholder="Object"
                     />
                     {!touched.Object && !errors.Object && (
                       <span className="errorContainer">{errors.Object}</span>
@@ -76,6 +78,7 @@ class StepsComp extends React.Component {
                       onBlur={handleBlur}
                       onChange={handleChange}
                       value={values.CustomerCode}
+                      placeholder="CustomerCode"
                     />
                     {!touched.CustomerCode && !errors.CustomerCode && (
                       <span className="errorContainer">
@@ -90,6 +93,7 @@ class StepsComp extends React.Component {
                       onBlur={handleBlur}
                       onChange={handleChange}
                       value={values.Status}
+                      placeholder="Status"
                     />
                     {!touched.Status && !errors.Status && (
                       <span className="errorContainer">{errors.Status}</span>
@@ -102,6 +106,7 @@ class StepsComp extends React.Component {
                       onBlur={handleBlur}
                       onChange={handleChange}
                       value={values.RequestDate}
+                      placeholder="RequestDate"
                     />
                     {!touched.RequestDate && !errors.RequestDate && (
                       <span className="errorContainer">
@@ -115,6 +120,7 @@ class StepsComp extends React.Component {
                       onBlur={handleBlur}
                       onChange={handleChange}
                       value={values.Created}
+                      placeholder="Created"
                     />
                     {!touched.Created && !errors.Created && (
                       <span className="errorContainer">{errors.Created}</span>
@@ -169,6 +175,7 @@ class StepsComp extends React.Component {
                       onBlur={handleBlur}
                       onChange={handleChange}
                       value={values.Description}
+                      placeholder="Description"
                     />
                     {!touched.Description && !errors.Description && (
                       <span className="errorContainer">
@@ -183,6 +190,7 @@ class StepsComp extends React.Component {
                       onBlur={handleBlur}
                       onChange={handleChange}
                       value={values.Types}
+                      placeholder="Types"
                     />
                     {!touched.Types && !errors.Types && (
                       <span className="errorContainer">{errors.Types}</span>
@@ -195,6 +203,7 @@ class StepsComp extends React.Component {
                       onBlur={handleBlur}
                       onChange={handleChange}
                       value={values.Products}
+                      placeholder="Products"
                     />
                     {!touched.Products && !errors.Products && (
                       <span className="errorContainer">{errors.Products}</span>
@@ -207,6 +216,7 @@ class StepsComp extends React.Component {
                       onBlur={handleBlur}
                       onChange={handleChange}
                       value={values.Analysis}
+                      placeholder="Analysis"
                     />
                     {!touched.Analysis && !errors.Analysis && (
                       <span className="errorContainer">{errors.Analysis}</span>
@@ -219,6 +229,7 @@ class StepsComp extends React.Component {
                       onBlur={handleBlur}
                       onChange={handleChange}
                       value={values.Comments}
+                      placeholder="Comments"
                     />
                     {!touched.Comments && !errors.Comments && (
                       <span className="errorContainer">{errors.Comments}</span>

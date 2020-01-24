@@ -26,10 +26,10 @@ export default function HomePage() {
         <Route path="/builder" component={Builder} />
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/google-material" component={GoogleMaterialPage} />
-        <Route path="/react-bootstrap" component={ReactBootstrapPage} />
+        <Route path="/newrequest" component={ReactBootstrapPage} />
         <Route path="/docs" component={DocsPage} />
         <Route path="/folderlist" component={FolderList} />
-        <Route path="/newrequest" component={NewRequest}/>
+        {/* <Route path="/newrequest" component={NewRequest}/> */}
         <Route path="/Efiles" component={Efiles}/>
         <Redirect to="/error/error-v1" />
       </Switch>
