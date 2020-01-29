@@ -12,3 +12,19 @@
 .errorContainer {
   color: red;
 }
+
+.stepcustom  {
+  > div > div > div {
+
+    font-size: 25px; 
+    margin-bottom: 10px;
+    color: white !important;
+   }
+   > div > div > div ::after{
+
+    font-size: 35px !important; 
+    margin-bottom: 10px;
+    color:black !important;
+   }
+
+}

@@ -1,11 +1,8 @@
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
-import BoxExamplesPage from "./layout/BoxExamplesPage";
+
 import ContainerExamplesPage from "./layout/ContainerExamplesPage";
-import GridExamplesPage from "./layout/GridExamplesPage";
-import GridListExamplesPage from "./layout/GridListExamplesPage";
-import HiddenExamplesPage from "./layout/HiddenExamplesPage";
-import AutocompleteExamplesPage from "./inputs/AutocompleteExamplesPage";
+
 import ButtonsExamplesPage from "./inputs/ButtonsExamplesPage";
 import CheckboxesExamplesPage from "./inputs/CheckboxesExamplesPage";
 import PickersExamplesPage from "./inputs/PickersExamplesPage";
@@ -70,6 +67,10 @@ export default function GoogleMaterialPage() {
        <Route 
         path="folderlist" 
         component={FolderList} 
+      />
+       <Route 
+        path="newrequest" 
+        component={NewRequest} 
       />
      {/* <Route 
         path="/google-material/layout/grid" 
