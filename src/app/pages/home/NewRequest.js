@@ -1,6 +1,6 @@
 import React from "react";
 import StepsComp from "../../widgets/Steps";
-import { Button, Input } from "antd";
+import { Button, Input, Descriptions } from "antd";
 import { Formik, Form } from "formik";
 import renderEmpty from "antd/lib/config-provider/renderEmpty";
 import { any } from "prop-types";
@@ -278,7 +278,16 @@ export default function NewRequest() {
             </div>
           </>
         }
-        thirdcontent={<div><pre>{JSON.stringify(dataValues)}</pre></div>}
+        thirdcontent={ <div><Descriptions title="User Info">
+    <Descriptions.Item label="UserName">Zhou Maomao</Descriptions.Item>
+    <Descriptions.Item label="Telephone">1810000000</Descriptions.Item>
+    <Descriptions.Item label="Live">Hangzhou, Zhejiang</Descriptions.Item>
+    <Descriptions.Item label="Remark">empty</Descriptions.Item>
+   {/* <Descriptions.Item > trying to render the dataValues Here 
+    </Descriptions.Item> */}
+  </Descriptions>,
+        
+        <pre>{JSON.stringify(dataValues)}</pre></div>}
       />
     </>
   );
