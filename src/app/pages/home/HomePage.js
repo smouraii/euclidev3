@@ -7,6 +7,16 @@ import { LayoutSplashScreen } from "../../../_metronic";
 import FolderList from "./FolderList";
 import NewRequest from "./NewRequest";
 import Efiles from "./Efiles";
+import Lims from "./Lims";
+import MailServer from "./MailServer";
+import DBConfiguration from "./DBConfiguration";
+import SecurityRoles from "./SecurityRoles";
+import UserConfiguration from "./UserConfiguration";
+import AuditConfiguration from "./AuditConfiguration";
+import EfilesConfiguration from "./EfilesConfiguration";
+import BugReport from "./BugReport";
+import ErrorLog from "./ErrorLog";
+import AuditLog from "./AuditLog";
 
 const GoogleMaterialPage = lazy(() =>
   import("./google-material/GoogleMaterialPage")
@@ -23,14 +33,25 @@ export default function HomePage() {
           /* Redirect from root URL to /dashboard. */
           <Redirect exact from="/" to="/dashboard" />
         }
-        <Route path="/builder" component={Builder} />
+        {/* <Route path="/builder" component={Builder} /> */}
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/google-material" component={GoogleMaterialPage} />
         <Route path="/react-bootstrap" component={ReactBootstrapPage} />
         <Route path="/docs" component={DocsPage} />
         <Route path="/folderlist" component={FolderList} />
         <Route path="/newrequest" component={NewRequest}/>
-        <Route path="/Efiles" component={Efiles}/>
+        <Route path="/efiles" component={Efiles}/>
+        <Route path="/Lims" component={Lims}/>
+        <Route path="/MailServer" component={MailServer} />
+        <Route path="/DB-Configuration" component={DBConfiguration} />
+        <Route path="/Security-Roles" component={SecurityRoles} />
+        <Route path="/Users-Configuration" component={UserConfiguration} />
+        <Route path="/Audit-Configuration" component={AuditConfiguration} />
+        <Route path="/eFiles-Configuration" component={EfilesConfiguration} />
+        <Route path="/BugReport" component={BugReport} /> 
+        <Route path="/ErrorLog" component={ErrorLog} />
+        <Route path="/AuditLog" component={AuditLog} />
+        
         <Redirect to="/error/error-v1" />
       </Switch>
     </Suspense>

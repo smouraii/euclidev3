@@ -47,6 +47,7 @@ import SpeedDialExamplesPage from "./labs/SpeedDialExamplesPage";
 import ToggleButtonExamplesPage from "./labs/ToggleButtonExamplesPage";
 import FolderList from "../FolderList";
 import NewRequest from "../NewRequest";
+import Efiles from "../Efiles"
 
 export default function GoogleMaterialPage() {
   return (
@@ -92,6 +93,10 @@ export default function GoogleMaterialPage() {
         component={AutocompleteExamplesPage} 
       />*/}
      
+      <Route
+        path="eFiles"
+        component={Efiles}
+      />
       <Route
         path="/google-material/inputs/buttons"
         component={ButtonsExamplesPage}

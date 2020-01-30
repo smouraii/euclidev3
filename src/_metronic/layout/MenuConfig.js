@@ -14,7 +14,7 @@ export default {
         root: true,
         alignment: "left",
         toggle: "click",
-        page: "lims",
+        page: "limsMenu",
         submenu: [
           {
             title: "New Request",
@@ -455,38 +455,38 @@ export default {
           {
             title: "LIMS",
             icon: "flaticon2-expand",
-            page: "builder"
+            page: "Lims"
           },
           {
             title: "Mail Server",
             icon: "flaticon2-expand",
-            page: "builder"
+            page: "MailServer"
           },
           {
             title: "DB Configuration",
             icon: "flaticon2-expand",
-            page: "builder"
+            page: "DB-Configuration"
           },
           {
             title: "Security Roles",
             icon: "flaticon2-expand",
-            page: "builder"
+            page: "Security-Roles"
           },
           {
             title: "Users configuration",
             icon: "flaticon2-expand",
-            page: "builder"
+            page: "User-Configuration"
           },
           {
             title: "Audit configuration",
             icon: "flaticon2-expand",
-            page: "builder"
+            page: "Audit-Configuration"
           },
           {
             title: "eFiles configuration",
             bullet: "dot",
             icon: "flaticon2-warning",
-            page: "error/error-v1", 
+            page: "eFiles-Configuration", 
           /*  submenu: [
               {
                 title: "Error 1",
@@ -526,17 +526,17 @@ export default {
           {
             title: "Bug report",
             bullet: "line",
-            page: "google-material/utils/click-away-listener"
+            page: "BugReport"
           },
           {
             title: "Error log",
             bullet: "line",
-            page: "google-material/utils/modal"
+            page: "ErrorLog"
           },
           {
             title: "Audit log",
             bullet: "line",
-            page: "google-material/utils/no-ssr"
+            page: "AuditLog"
           }
         ]
       }
