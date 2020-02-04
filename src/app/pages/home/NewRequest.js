@@ -2,6 +2,7 @@ import React from "react";
 import StepsComp from "../../widgets/Steps";
 import { Button, Input, Descriptions } from "antd";
 import { Formik, Form } from "formik";
+import {Decoration10} from "@jiaminghi/data-view-react";
 import renderEmpty from "antd/lib/config-provider/renderEmpty";
 import { any } from "prop-types";
 
@@ -26,7 +27,6 @@ export default function NewRequest() {
         firstcontent={
           <>
             <div className="row d-flex justify-content-center">
-              {" "}
               <div className="col-md-6 ">
                 <Formik
                   initialValues={{
@@ -40,13 +40,13 @@ export default function NewRequest() {
                   }}
                   onSubmit={(data, { setSubmitting }) => {
                     next();
-                    console.log(data);
+                    setDataValues(data);
                     setSubmitting(false);
                   }}
                 >
                   {({
                     values,
-                  
+
                     errors,
                     touched,
                     handleChange,
@@ -175,7 +175,7 @@ export default function NewRequest() {
                   }}
                   onSubmit={(data, { setSubmitting }) => {
                     next();
-                    setDataValues(data);
+                    setDataValues({ ...dataValues, ...data });
                     setSubmitting(false);
                   }}
                 >
@@ -278,16 +278,56 @@ export default function NewRequest() {
             </div>
           </>
         }
-        thirdcontent={ <div><Descriptions title="User Info">
-    <Descriptions.Item label="UserName">Zhou Maomao</Descriptions.Item>
-    <Descriptions.Item label="Telephone">1810000000</Descriptions.Item>
-    <Descriptions.Item label="Live">Hangzhou, Zhejiang</Descriptions.Item>
-    <Descriptions.Item label="Remark">empty</Descriptions.Item>
-   {/* <Descriptions.Item > trying to render the dataValues Here 
+        thirdcontent={
+          <div>
+          <div>
+            <Descriptions title="Confirmation" >
+              <Descriptions.Item label="Request Number">
+                {dataValues.RequestNum}
+              </Descriptions.Item>
+              <Descriptions.Item label="Object">
+                {dataValues.Object}
+              </Descriptions.Item>
+              <Descriptions.Item label="Customer Code">
+                {dataValues.CustomerCode}
+              </Descriptions.Item>
+              <Descriptions.Item label="Status">
+                {dataValues.Status}
+              </Descriptions.Item>
+              <Descriptions.Item label="Request Date">
+                {dataValues.RequestDate}
+              </Descriptions.Item>
+              <Descriptions.Item label="Created">
+                {dataValues.Created}
+              </Descriptions.Item>
+              </Descriptions>
+              </div>
+
+              <Decoration10 style={{width: '90%', height: '5px'}} />
+
+              <div>
+              <Descriptions>
+              <Descriptions.Item label="Description">
+                {dataValues.Description}
+              </Descriptions.Item>
+              <Descriptions.Item label="Types">
+                {dataValues.Types}
+              </Descriptions.Item>
+              <Descriptions.Item label="Products">
+                {dataValues.Products}
+              </Descriptions.Item>
+              <Descriptions.Item label="Analysis">
+                {dataValues.Analysis}
+              </Descriptions.Item>
+              <Descriptions.Item label="Comments">
+                {dataValues.Comments}
+              </Descriptions.Item>
+              {/* <Descriptions.Item > trying to render the dataValues Here 
     </Descriptions.Item> */}
-  </Descriptions>,
-        
-        <pre>{JSON.stringify(dataValues)}</pre></div>}
+            </Descriptions>
+          </div>
+          </div>
+        }
       />
     </>
   );

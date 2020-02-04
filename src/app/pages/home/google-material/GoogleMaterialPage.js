@@ -48,6 +48,8 @@ import ToggleButtonExamplesPage from "./labs/ToggleButtonExamplesPage";
 import FolderList from "../FolderList";
 import NewRequest from "../NewRequest";
 import Efiles from "../Efiles"
+import SwitchComp from "../../../widgets/SwitchComp";
+import WrappedLims from "../Lims";
 
 export default function GoogleMaterialPage() {
   return (
@@ -58,12 +60,6 @@ export default function GoogleMaterialPage() {
         to="/euclide/lims"
       />
 
-      {/* Layout */}
-
-      <Route
-        path="/google-material/layout/container"
-        component={ContainerExamplesPage}
-      />
        {/*Lims*/}
        <Route 
         path="folderlist" 
@@ -97,70 +93,12 @@ export default function GoogleMaterialPage() {
         path="eFiles"
         component={Efiles}
       />
-      <Route
-        path="/google-material/inputs/buttons"
-        component={ButtonsExamplesPage}
-      />
-      <Route 
-        path="/google-material/inputs/checkboxes" 
-        component={CheckboxesExamplesPage} 
-      />
-      <Route
-        path="/google-material/inputs/pickers"
-        component={PickersExamplesPage}
-      />
-      <Route
-        path="/google-material/inputs/radio-buttons"
-        component={RadioButtonsExamplesPage}
-      />
-      <Route
-        path="/google-material/inputs/selects"
-        component={SelectsExamplesPage}
-      />
-      <Route 
-        path="/google-material/inputs/switches" 
-        component={SwitchesExamplesPage} 
-      />
-      <Route
-        path="/google-material/inputs/text-fields"
-        component={TextFieldsExamplesPage}
-      />
-      <Route
-        path="/google-material/inputs/transfer-list"
-        component={TransferListExamplesPage}
-      />
 
-      {/* Navigation */}
+      {/* Euclide */}
       <Route
-        path="/google-material/navigation/bottom-navigation"
-        component={BottomNavigationExamplesPage}
+        path="Lims"
+        component={WrappedLims}
       />
-      <Route
-        path="/google-material/navigation/breadcrumbs"
-        component={BreadcrumbsExamplesPage}
-      />
-      <Route
-        path="/google-material/navigation/drawer"
-        component={DrawerExamplesPage}
-      />
-      <Route
-        path="/google-material/navigation/links"
-        component={LinksExamplesPage}
-      />
-      <Route
-        path="/google-material/navigation/menus"
-        component={MenusExamplesPage}
-      />
-      <Route
-        path="/google-material/navigation/steppers"
-        component={SteppersExamplesPage}
-      />
-      <Route
-        path="/google-material/navigation/tabs"
-        component={TabsExamplesPage}
-      />
-
-      {/* Surfaces */}
       <Route
         path="/google-material/surfaces/app-bar"
         component={AppBarExamplesPage}

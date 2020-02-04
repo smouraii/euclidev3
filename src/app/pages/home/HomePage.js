@@ -17,6 +17,9 @@ import EfilesConfiguration from "./EfilesConfiguration";
 import BugReport from "./BugReport";
 import ErrorLog from "./ErrorLog";
 import AuditLog from "./AuditLog";
+import WrappedInputComp from "./Lims";
+import SwitchComp from "../../widgets/SwitchComp";
+import WrappedLims from "./Lims";
 
 const GoogleMaterialPage = lazy(() =>
   import("./google-material/GoogleMaterialPage")
@@ -41,16 +44,18 @@ export default function HomePage() {
         <Route path="/folderlist" component={FolderList} />
         <Route path="/newrequest" component={NewRequest}/>
         <Route path="/efiles" component={Efiles}/>
-        <Route path="/Lims" component={Lims}/>
-        <Route path="/MailServer" component={MailServer} />
+        {/* this is a test */}
+        <Route path="/lims" component={WrappedLims}/>
+        <Route path="/switchComp" component={SwitchComp}/>
+        {/* <Route path="/Security-Roles" component={SecurityRoles} /> */}
+        {/* <Route path="/MailServer" component={MailServer} />
         <Route path="/DB-Configuration" component={DBConfiguration} />
-        <Route path="/Security-Roles" component={SecurityRoles} />
         <Route path="/Users-Configuration" component={UserConfiguration} />
         <Route path="/Audit-Configuration" component={AuditConfiguration} />
         <Route path="/eFiles-Configuration" component={EfilesConfiguration} />
         <Route path="/BugReport" component={BugReport} /> 
         <Route path="/ErrorLog" component={ErrorLog} />
-        <Route path="/AuditLog" component={AuditLog} />
+        <Route path="/AuditLog" component={AuditLog} /> */}
         
         <Redirect to="/error/error-v1" />
       </Switch>
