@@ -1,113 +1,151 @@
-// import React from 'react';
-// import { Form, Input, DatePicker, TimePicker, Select, Cascader, InputNumber } from 'antd';
+import React from "react";
+import {
+  Form,
+  Input,
+  Select,
+  Row,
+  Col,
+  Checkbox,
+  Button,
+  AutoComplete
+} from "antd";
+import { Portlet, PortletBody } from "../../partials/content/Portlet";
+import SwitchComp from "../../widgets/SwitchComp";
+import InputComp from "../../widgets/InputComp";
 
-// const { Option } = Select;
+const { Option } = Select;
+const AutoCompleteOption = AutoComplete.Option;
 
-// const formItemLayout = {
-//   labelCol: {
-//     xs: { span: 24 },
-//     sm: { span: 5 },
-//   },
-//   wrapperCol: {
-//     xs: { span: 24 },
-//     sm: { span: 12 },
-//   },
-// };
+class SecurityRoles extends React.Component {
+  state = {
+    confirmDirty: false,
+    autoCompleteResult: []
+  };
 
-// ReactDOM.render(
-//   <Form {...formItemLayout}>
-//     <Form.Item
-//       label="Fail"
-//       validateStatus="error"
-//       help="Should be combination of numbers & alphabets"
-//     >
-//       <Input placeholder="unavailable choice" id="error" />
-//     </Form.Item>
+  handleSubmit = e => {
+    e.preventDefault();
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        console.log("Received values of form: ", values);
+      }
+    });
+  };
 
-//     <Form.Item label="Warning" validateStatus="warning">
-//       <Input placeholder="Warning" id="warning" />
-//     </Form.Item>
+  handleConfirmBlur = e => {
+    const { value } = e.target;
+    this.setState({ confirmDirty: this.state.confirmDirty || !!value });
+  };
 
-//     <Form.Item
-//       label="Validating"
-//       hasFeedback
-//       validateStatus="validating"
-//       help="The information is being validated..."
-//     >
-//       <Input placeholder="I'm the content is being validated" id="validating" />
-//     </Form.Item>
+  render() {
+    const { getFieldDecorator } = this.props.form;
+    const { autoCompleteResult } = this.state;
 
-//     <Form.Item label="Success" hasFeedback validateStatus="success">
-//       <Input placeholder="I'm the content" id="success" />
-//     </Form.Item>
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 8 }
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 }
+      }
+    };
+    const tailFormItemLayout = {
+      wrapperCol: {
+        xs: {
+          span: 24,
+          offset: 0
+        },
+        sm: {
+          span: 16,
+          offset: 8
+        }
+      }
+    };
+    const prefixSelector = getFieldDecorator("prefix", {
+      initialValue: "86"
+    })(
+      <Select style={{ width: 70 }}>
+        <Option value="86">+86</Option>
+        <Option value="87">+87</Option>
+      </Select>
+    );
 
-//     <Form.Item label="Warning" hasFeedback validateStatus="warning">
-//       <Input placeholder="Warning" id="warning2" />
-//     </Form.Item>
+    const websiteOptions = autoCompleteResult.map(website => (
+      <AutoCompleteOption key={website}>{website}</AutoCompleteOption>
+    ));
 
-//     <Form.Item
-//       label="Fail"
-//       hasFeedback
-//       validateStatus="error"
-//       help="Should be combination of numbers & alphabets"
-//     >
-//       <Input placeholder="unavailable choice" id="error2" />
-//     </Form.Item>
+    return (
+      <>
+        <InputComp
+          title={"SecurityRoles"}
+          content={
+            <>
+              <div
+                className="row d-flex justify-content-center"
+                style={{ marginTop: "50px" }}
+              >
+                <div className="col-md-6 ">
+                  <Form {...formItemLayout} onSubmit={this.handleSubmit}>
+                    <Form.Item label="Rest Services URL">
+                      {getFieldDecorator("restServiceUrl", {
+                        rules: [
+                          {
+                            required: true,
+                            message: "Please type a REST Service URL"
+                          }
+                        ]
+                      })(<Input />)}
+                    </Form.Item>
+                    <Form.Item label="SecurityRoles Database">
+                      {getFieldDecorator("SecurityRolesDatabase", {
+                        rules: [
+                          {
+                            required: true,
+                            message: "Please type a SecurityRoles DATABASE"
+                          }
+                        ]
+                      })(<Input />)}
+                    </Form.Item>
+                    <Form.Item label="Username">
+                      {getFieldDecorator("username", {
+                        rules: [
+                          {
+                            required: true,
+                            message: "Please type your username!"
+                          }
+                        ]
+                      })(<Input />)}
+                    </Form.Item>
+                    <Form.Item label="Password">
+                      {getFieldDecorator("password", {
+                        rules: [
+                          {
+                            required: true,
+                            message: "Please input your password!"
+                          }
+                        ]
+                      })(<Input.Password />)}
+                    </Form.Item>
 
-//     <Form.Item label="Success" hasFeedback validateStatus="success">
-//       <DatePicker style={{ width: '100%' }} />
-//     </Form.Item>
+                    <SwitchComp style={{ marginRight: "50px" }} />
 
-//     <Form.Item label="Warning" hasFeedback validateStatus="warning">
-//       <TimePicker style={{ width: '100%' }} />
-//     </Form.Item>
+                    <Form.Item {...tailFormItemLayout}>
+                      <Button type="primary" htmlType="submit">
+                        Save
+                      </Button>
+                    </Form.Item>
+                  </Form>
+                </div>
+              </div>
+            </>
+          }
+        />
+      </>
+    );
+  }
+}
 
-//     <Form.Item label="Error" hasFeedback validateStatus="error">
-//       <Select defaultValue="1">
-//         <Option value="1">Option 1</Option>
-//         <Option value="2">Option 2</Option>
-//         <Option value="3">Option 3</Option>
-//       </Select>
-//     </Form.Item>
+const WrappedSecurityRoles = Form.create({ name: "Inputs" })(SecurityRoles);
 
-//     <Form.Item
-//       label="Validating"
-//       hasFeedback
-//       validateStatus="validating"
-//       help="The information is being validated..."
-//     >
-//       <Cascader defaultValue={['1']} options={[]} />
-//     </Form.Item>
-
-//     <Form.Item label="inline" style={{ marginBottom: 0 }}>
-//       <Form.Item
-//         validateStatus="error"
-//         help="Please select the correct date"
-//         style={{ display: 'inline-block', width: 'calc(50% - 12px)' }}
-//       >
-//         <DatePicker />
-//       </Form.Item>
-//       <span style={{ display: 'inline-block', width: '24px', textAlign: 'center' }}>-</span>
-//       <Form.Item style={{ display: 'inline-block', width: 'calc(50% - 12px)' }}>
-//         <DatePicker />
-//       </Form.Item>
-//     </Form.Item>
-
-//     <Form.Item label="Success" hasFeedback validateStatus="success">
-//       <InputNumber style={{ width: '100%' }} />
-//     </Form.Item>
-
-//     <Form.Item label="Success" hasFeedback validateStatus="success">
-//       <Input allowClear placeholder="with allowClear" />
-//     </Form.Item>
-
-//     <Form.Item label="Warning" hasFeedback validateStatus="warning">
-//       <Input.Password placeholder="with input password" />
-//     </Form.Item>
-
-//     <Form.Item label="Error" hasFeedback validateStatus="error">
-//       <Input.Password allowClear placeholder="with input password and allowClear" />
-//     </Form.Item>
-//   </Form>,
-//   mountNode,
-// );
+export default WrappedSecurityRoles;

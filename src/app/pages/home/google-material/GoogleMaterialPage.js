@@ -50,6 +50,7 @@ import NewRequest from "../NewRequest";
 import Efiles from "../Efiles"
 import SwitchComp from "../../../widgets/SwitchComp";
 import WrappedLims from "../Lims";
+import WrappedDbconfiguration from "../DBConfiguration";
 
 export default function GoogleMaterialPage() {
   return (
@@ -100,8 +101,8 @@ export default function GoogleMaterialPage() {
         component={WrappedLims}
       />
       <Route
-        path="/google-material/surfaces/app-bar"
-        component={AppBarExamplesPage}
+        path="dbconfiguration"
+        component={WrappedDbconfiguration}
       />
       <Route
         path="/google-material/surfaces/paper"

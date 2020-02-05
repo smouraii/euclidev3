@@ -7,10 +7,11 @@ import {
   Col,
   Checkbox,
   Button,
-  AutoComplete,
+  AutoComplete
 } from "antd";
 import { Portlet, PortletBody } from "../../partials/content/Portlet";
 import SwitchComp from "../../widgets/SwitchComp";
+import InputComp from "../../widgets/InputComp";
 
 const { Option } = Select;
 const AutoCompleteOption = AutoComplete.Option;
@@ -75,67 +76,71 @@ class Lims extends React.Component {
     ));
 
     return (
-<>
-<div className="row d-flex justify-content-center" ><h3 style={{color: "white"}}>LIMS</h3></div>
-        <Portlet>   
-        <PortletBody fit={true}>
-        <div className="row d-flex justify-content-center" style={{marginTop:'50px'}}>
-              <div className="col-md-6 ">
-      <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-        <Form.Item label="Rest Services URL">
-          {getFieldDecorator("restServiceUrl", {
-            rules: [
-              {
-                required: true,
-                message: "Please type a REST Service URL"
-              }
-            ]
-          })(<Input />)}
-        </Form.Item>
-        <Form.Item label="Lims Database">
-          {getFieldDecorator("limsDatabase", {
-            rules: [
-              {
-                required: true,
-                message: "Please type a LIMS DATABASE"
-              }
-            ]
-          })(<Input />)}
-        </Form.Item>
-        <Form.Item label="Username">
-          {getFieldDecorator("username", {
-            rules: [
-              {
-                required: true,
-                message: "Please type your username!",
-              }
-            ]
-          })(<Input />)}
-        </Form.Item>
-        <Form.Item label="Password" >
-          {getFieldDecorator("password", {
-            rules: [
-              {
-                required: true,
-                message: "Please input your password!"
-              },
-           
-            ]
-          })(<Input.Password />)}
-        </Form.Item>
+      <>
+        <InputComp
+          title={"Lims"}
+          content={
+            <>
+              <div
+                className="row d-flex justify-content-center"
+                style={{ marginTop: "50px" }}
+              >
+                <div className="col-md-6 ">
+                  <Form {...formItemLayout} onSubmit={this.handleSubmit}>
+                    <Form.Item label="Rest Services URL">
+                      {getFieldDecorator("restServiceUrl", {
+                        rules: [
+                          {
+                            required: true,
+                            message: "Please type a REST Service URL"
+                          }
+                        ]
+                      })(<Input />)}
+                    </Form.Item>
+                    <Form.Item label="Lims Database">
+                      {getFieldDecorator("limsDatabase", {
+                        rules: [
+                          {
+                            required: true,
+                            message: "Please type a LIMS DATABASE"
+                          }
+                        ]
+                      })(<Input />)}
+                    </Form.Item>
+                    <Form.Item label="Username">
+                      {getFieldDecorator("username", {
+                        rules: [
+                          {
+                            required: true,
+                            message: "Please type your username!"
+                          }
+                        ]
+                      })(<Input />)}
+                    </Form.Item>
+                    <Form.Item label="Password">
+                      {getFieldDecorator("password", {
+                        rules: [
+                          {
+                            required: true,
+                            message: "Please input your password!"
+                          }
+                        ]
+                      })(<Input.Password />)}
+                    </Form.Item>
 
-        <SwitchComp style={{marginRight:'50px'}} />
-        
-        <Form.Item {...tailFormItemLayout}>
-          <Button type="primary" htmlType="submit">
-            Save
-          </Button>
-        </Form.Item>
-      </Form>
-      </div>
-      </div>
-      </PortletBody>
-      </Portlet>
+                    <SwitchComp style={{ marginRight: "50px" }} />
+
+                    <Form.Item {...tailFormItemLayout}>
+                      <Button type="primary" htmlType="submit">
+                        Save
+                      </Button>
+                    </Form.Item>
+                  </Form>
+                </div>
+              </div>
+            </>
+          }
+        />
       </>
     );
   }
