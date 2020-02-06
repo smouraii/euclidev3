@@ -48,7 +48,8 @@ export default function HomePage() {
         {/* this is a test */}
         <Route path="/lims" component={WrappedLims}/>
         <Route path="/switchComp" component={SwitchComp}/>
-        <Route path="/dbconfiguration" component={WrappedDbconfiguration} />
+        <Route path="/DB-Configuration" component={WrappedDbconfiguration} />
+
         {/* <Route path="/security-Roles" component={SecurityRoles} /> */}
         {/* <Route path="/mailServer" component={MailServer} />
         

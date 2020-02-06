@@ -16,6 +16,23 @@ import InputComp from "../../widgets/InputComp";
 const { Option } = Select;
 const AutoCompleteOption = AutoComplete.Option;
 
+
+function onChange(value) {
+  console.log(`selected ${value}`);
+}
+
+function onBlur() {
+  console.log('blur');
+}
+
+function onFocus() {
+  console.log('focus');
+}
+
+function onSearch(val) {
+  console.log('search:', val);
+}
+
 class Dbconfiguration extends React.Component {
   state = {
     confirmDirty: false,
@@ -34,7 +51,7 @@ class Dbconfiguration extends React.Component {
   handleConfirmBlur = e => {
     const { value } = e.target;
     this.setState({ confirmDirty: this.state.confirmDirty || !!value });
-  };
+  };git add .
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -85,28 +102,43 @@ content={
 <div className="row d-flex justify-content-center" style={{marginTop:'50px'}}>
               <div className="col-md-6 ">
       <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-        <Form.Item label="Rest Services URL">
-          {getFieldDecorator("restServiceUrl", {
+        <Form.Item label="Driver Class">
+          {getFieldDecorator("driverClass", {
             rules: [
               {
                 required: true,
                 message: "Please type a REST Service URL"
               }
             ]
-          })(<Input />)}
+          })(<Input />)} 
         </Form.Item>
-        <Form.Item label="Dbconfiguration Database">
-          {getFieldDecorator("DbconfigurationDatabase", {
-            rules: [
+        <Form.Item label="Connection name">
+          {getFieldDecorator("ConnectionName", {
+            rules:[
               {
                 required: true,
-                message: "Please type a Dbconfiguration DATABASE"
               }
             ]
-          })(<Input />)}
+          })(<Select
+    showSearch
+    style={{ width: 200 }}
+    placeholder="Select a person"
+    optionFilterProp="children"
+    onChange={onChange}
+    onFocus={onFocus}
+    onBlur={onBlur}
+    onSearch={onSearch}
+    filterOption={(input, option) =>
+      option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+    }
+  >
+    <Option value="jack">Oracle 10/11</Option>
+    <Option value="lucy">MySQL</Option>
+    <Option value="tom">SQLServer</Option>
+  </Select>,)}
         </Form.Item>
-        <Form.Item label="Username">
-          {getFieldDecorator("username", {
+        <Form.Item label="Hostname">
+          {getFieldDecorator("hostname", {
             rules: [
               {
                 required: true,

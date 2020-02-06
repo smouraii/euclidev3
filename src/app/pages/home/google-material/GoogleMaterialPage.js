@@ -101,7 +101,7 @@ export default function GoogleMaterialPage() {
         component={WrappedLims}
       />
       <Route
-        path="dbconfiguration"
+        path="DB-Configuration"
         component={WrappedDbconfiguration}
       />
       <Route
