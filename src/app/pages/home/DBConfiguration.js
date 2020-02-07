@@ -51,7 +51,7 @@ class Dbconfiguration extends React.Component {
   handleConfirmBlur = e => {
     const { value } = e.target;
     this.setState({ confirmDirty: this.state.confirmDirty || !!value });
-  };git add .
+  };
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -132,9 +132,9 @@ content={
       option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
     }
   >
-    <Option value="jack">Oracle 10/11</Option>
-    <Option value="lucy">MySQL</Option>
-    <Option value="tom">SQLServer</Option>
+    <Option value="Oracle 10/11">Oracle 10/11</Option>
+    <Option value="MySQL">MySQL</Option>
+    <Option value="SQLServer">SQLServer</Option>
   </Select>,)}
         </Form.Item>
         <Form.Item label="Hostname">
