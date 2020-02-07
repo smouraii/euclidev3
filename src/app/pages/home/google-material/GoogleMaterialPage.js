@@ -51,6 +51,7 @@ import Efiles from "../Efiles"
 import SwitchComp from "../../../widgets/SwitchComp";
 import WrappedLims from "../Lims";
 import WrappedDbconfiguration from "../DBConfiguration";
+import MailServer from "../MailServer"
 
 export default function GoogleMaterialPage() {
   return (
@@ -105,8 +106,8 @@ export default function GoogleMaterialPage() {
         component={WrappedDbconfiguration}
       />
       <Route
-        path="/google-material/surfaces/paper"
-        component={PaperExamplesPage}
+        path="mailServer"
+        component={MailServer}
       />
       <Route
         path="/google-material/surfaces/cards"

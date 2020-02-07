@@ -135,7 +135,7 @@ content={
     <Option value="Oracle 10/11">Oracle 10/11</Option>
     <Option value="MySQL">MySQL</Option>
     <Option value="SQLServer">SQLServer</Option>
-  </Select>,)}
+  </Select>)}
         </Form.Item>
         <Form.Item label="Hostname">
           {getFieldDecorator("hostname", {

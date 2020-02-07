@@ -49,11 +49,10 @@ export default function HomePage() {
         <Route path="/lims" component={WrappedLims}/>
         <Route path="/switchComp" component={SwitchComp}/>
         <Route path="/DB-Configuration" component={WrappedDbconfiguration} />
+        <Route path="/mailServer" component={MailServer} />
 
         {/* <Route path="/security-Roles" component={SecurityRoles} /> */}
-        {/* <Route path="/mailServer" component={MailServer} />
-        
-        <Route path="/users-configuration" component={UserConfiguration} />
+        {/* <Route path="/users-configuration" component={UserConfiguration} />
         <Route path="/audit-configuration" component={AuditConfiguration} />
         <Route path="/efiles-configuration" component={EfilesConfiguration} />
         <Route path="/bugreport" component={BugReport} /> 
