@@ -51,7 +51,9 @@ import Efiles from "../Efiles"
 import SwitchComp from "../../../widgets/SwitchComp";
 import WrappedLims from "../Lims";
 import WrappedDbconfiguration from "../DBConfiguration";
-import MailServer from "../MailServer"
+import MailServer from "../MailServer";
+import UserConfiguration from "../UserConfiguration";
+import AuditConfiguration from "../AuditConfiguration";
 
 export default function GoogleMaterialPage() {
   return (
@@ -102,7 +104,7 @@ export default function GoogleMaterialPage() {
         component={WrappedLims}
       />
       <Route
-        path="DB-Configuration"
+        path="db-Configuration"
         component={WrappedDbconfiguration}
       />
       <Route
@@ -110,12 +112,12 @@ export default function GoogleMaterialPage() {
         component={MailServer}
       />
       <Route
-        path="/google-material/surfaces/cards"
-        component={CardsExamplesPage}
+        path="/users-configuration"
+        component={UserConfiguration}
       />
       <Route
-        path="/google-material/surfaces/expansion-panels"
-        component={ExpansionPanelsExamplesPage}
+        path="audit-configuration"
+        component={AuditConfiguration}
       />
 
       {/* Feedback */}

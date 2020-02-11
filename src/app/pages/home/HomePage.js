@@ -48,13 +48,12 @@ export default function HomePage() {
         {/* this is a test */}
         <Route path="/lims" component={WrappedLims}/>
         <Route path="/switchComp" component={SwitchComp}/>
-        <Route path="/DB-Configuration" component={WrappedDbconfiguration} />
-        <Route path="/mailServer" component={MailServer} />
-
-        {/* <Route path="/security-Roles" component={SecurityRoles} /> */}
-        {/* <Route path="/users-configuration" component={UserConfiguration} />
+        <Route path="/db-configuration" component={WrappedDbconfiguration} />
+        <Route path="/mail-server" component={MailServer} />
+        <Route path="/security-Roles" component={SecurityRoles} />
+        <Route path="/users-configuration" component={UserConfiguration} />
         <Route path="/audit-configuration" component={AuditConfiguration} />
-        <Route path="/efiles-configuration" component={EfilesConfiguration} />
+         {/*<Route path="/efiles-configuration" component={EfilesConfiguration} />
         <Route path="/bugreport" component={BugReport} /> 
         <Route path="/errorlog" component={ErrorLog} />
         <Route path="/auditlog" component={AuditLog} /> */}

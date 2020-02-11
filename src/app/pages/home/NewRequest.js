@@ -1,8 +1,7 @@
 import React from "react";
 import StepsComp from "../../widgets/Steps";
-import { Button, Input, Descriptions } from "antd";
+import { Button, Input, Descriptions, Divider } from "antd";
 import { Formik, Form } from "formik";
-import {Decoration10} from "@jiaminghi/data-view-react";
 import renderEmpty from "antd/lib/config-provider/renderEmpty";
 import { any } from "prop-types";
 
@@ -303,7 +302,7 @@ export default function NewRequest() {
               </Descriptions>
               </div>
 
-              <Decoration10 style={{width: '90%', height: '5px'}} />
+              <Divider />
 
               <div>
               <Descriptions>
