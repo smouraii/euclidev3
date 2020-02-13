@@ -1,12 +1,9 @@
-import React, { useMemo } from "react";
-import { useSelector } from "react-redux";
+import React from "react";
 import {
   Portlet,
   PortletBody,
-  PortletHeader,
-  PortletHeaderToolbar
 } from "../../partials/content/Portlet";
-import { metronic } from "../../../_metronic";
+
 import Datatable from "../../widgets/Datatables"
 import datatableData from "./data/datatableData.json"
 

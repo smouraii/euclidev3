@@ -2,7 +2,6 @@ import React from "react";
 import StepsComp from "../../widgets/Steps";
 import { Button, Input, Descriptions, Divider } from "antd";
 import { Formik, Form } from "formik";
-import renderEmpty from "antd/lib/config-provider/renderEmpty";
 import { any } from "prop-types";
 
 export default function NewRequest() {
@@ -150,8 +149,6 @@ export default function NewRequest() {
                       <Button type="primary" htmlType="submit">
                         Next
                       </Button>
-
-                      <pre>{JSON.stringify(values, null, 2)}</pre>
                     </Form>
                   )}
                 </Formik>
@@ -279,52 +276,50 @@ export default function NewRequest() {
         }
         thirdcontent={
           <div>
-          <div>
-            <Descriptions title="Confirmation" >
-              <Descriptions.Item label="Request Number">
-                {dataValues.RequestNum}
-              </Descriptions.Item>
-              <Descriptions.Item label="Object">
-                {dataValues.Object}
-              </Descriptions.Item>
-              <Descriptions.Item label="Customer Code">
-                {dataValues.CustomerCode}
-              </Descriptions.Item>
-              <Descriptions.Item label="Status">
-                {dataValues.Status}
-              </Descriptions.Item>
-              <Descriptions.Item label="Request Date">
-                {dataValues.RequestDate}
-              </Descriptions.Item>
-              <Descriptions.Item label="Created">
-                {dataValues.Created}
-              </Descriptions.Item>
+            <div>
+              <Descriptions title="Confirmation">
+                <Descriptions.Item label="Request Number">
+                  {dataValues.RequestNum}
+                </Descriptions.Item>
+                <Descriptions.Item label="Object">
+                  {dataValues.Object}
+                </Descriptions.Item>
+                <Descriptions.Item label="Customer Code">
+                  {dataValues.CustomerCode}
+                </Descriptions.Item>
+                <Descriptions.Item label="Status">
+                  {dataValues.Status}
+                </Descriptions.Item>
+                <Descriptions.Item label="Request Date">
+                  {dataValues.RequestDate}
+                </Descriptions.Item>
+                <Descriptions.Item label="Created">
+                  {dataValues.Created}
+                </Descriptions.Item>
               </Descriptions>
-              </div>
+            </div>
 
-              <Divider />
+            <Divider />
 
-              <div>
+            <div>
               <Descriptions>
-              <Descriptions.Item label="Description">
-                {dataValues.Description}
-              </Descriptions.Item>
-              <Descriptions.Item label="Types">
-                {dataValues.Types}
-              </Descriptions.Item>
-              <Descriptions.Item label="Products">
-                {dataValues.Products}
-              </Descriptions.Item>
-              <Descriptions.Item label="Analysis">
-                {dataValues.Analysis}
-              </Descriptions.Item>
-              <Descriptions.Item label="Comments">
-                {dataValues.Comments}
-              </Descriptions.Item>
-              {/* <Descriptions.Item > trying to render the dataValues Here 
-    </Descriptions.Item> */}
-            </Descriptions>
-          </div>
+                <Descriptions.Item label="Description">
+                  {dataValues.Description}
+                </Descriptions.Item>
+                <Descriptions.Item label="Types">
+                  {dataValues.Types}
+                </Descriptions.Item>
+                <Descriptions.Item label="Products">
+                  {dataValues.Products}
+                </Descriptions.Item>
+                <Descriptions.Item label="Analysis">
+                  {dataValues.Analysis}
+                </Descriptions.Item>
+                <Descriptions.Item label="Comments">
+                  {dataValues.Comments}
+                </Descriptions.Item>
+              </Descriptions>
+            </div>
           </div>
         }
       />

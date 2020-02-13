@@ -1,22 +1,22 @@
-import React, { useState } from 'react';
-import Paper from '@material-ui/core/Paper';
+import React, { useState } from "react";
+import Paper from "@material-ui/core/Paper";
 import {
   SelectionState,
   IntegratedSelection,
   TreeDataState,
-  CustomTreeData,
-} from '@devexpress/dx-react-grid';
+  CustomTreeData
+} from "@devexpress/dx-react-grid";
 import {
   Grid,
   Table,
   TableHeaderRow,
-  TableTreeColumn,
-} from '@devexpress/dx-react-grid-material-ui';
+  TableTreeColumn
+} from "@devexpress/dx-react-grid-material-ui";
 
 import {
   generateRows,
-  defaultColumnValues,
-} from '../../../demo-data/generator';
+  defaultColumnValues
+} from "./generator";
 
 const getChildRows = (row, rootRows) => {
   const childRows = rootRows.filter(r => r.parentId === (row ? row.id : null));
@@ -24,48 +24,37 @@ const getChildRows = (row, rootRows) => {
 };
 
 export default () => {
-  const [columns] = useState([
-    { name: 'name', title: 'Name' },
-    { name: 'gender', title: 'Gender' },
-    { name: 'city', title: 'City' },
-    { name: 'car', title: 'Car' },
+  const [columns, useColumns] = useState([
+    { name: "name", title: "Name" },
+    { name: "gender", title: "Gender" },
+    { name: "city", title: "City" },
+    { name: "car", title: "Car" }
   ]);
-  const [data] = useState(generateRows({
+  const data = generateRows({
     columnValues: {
       id: ({ index }) => index,
-      parentId: ({ index, random }) => (index > 0 ? Math.trunc((random() * index) / 2) : null),
-      ...defaultColumnValues,
+      parentId: ({ index, random }) =>
+        index > 0 ? Math.trunc((random() * index) / 2) : null,
+      ...defaultColumnValues
+    
     },
-    length: 20,
-  }));
+    length: 20
+  });
   const [tableColumnExtensions] = useState([
-    { columnName: 'name', width: 300 },
+    { columnName: "name", width: 300 }
   ]);
   const [defaultExpandedRowIds] = useState([0]);
 
   return (
     <Paper>
-      <Grid
-        rows={data}
-        columns={columns}
-      >
+      <Grid rows={data} columns={columns}>
         <SelectionState />
-        <TreeDataState
-          defaultExpandedRowIds={defaultExpandedRowIds}
-        />
-        <CustomTreeData
-          getChildRows={getChildRows}
-        />
+        <TreeDataState defaultExpandedRowIds={defaultExpandedRowIds} />
+        <CustomTreeData getChildRows={getChildRows} />
         <IntegratedSelection />
-        <Table
-          columnExtensions={tableColumnExtensions}
-        />
+        <Table columnExtensions={tableColumnExtensions} />
         <TableHeaderRow />
-        <TableTreeColumn
-          for="name"
-          showSelectionControls
-          showSelectAll
-        />
+        <TableTreeColumn for="name" showSelectionControls showSelectAll />
       </Grid>
     </Paper>
   );

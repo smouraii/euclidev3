@@ -33,6 +33,9 @@
   },
   "dependencies": {
     "@date-io/date-fns": "^1.3.11",
+    "@devexpress/dx-react-core": "^2.4.0",
+    "@devexpress/dx-react-grid": "^2.4.0",
+    "@devexpress/dx-react-grid-material-ui": "^2.4.0",
     "@formatjs/intl-pluralrules": "^1.3.5",
     "@fortawesome/fontawesome-free": "^5.11.2",
     "@jiaminghi/data-view-react": "^1.1.3",
@@ -69,6 +72,7 @@
     "object-path": "^0.11.4",
     "perfect-scrollbar": "^1.4.0",
     "prop-types": "^15.7.2",
+    "rc-progress": "^2.5.2",
     "react": "^16.12.0",
     "react-bootstrap": "1.0.0-beta.16",
     "react-dom": "^16.12.0",
