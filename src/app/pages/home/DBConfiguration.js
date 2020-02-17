@@ -99,21 +99,13 @@ class Dbconfiguration extends React.Component {
 content={
   <>
 
-<div className="row d-flex justify-content-center" style={{marginTop:'50px'}}>
-              <div className="col-md-6 ">
+<div className="row d-flex justify-content-center" style={{margin:'50px'}}>
+              <div className="col-md-12 ">
       <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-        <Form.Item label="Driver Class">
+      <div className="row d-flex justify-content-between">
+      <div className="col-md-6">
+      <Form.Item label="Driver Class">
           {getFieldDecorator("driverClass", {
-            rules: [
-              {
-                required: true,
-                message: "Please type a REST Service URL"
-              }
-            ]
-          })(<Input />)} 
-        </Form.Item>
-        <Form.Item label="Connection name">
-          {getFieldDecorator("ConnectionName", {
             rules:[
               {
                 required: true,
@@ -121,7 +113,6 @@ content={
             ]
           })(<Select
     showSearch
-    style={{ width: 200 }}
     placeholder="Select a person"
     optionFilterProp="children"
     onChange={onChange}
@@ -137,6 +128,22 @@ content={
     <Option value="SQLServer">SQLServer</Option>
   </Select>)}
         </Form.Item>
+        </div>
+        <div className="col-md-6">
+        <Form.Item label="Connection name">
+          {getFieldDecorator("ConnectionName", {
+            rules: [
+              {
+                required: true,
+                message: "Please type a REST Service URL"
+              }
+            ]
+          })(<Input />)} 
+        </Form.Item>
+        </div>
+        </div>
+        <div className="row d-flex justify-content-between">
+      <div className="col-md-6">
         <Form.Item label="Hostname">
           {getFieldDecorator("hostname", {
             rules: [
@@ -147,8 +154,10 @@ content={
             ]
           })(<Input />)}
         </Form.Item>
-        <Form.Item label="Test" >
-          {getFieldDecorator("test", {
+        </div>
+        <div className="col-md-6">
+        <Form.Item label="Port" >
+          {getFieldDecorator("port", {
             rules: [
               {
                 required: true,
@@ -158,6 +167,24 @@ content={
             ]
           })(<Input />)}
         </Form.Item>
+        </div>
+        </div>
+        <div className="row d-flex justify-content-between">
+        <div className="col-md-6">
+        <Form.Item label="User" >
+          {getFieldDecorator("user", {
+            rules: [
+              {
+                required: true,
+                message: "Please input your password!"
+              },
+           
+            ]
+          })(<Input />)}
+        </Form.Item>
+        
+        </div>
+        <div className="col-md-6">
         <Form.Item label="Password" >
           {getFieldDecorator("password", {
             rules: [
@@ -169,9 +196,8 @@ content={
             ]
           })(<Input.Password />)}
         </Form.Item>
-
-        <SwitchComp style={{marginRight:'50px'}} />
-        
+        </div>
+        </div>
         <Form.Item {...tailFormItemLayout}>
           <Button type="primary" htmlType="submit">
             Save

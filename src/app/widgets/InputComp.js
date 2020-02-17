@@ -30,7 +30,6 @@ class InputComp extends React.Component {
 <div className="row d-flex justify-content-center" ><h3 style={{color: "white"}}>{this.props.title}</h3></div>
         <Portlet>   
         <PortletBody fit={true}>
-        <div className="row d-flex justify-content-center" style={{marginTop:'50px'}}></div>
               <div className="input-content">{this.props.content}</div>
       </PortletBody>
       </Portlet>
