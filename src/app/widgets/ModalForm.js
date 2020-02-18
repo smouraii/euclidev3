@@ -158,10 +158,6 @@ class ModalForm extends React.Component {
                     <span className="errorContainer">{errors.StepToReproduce}</span>
                   )}
                 </div>
-
-                <Button type="primary" htmlType="submit" onSubmit={handleSubmit}>
-                  Next
-                </Button>
               </Form>
             )}
           </Formik>

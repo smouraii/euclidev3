@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Collapse, Progress, Button, Input, Select } from "antd";
+import { Collapse, Progress, Button, Input, Select, Icon } from "antd";
 import { Circle } from "rc-progress";
 import { Portlet, PortletBody } from "../../partials/content/Portlet";
 
@@ -48,19 +48,27 @@ export default function EfilesConfiguration() {
           <Button onClick={increase} icon="plus" />
         </ButtonGroup>
       </div>
-      <div className="col-md-12">
+      <div className="row">
+     <div className="col-md-12">
       <Select
         defaultValue="word"
-        style={{ width: 120 }}
+        style={{ width: 900 , margin: 10}}
         onChange={handleChange}
       >
-        <Option value="word">Word</Option>
-        <Option value="excel">Excel</Option>
-        <Option value="pdf">pdf</Option>
-        <Option value="text">Text</Option>
+        <Option value="word"><Icon type="file-word" />Word</Option>
+        <Option value="excel"><Icon type="file-excel" />Excel</Option>
+        <Option value="pdf"><Icon type="file-pdf" />Pdf</Option>
+        
+        <Option value="text"><Icon type="file-text" />Text</Option>
+        <Option value="jpeg"><Icon type="file-jpg" />Jpeg</Option>
+        <Option value="bitmap"><Icon type="file" />Bitmap</Option>
+        <Option value="png"><Icon type="file-image" />Png</Option>
+        <Option value="gif"><Icon type="file-exclamation" />Gif</Option>
+        
       </Select>
       </div>
     </div>
+    </div> 
   );
   return (
     <Portlet>
