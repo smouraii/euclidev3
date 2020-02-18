@@ -15,7 +15,7 @@ export default function AuditConfiguration() {
     <>
       <Portlet>
         <PortletBody>
-          <Tabs defaultActiveKey="2">
+          <Tabs defaultActiveKey="1">
             <TabPane
               tab={
                 <span>
