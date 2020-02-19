@@ -508,12 +508,15 @@ const Datatable = () => {
   };
 
   return (
+   
+    <div style={{margin:20}}>
     <MDBDataTable
       striped
       bordered
       hover
       data={data}
     />
+    </div>
   );
 }
 
