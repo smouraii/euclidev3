@@ -120,8 +120,8 @@ export default function Dashboard() {
   */}
       <Portlet>
         <PortletBody fit={true}>
-        <div className="row">
-        <div className="col-md-6" style={{ margin:20  }}>
+        <div className="d-flex flex-row-reverse bd-highlight">
+        <div className="p-2 bd-highlight" style={{ margin:20  }}>
        <DatePickerComp />
        </div>
        </div>
