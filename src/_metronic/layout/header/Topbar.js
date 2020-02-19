@@ -12,7 +12,7 @@ export default class Topbar extends React.Component {
   render() {
     return (
       <div className="kt-header__topbar kt-grid__item">
-        <SearchDropdown useSVG="true"  />
+        {/* <SearchDropdown useSVG="true"  /> */}
 
         <UserNotifications
           bgImage={toAbsoluteUrl("/media/misc/bg-1.jpg")}
@@ -40,9 +40,9 @@ export default class Topbar extends React.Component {
           bgImage={toAbsoluteUrl("/media/misc/bg-1.jpg")}
         />
 
-        <QuickPanelToggler />
+        {/* <QuickPanelToggler />
 
-        <LanguageSelector iconType="" />
+        <LanguageSelector iconType="" /> */}
 
         <UserProfile showHi={true} showBadge={true} />
       </div>

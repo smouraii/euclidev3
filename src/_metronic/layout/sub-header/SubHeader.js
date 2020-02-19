@@ -43,7 +43,7 @@ class SubHeader extends React.Component {
             </LayoutContextConsumer>
           </div>
 
-          <div className="kt-subheader__toolbar">
+          {/* <div className="kt-subheader__toolbar">
             <div className="kt-subheader__wrapper">
                <a href="#" className="btn kt-subheader__btn-secondary">
 	            	Reports
@@ -51,7 +51,7 @@ class SubHeader extends React.Component {
               &nbsp;
               <QuickActions />
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     );

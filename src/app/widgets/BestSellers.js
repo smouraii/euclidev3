@@ -1,6 +1,6 @@
 /* eslint-disable no-script-url,jsx-a11y/anchor-is-valid */
 import React from "react";
-import { toAbsoluteUrl } from "../../_metronic/utils/utils";
+import { toAbsoluteUrl } from "../../_Euclide/utils/utils";
 import PortletHeaderDropdown from "../partials/content/CustomDropdowns/PortletHeaderDropdown";
 
 export default function BestSellers() {
@@ -26,10 +26,10 @@ export default function BestSellers() {
                 </div>
                 <div className="kt-widget5__section">
                   <a className="kt-widget5__title">Great Logo Design</a>
-                  <p className="kt-widget5__desc">Metronic admin themes.</p>
+                  <p className="kt-widget5__desc">Euclide.</p>
                   <div className="kt-widget5__info">
                     <span>Author:</span>
-                    <span className="kt-font-info">Keenthemes</span>
+                    <span className="kt-font-info">Labvantage</span>
                     <span>Released:</span>
                     <span className="kt-font-info">23.08.17</span>
                   </div>
@@ -58,7 +58,7 @@ export default function BestSellers() {
                 <div className="kt-widget5__section">
                   <a className="kt-widget5__title">Awesome Mobile App</a>
                   <p className="kt-widget5__desc">
-                    Metronic admin themes. Lorem Ipsum Amet.
+                    Euclide Lorem Ipsum Amet.
                   </p>
                   <div className="kt-widget5__info">
                     <span>Author:</span>
@@ -90,7 +90,7 @@ export default function BestSellers() {
                 </div>
                 <div className="kt-widget5__section">
                   <a className="kt-widget5__title">Branding Mockup</a>
-                  <p className="kt-widget5__desc">Metronic bootstrap themes.</p>
+                  <p className="kt-widget5__desc">Euclide bootstrap themes.</p>
                   <div className="kt-widget5__info">
                     <span>Author:</span>
                     <span className="kt-font-info">Fly themes</span>
