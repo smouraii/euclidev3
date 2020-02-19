@@ -15,7 +15,6 @@ export default function UserConfiguration() {
             
             <div className="col-xl-12" >
               <Datatable
-              style={{margin:50}}
                 title="A Datatable "
                 data={datatableData}
                 desc="This is a Datatable"

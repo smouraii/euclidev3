@@ -11,6 +11,7 @@ import MyResponsivePie from "../../widgets/PieChart";
 import pieData from "./data/pieData.json";
 import MyResponsiveBar from "../../widgets/BarChart";
 import barData from "./data/barData.json";
+import DatePickerComp from "../../widgets/DatePicker";
 
 
 export default function Dashboard() {
@@ -119,6 +120,11 @@ export default function Dashboard() {
   */}
       <Portlet>
         <PortletBody fit={true}>
+        <div className="row">
+        <div className="col-md-6" style={{ margin:20  }}>
+       <DatePickerComp />
+       </div>
+       </div>
           <div className="row row-no-padding row-col-separator-x1">
             <div className="col-xl-12">
               <MyResponsiveBar 
