@@ -293,13 +293,13 @@ export default {
           }*/
         ]
       },
-      // {
-      //   title: "eFiles",
-      //   root: true,
-      //   alignment: "left",
-      //   toggle: "click",
-      //   page: "eFiles",
-      // },
+      {
+        title: "eFiles",
+        root: true,
+        alignment: "left",
+        toggle: "click",
+        page: "eFiles",
+      },
       {
         title: "Euclide",
         root: true,

@@ -124,6 +124,13 @@ export default function Dashboard() {
         <div className="p-2 bd-highlight" style={{ margin:20  }}>
        <DatePickerComp />
        </div>
+       <div className="col-xl-12">
+              <MyResponsivePie
+                title="Revenue Change "
+                data={pieData}
+                desc="Revenue change breakdown by cities"
+              />
+            </div>
        </div>
           <div className="row row-no-padding row-col-separator-x1">
             <div className="col-xl-12">
@@ -137,13 +144,6 @@ export default function Dashboard() {
               <SalesBarChart
                 title="Daily Sales"
                 desc="Check out each column for more details"
-              />
-            </div>
-           <div className="col-xl-12">
-              <MyResponsivePie
-                title="Revenue Change "
-                data={pieData}
-                desc="Revenue change breakdown by cities"
               />
             </div>
           </div>
