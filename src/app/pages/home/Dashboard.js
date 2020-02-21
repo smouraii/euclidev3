@@ -124,15 +124,21 @@ export default function Dashboard() {
         <div className="p-2 bd-highlight" style={{ margin:20  }}>
        <DatePickerComp />
        </div>
-       <div className="col-xl-12">
+       </div>
+          <div className="row row-no-padding row-col-separator-x1">
+          <div className="col-xl-12">
+          <div className="row d-flex justify-content-center">
+                      <h1>PieChart</h1> 
+                    </div>
               <MyResponsivePie
                 title="Revenue Change "
                 data={pieData}
                 desc="Revenue change breakdown by cities"
               />
             </div>
-       </div>
-          <div className="row row-no-padding row-col-separator-x1">
+            <div className="row d-flex justify-content-center">
+                      <h1>Barchat</h1> 
+                    </div>
             <div className="col-xl-12">
               <MyResponsiveBar 
                 title="Bar chart"
@@ -140,6 +146,9 @@ export default function Dashboard() {
                 desc="this is a Bar chart"
               />
             </div> 
+            <div className="row d-flex justify-content-center">
+                      <h1>SalesBarChart</h1> 
+                    </div>
             <div className="col-xl-12">
               <SalesBarChart
                 title="Daily Sales"
