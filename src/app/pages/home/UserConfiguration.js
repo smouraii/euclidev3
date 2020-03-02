@@ -6,31 +6,42 @@ import {
 import Datatable from "../../widgets/Datatables";
 import datatableData from "./data/datatableData.json";
 import ModalForm from "../../widgets/ModalForm";
+import ModalChangeRole from "../../widgets/ModalChangeRole";
+import ModalActivate from "../../widgets/ModalActivate";
+import ModalDisableUser from "../../widgets/ModalDisableUser";
+import ModalSuspendUser from "../../widgets/ModalSuspendUser";
+import ModalAllocateAddresses from "../../widgets/ModalAllocateAddresses";
+import ModalChangePassword from "../../widgets/ModalChangePassword";
+import RefreshButton from "../../widgets/RefreshButton";
+import FullscreenButton from "../../widgets/FullscreenButton";
+
 
 export default function UserConfiguration() {
   return (
     <>
     <Portlet>
         <PortletBody >
-          <div className="row row-no-padding row-col-separator-x1" >
+          <div className="d-flex justify-content-end" style={{
+            marginBottom:-30
+            }}>
             
-            <div className="col-xl-12" >
-            <div
-                style={{
-                  float: "right",
-                  marginRight: "20px",
-                  marginTop: "20px"
-                }}
-              >
+                <RefreshButton />
                 <ModalForm />
-              </div>
-              <Datatable
+                <ModalChangeRole />
+                <ModalActivate />
+                <ModalDisableUser />
+                <ModalSuspendUser />
+                <ModalAllocateAddresses />
+                <ModalChangePassword />
+               
+                </div>
+
+                <Datatable
                 title="A Datatable "
                 data={datatableData}
                 desc="This is a Datatable"
               />
-            </div>
-          </div>
+           
         </PortletBody>
       </Portlet>
 

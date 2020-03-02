@@ -25,10 +25,9 @@ const getChildRows = (row, rootRows) => {
 
 export default () => {
   const [columns, useColumns] = useState([
-    { name: "name", title: "Name" },
-    { name: "gender", title: "Gender" },
-    { name: "city", title: "City" },
-    { name: "car", title: "Car" }
+    {name:"tree", title:" "},
+    { name: "name", title: "Domain" },
+    { name: "car", title: "Audit" }
   ]);
   const data = generateRows({
     columnValues: {
@@ -41,7 +40,7 @@ export default () => {
     length: 20
   });
   const [tableColumnExtensions] = useState([
-    { columnName: "name", width: 300 }
+    { columnName: "tree", width: 300 }
   ]);
   const [defaultExpandedRowIds] = useState([0]);
 
@@ -54,7 +53,7 @@ export default () => {
         <IntegratedSelection />
         <Table columnExtensions={tableColumnExtensions} />
         <TableHeaderRow />
-        <TableTreeColumn for="name" showSelectionControls showSelectAll />
+        <TableTreeColumn for="tree" showSelectionControls showSelectAll />
       </Grid>
     </Paper>
   );

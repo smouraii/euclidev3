@@ -3,24 +3,36 @@ import {
   Portlet,
   PortletBody
 } from "../../partials/content/Portlet";
-import Datatable from "../../widgets/Datatables"
-import datatableData from "./data/datatableData.json"
+import Datatable from "../../widgets/Datatables";
+import datatableData from "./data/datatableData.json";
+import ModalUpload from "../../widgets/ModalUpload";
+import ModalAddFloder from "../../widgets/ModalAddFolder";
+import ModalDelete from "../../widgets/ModalDelete";
+import RefreshButton from "../../widgets/RefreshButton";
 
-export default function Efiles() {
+
+export default function UserConfiguration() {
   return (
     <>
     <Portlet>
-        <PortletBody fit={true}>
-          <div className="row row-no-padding row-col-separator-x1">
+        <PortletBody >
+          <div className="d-flex justify-content-end" style={{
+            marginBottom:-30
+            }}>
             
-            <div className="col-xl-12">
-              <Datatable
+                <ModalAddFloder />
+                <ModalUpload />
+                <ModalDelete />
+               <RefreshButton />
+               
+                </div>
+
+                <Datatable
                 title="A Datatable "
                 data={datatableData}
                 desc="This is a Datatable"
               />
-            </div>
-          </div>
+           
         </PortletBody>
       </Portlet>
 

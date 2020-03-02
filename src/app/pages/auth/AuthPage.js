@@ -34,7 +34,7 @@ export default function AuthPage() {
                   <div className="kt-grid__item kt-grid__item--middle">
                     <h3 className="kt-login__title">Powered by LabVantage</h3>
                     <h4 className="kt-login__subtitle">
-                      The ultimate Bootstrap & Angular 6 admin theme framework for
+                      The ultimate framework for
                       next generation web apps.
                     </h4>
                   </div>

@@ -1,10 +1,44 @@
-import React from "react";
+import React, { useEffect } from "react";
 import StepsComp from "../../widgets/Steps";
-import { Button, Input, Descriptions, Divider } from "antd";
+import { Button, Input, Descriptions, Divider, Transfer } from "antd";
 import { Formik, Form } from "formik";
 import { any } from "prop-types";
 
 export default function NewRequest() {
+
+
+  const [mockData, setMockData] = React.useState([]);
+  const [targetKeys, setTargetKeys] = React.useState([]);
+  
+  useEffect(() => {
+   getMock() 
+  },[]);
+  
+
+
+ const getMock = () => {
+    const targetKeys = [];
+    const mockData = [];
+    for (let i = 0; i < 20; i++) {
+      const data = {
+        key: i.toString(),
+        title: `content${i + 1}`,
+        description: `description of content${i + 1}`,
+        chosen: Math.random() * 2 > 1,
+      };
+      if (data.chosen) {
+        targetKeys.push(data.key);
+      }
+      mockData.push(data);
+    }
+    setMockData(mockData);
+    setTargetKeys(targetKeys);
+  };
+
+  const handleTransfer = targetKeys => {
+    setTargetKeys( targetKeys );
+  };
+
   const [current, setCurrent] = React.useState(0);
   const [dataValues, setDataValues] = React.useState({});
 
@@ -263,6 +297,18 @@ export default function NewRequest() {
                           </span>
                         )}
                       </div>
+                      <Transfer
+                        dataSource={mockData}
+                        showSearch
+                        listStyle={{
+                          width: 250,
+                          height: 300
+                        }}
+                        operations={["to right", "to left"]}
+                        targetKeys={targetKeys}
+                        onChange={handleTransfer}
+                        render={item => `${item.title}-${item.description}`}
+                      />
 
                       <Button type="primary" htmlType="submit">
                         Next
@@ -325,4 +371,4 @@ export default function NewRequest() {
       />
     </>
   );
-}
+ }

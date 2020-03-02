@@ -8,6 +8,7 @@ const { Option } = Select;
 
 export default function EfilesConfiguration() {
   const [state, setState] = useState(0);
+  const [count, setCount] = useState(0);
 
   function handleChange(value) {
     console.log(`selected ${value}`);
@@ -29,6 +30,22 @@ export default function EfilesConfiguration() {
     setState({ percent });
   };
 
+  const plus = () => {
+    let percent = count + 10;
+    if (percent > 100) {
+      percent = 100;
+    }
+    setState({ percent });
+  };
+
+  const minus = () => {
+    let percent = count - 10;
+    if (percent < 0) {
+      percent = 0;
+    }
+    setState({ percent });
+  };
+
   const { Panel } = Collapse;
   const text = (
     <div className="row justify-content-between ">
@@ -44,8 +61,8 @@ export default function EfilesConfiguration() {
         <Progress type="dashboard" percent={50} />
         <Input />
         <ButtonGroup>
-          <Button onClick={decline} icon="minus" />
-          <Button onClick={increase} icon="plus" />
+          <Button onClick={minus} icon="minus" />
+          <Button onClick={plus} icon="plus" />
         </ButtonGroup>
       </div>
       <div className="row">
