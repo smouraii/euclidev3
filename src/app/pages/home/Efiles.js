@@ -11,7 +11,7 @@ import ModalDelete from "../../widgets/ModalDelete";
 import RefreshButton from "../../widgets/RefreshButton";
 
 
-export default function UserConfiguration() {
+export default function Efiles() {
   return (
     <>
     <Portlet>
