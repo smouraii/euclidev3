@@ -31,7 +31,7 @@ class ModalDelete extends React.Component {
     return (
       <div>
         <Button type="ghost" onClick={this.showModal}>
-        <Icon type="cloud-upload" /> Delete an item
+        <Icon type="delete" /> Delete an item
         </Button>
         <Modal
           visible={visible}
