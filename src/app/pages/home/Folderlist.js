@@ -6,7 +6,7 @@ import FullScreenButton from "../../widgets/FullscreenButton";
 import { Button, Input } from "antd";
 
 import QueryBuilder from "../../widgets/QueryBuilder";
-import MaterialTableDemo from "../../widgets/DatatableTest";
+import MaterialTableDemo from "../../widgets/DatatableMaterialUI";
 
 
 

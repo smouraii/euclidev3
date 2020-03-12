@@ -1,6 +1,6 @@
 import React from "react";
 import { Tabs, Icon, Button, Input, Select, Form } from "antd";
-import { Portlet, PortletBody } from "../../partials/content/Portlet";
+import { Portlet, PortletBody, PortletHeader } from "../../partials/content/Portlet";
 import TreeComp from "../../widgets/TreeComp";
 
 const { TabPane } = Tabs;
@@ -25,7 +25,9 @@ export default function AuditConfiguration() {
               }
               key="1"
             >
+            <PortletBody fluid={true}>
               <TreeComp />
+              </PortletBody>
             </TabPane>
             <TabPane
               tab={
@@ -39,8 +41,13 @@ export default function AuditConfiguration() {
               <div class="form row">
                 <div class="col-md-12">
                   <div class="row">
+                  <Portlet>
+                  <PortletHeader
+                    title= "Audit bugReport API"
+                 />
+                <PortletBody fluid={true}>
                     <div class="col-md-6">
-                      <h3 class="form-section">audit bugReport api</h3>
+                     
 
                       <div class="form-group">
                         <div class="input-group">
@@ -55,9 +62,12 @@ export default function AuditConfiguration() {
                         </div>
                       </div>
                     </div>
+                    </PortletBody>
+                    </Portlet>
+                    <Portlet>
+                    <PortletHeader title="BugReport synchronization" />
+                      <PortletBody fluid={true}>
                     <div class="col-md-6">
-                      <h3 class="form-section">bugReport synchronization</h3>
-
                       <table class="table table-hover table-bordered">
                         <tbody>
                           <tr>
@@ -79,6 +89,8 @@ export default function AuditConfiguration() {
                         </tbody>
                       </table>
                     </div>
+                    </PortletBody>
+                    </Portlet>
                   </div>
                 </div>
               </div>
@@ -92,31 +104,38 @@ export default function AuditConfiguration() {
               }
               key="3"
             >
+          
               <Form>
+              <Portlet>
+              <PortletHeader title="Log Settings" />
+              <PortletBody>
+              <div className="col-md-6">
                 <div className="inputContainer">
-                  <label htmlFor="fileName">Request Number</label>
+                  <label htmlFor="fileName">File Name</label>
                   <Input
                     placeholder="File Name "
                     name="fileName"
                     onChange={handleChange}
                   />
                 </div>
+                </div>
+                <div className="col-md-6">
                 <div className="inputContainer">
-                  <label htmlFor="fileLocation">Request Number</label>
+                  <label htmlFor="fileLocation">File Location</label>
                   <Input
                     placeholder="File Location"
                     name="fileLocation"
                     onChange={handleChange}
                   />
                 </div>
-                <div>
-                  <label htmlFor="logtype">Request Number</label>
+                </div>
+                <div className="col-md-6"> 
+                  <label htmlFor="logtype">Log Type</label>
                   <div>
                     <Select
                       defaultValue="dailyRolling"
                       name="LogType"
                       title="Log Type"
-                      style={{ width: 700 }}
                       onChange={handleChange}
                     >
                       <Option value="dailyRolling">DAILY ROLLING</Option>
@@ -124,7 +143,9 @@ export default function AuditConfiguration() {
                     </Select>
                   </div>
                 </div>
-              </Form>
+                </PortletBody>
+            </Portlet>
+              </Form>        
             </TabPane>
           </Tabs>
         </PortletBody>

@@ -1,11 +1,11 @@
 import React from "react";
 import { Portlet, PortletBody } from "../../partials/content/Portlet";
-import Datatables from "../../widgets/Datatables";
+import Datatables from "../../widgets/DatatablePrimeReact";
 import ModalUpload from "../../widgets/ModalUpload";
 import ModalAddFloder from "../../widgets/ModalAddFolder";
 import ModalDelete from "../../widgets/ModalDelete";
 import RefreshButton from "../../widgets/RefreshButton";
-import Datatable from "../../widgets/Datatable";
+import Datatable from "../../widgets/DatatableAntd";
 
 export default function Efiles() {
   return (

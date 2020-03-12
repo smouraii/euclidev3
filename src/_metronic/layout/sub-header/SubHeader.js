@@ -3,11 +3,9 @@ import React from "react";
 import { connect } from "react-redux";
 import objectPath from "object-path";
 import { withRouter } from "react-router-dom";
-import { QuickActions } from "./components/QuickActions";
 import * as builder from "../../ducks/builder";
 import { LayoutContextConsumer } from "../LayoutContext";
 import BreadCrumbs from "./components/BreadCrumbs";
-import DatePickerRouter from "../../../app/widgets/DatePickerRouter";
 import DatePickerComp from "../../../app/widgets/DatePicker";
 
 class SubHeader extends React.Component {
@@ -47,7 +45,7 @@ class SubHeader extends React.Component {
 
           <div className="kt-subheader__toolbar">
             <div className="kt-subheader__wrapper">
-            {this.props.match.path === "/" && (
+            {this.props.location.pathname === "/dashboard" && (
           <DatePickerComp/>
         )}    
         {console.log(this.props)}

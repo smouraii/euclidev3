@@ -3,6 +3,7 @@ import StepsComp from "../../widgets/Steps";
 import { Button, Input, Descriptions, Divider, Transfer } from "antd";
 import { Formik, Form } from "formik";
 import { any } from "prop-types";
+import { Portlet, PortletBody } from "../../partials/content/Portlet";
 
 export default function NewRequest() {
 
@@ -52,6 +53,10 @@ export default function NewRequest() {
 
   return (
     <>
+    <Portlet>
+      <PortletBody>
+
+ 
       <StepsComp
         next={next}
         prev={prev}
@@ -59,7 +64,8 @@ export default function NewRequest() {
         firstcontent={
           <>
             <div className="row d-flex justify-content-center">
-              <div className="col-md-6 ">
+              <div className="col-md-10 ">
+             
                 <Formik
                   initialValues={{
                     RequestNum: "",
@@ -85,6 +91,8 @@ export default function NewRequest() {
                     handleBlur,
                     handleSubmit
                   }) => (
+                    <Portlet>
+                    <PortletBody>
                     <Form>
                       <div className="inputContainer">
                         <label htmlFor="RequestNum">Request Number</label>
@@ -179,13 +187,17 @@ export default function NewRequest() {
                           </span>
                         )}
                       </div>
-
+                      <div style={{marginTop:10}}>
                       <Button type="primary" htmlType="submit">
                         Next
                       </Button>
+                      </div>
                     </Form>
+                    </PortletBody>
+              </Portlet>
                   )}
                 </Formik>
+                
               </div>
             </div>
           </>
@@ -193,7 +205,8 @@ export default function NewRequest() {
         secondcontent={
           <>
             <div className="row d-flex justify-content-center">
-              <div className="col-md-6 ">
+              <div className="col-md-10 ">
+              
                 <Formik
                   initialValues={{
                     Description: "",
@@ -297,6 +310,7 @@ export default function NewRequest() {
                           </span>
                         )}
                       </div>
+                      <div className="col-md-12" style={{margin:20} }>
                       <Transfer
                         dataSource={mockData}
                         showSearch
@@ -309,10 +323,12 @@ export default function NewRequest() {
                         onChange={handleTransfer}
                         render={item => `${item.title}-${item.description}`}
                       />
-
+                      </div>
+                      <div style={{marginTop:10}}>
                       <Button type="primary" htmlType="submit">
                         Next
                       </Button>
+                      </div>
                     </Form>
                   )}
                 </Formik>
@@ -321,8 +337,8 @@ export default function NewRequest() {
           </>
         }
         thirdcontent={
-          <div>
-            <div>
+          <div className="row d-flex justify-content-center">
+              <div className="col-md-10 ">
               <Descriptions title="Confirmation">
                 <Descriptions.Item label="Request Number">
                   {dataValues.RequestNum}
@@ -369,6 +385,8 @@ export default function NewRequest() {
           </div>
         }
       />
+           </PortletBody>
+    </Portlet>
     </>
   );
  }

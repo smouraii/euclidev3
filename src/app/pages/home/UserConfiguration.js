@@ -3,7 +3,7 @@ import {
   Portlet,
   PortletBody
 } from "../../partials/content/Portlet";
-import Datatables from "../../widgets/Datatables";
+import Datatables from "../../widgets/DatatablePrimeReact";
 import ModalForm from "../../widgets/ModalForm";
 import ModalChangeRole from "../../widgets/ModalChangeRole";
 import ModalActivate from "../../widgets/ModalActivate";

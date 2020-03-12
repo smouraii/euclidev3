@@ -4,6 +4,22 @@ import Builder from "./Builder";
 import Dashboard from "./Dashboard";
 import DocsPage from "./docs/DocsPage";
 import { LayoutSplashScreen } from "../../../_metronic";
+import FolderList from "./Folderlist";
+
+import NewRequest from "./NewRequest";
+import Efiles from "./Efiles";
+import MailServer from "./MailServer";
+import DBConfiguration from "./DBConfiguration";
+import SecurityRoles from "./SecurityRoles";
+import UserConfiguration from "./UserConfiguration";
+import AuditConfiguration from "./AuditConfiguration";
+import EfilesConfiguration from "./EfilesConfiguration";
+import BugReport from "./BugReport";
+import ErrorLog from "./ErrorLog";
+import AuditLog from "./AuditLog";
+import SwitchComp from "../../widgets/SwitchComp";
+import WrappedLims from "./Lims";
+import WrappedDbconfiguration from "./DBConfiguration";
 
 const GoogleMaterialPage = lazy(() =>
   import("./google-material/GoogleMaterialPage")
@@ -25,6 +41,26 @@ export default function HomePage() {
         <Route path="/google-material" component={GoogleMaterialPage} />
         <Route path="/react-bootstrap" component={ReactBootstrapPage} />
         <Route path="/docs" component={DocsPage} />
+
+        <Route path="/google-material" component={GoogleMaterialPage} />
+        <Route path="/react-bootstrap" component={ReactBootstrapPage} />
+        {/* <Route path="/docs" component={DocsPage} /> */}
+        <Route path="/folderlist" component={FolderList} />
+        <Route path="/newrequest" component={NewRequest}/>
+        <Route path="/efiles" component={Efiles}/>
+        {/* this is a test */}
+        <Route path="/lims" component={WrappedLims}/>
+        <Route path="/switchComp" component={SwitchComp}/>
+        <Route path="/DB-Configuration" component={WrappedDbconfiguration} />
+        <Route path="/MailServer" component={MailServer} />
+        <Route path="/Security-Roles" component={SecurityRoles} />
+        <Route path="/User-Configuration" component={UserConfiguration} />
+        <Route path="/Audit-Configuration" component={AuditConfiguration} />
+         <Route path="/efiles-configuration" component={EfilesConfiguration} />
+       <Route path="/bugreport" component={BugReport} /> 
+        <Route path="/errorlog" component={ErrorLog} />
+        <Route path="/auditlog" component={AuditLog} /> 
+
         <Redirect to="/error/error-v1" />
       </Switch>
     </Suspense>

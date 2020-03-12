@@ -1,31 +1,28 @@
 import React from "react";
 import { Portlet, PortletBody } from "../../partials/content/Portlet";
-import Datatables from "../../widgets/Datatables";
+import Datatables from "../../widgets/DatatablePrimeReact";
 import ModalForm from "../../widgets/ModalForm";
 
 export default function BugReport() {
   return (
     <>
-      <Portlet>
-        <PortletBody fit={true}>
-          <div className="row row-no-padding row-col-separator-x1">
-            <div className="col-xl-12">
-              <div
-                style={{
-                  float: "right",
-                  marginRight: "20px",
-                  marginTop: "20px"
-                }}
-              >
+      <div className="row d-flex justify-content-end">
+        
+          <div>
+            <Portlet>
+              <PortletBody fit={true}>
                 <ModalForm />
-              </div>
-              <Datatables
-
-              />
-            </div>
+              </PortletBody>
+            </Portlet>
           </div>
-        </PortletBody>
-      </Portlet>
+          <div className="col-md-12">
+          <Portlet>
+            <PortletBody fit={true}>
+              <Datatables />
+            </PortletBody>
+          </Portlet>
+        </div>
+      </div>
     </>
   );
 }
