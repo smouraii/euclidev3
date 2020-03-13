@@ -3,10 +3,10 @@ import React from "react";
 import { connect } from "react-redux";
 import objectPath from "object-path";
 import { withRouter } from "react-router-dom";
-import { QuickActions } from "./components/QuickActions";
 import * as builder from "../../ducks/builder";
 import { LayoutContextConsumer } from "../LayoutContext";
 import BreadCrumbs from "./components/BreadCrumbs";
+import DatePickerComp from "../../../app/widgets/DatePicker";
 
 class SubHeader extends React.Component {
   render() {
@@ -45,12 +45,11 @@ class SubHeader extends React.Component {
 
           <div className="kt-subheader__toolbar">
             <div className="kt-subheader__wrapper">
-               <a href="#" className="btn kt-subheader__btn-secondary">
-	            	Reports
-	            </a>
-              &nbsp;
-              <QuickActions />
-            </div>
+            {this.props.location.pathname === "/dashboard" && (
+          <DatePickerComp/>
+        )}    
+        {console.log(this.props)}
+                </div>
           </div>
         </div>
       </div>

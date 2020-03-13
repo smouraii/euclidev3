@@ -17,6 +17,13 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import "./_metronic/_assets/plugins/line-awesome/css/line-awesome.css";
 import "./_metronic/_assets/plugins/flaticon/flaticon.css";
 import "./_metronic/_assets/plugins/flaticon2/flaticon.css";
+import 'antd/dist/antd.css';
+import 'primereact/resources/themes/nova-light/theme.css';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
+import 'react-awesome-query-builder/css/styles.scss';
+import 'react-awesome-query-builder/css/compact_styles.scss';
+import 'react-awesome-query-builder/css/antd.less';
 /**
  * Base URL of the website.
  *
