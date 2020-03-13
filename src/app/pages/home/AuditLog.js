@@ -7,22 +7,21 @@ export default function AuditLog() {
   return (
     <>
       <div className="row d-flex justify-content-end">
-        
         <div>
-          <Portlet>
-            <PortletBody fit={true}>
+          <Portlet className="kt-portlet--height-fluid">
+            <PortletBody fluidheight={true} fit={true}>
               <ModalForm />
             </PortletBody>
           </Portlet>
         </div>
         <div className="col-md-12">
-        <Portlet>
-          <PortletBody fit={true}>
-            <Datatables />
-          </PortletBody>
-        </Portlet>
+          <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
+            <PortletBody fluidheight={true}>
+              <Datatables />
+            </PortletBody>
+          </Portlet>
+        </div>
       </div>
-    </div>
     </>
   );
 }

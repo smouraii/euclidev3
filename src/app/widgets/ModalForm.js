@@ -1,6 +1,7 @@
 import React from "react";
 import { Modal, Button, Icon, Input } from "antd";
 import { Formik, Form } from "formik";
+import { PortletBody, Portlet } from "../partials/content/Portlet";
 
 
 class ModalForm extends React.Component {
@@ -29,7 +30,7 @@ class ModalForm extends React.Component {
   render() {
     const { visible, loading } = this.state;
     return (
-      <div>
+<>
         <Button type="ghost" onClick={this.showModal}>
           <Icon type="file-add" />
         </Button>
@@ -162,7 +163,7 @@ class ModalForm extends React.Component {
             )}
           </Formik>
         </Modal>
-      </div>
+</>
     );
   }
 }

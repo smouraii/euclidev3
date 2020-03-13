@@ -48,7 +48,6 @@ class SubHeader extends React.Component {
             {this.props.location.pathname === "/dashboard" && (
           <DatePickerComp/>
         )}    
-        {console.log(this.props)}
                 </div>
           </div>
         </div>
