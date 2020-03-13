@@ -1,34 +1,31 @@
 import React from "react";
-import { Table, Input, Button, Icon } from "antd";
+import { Table, Input, Button, Icon, Pagination } from "antd";
 import reqwest from "reqwest";
 import { withRouter } from "react-router-dom";
 import QueryBuilder from "./QueryBuilder";
 import Highlighter from "react-highlight-words";
 
-
-
 class Datatable extends React.Component {
   state = {
     data: [],
-    pagination: {},
+    pagination: {pageSizeOptions:['10','25','50','100']},
     loading: false,
-    searchText:'',
-    searchedColumn:'',
+    searchText: "",
+    searchedColumn: ""
   };
-  
 
   componentDidMount() {
     this.fetch();
   }
 
-  handleTableChange = (pagination, filters, sorter) => {
-    const pager = { ...this.state.pagination };
+  handleTableChange = (pagination, filters, sorter, ) => {
+    const pager = { ...this.state.pagination };;
     pager.current = pagination.current;
     this.setState({
       pagination: pager
     });
     this.fetch({
-      results: pagination.pageSize,
+      results: pagination.pageSizeOptions,
       page: pagination.current,
       sortField: sorter.field,
       sortOrder: sorter.order,
@@ -43,7 +40,7 @@ class Datatable extends React.Component {
       url: "https://randomuser.me/api",
       method: "get",
       data: {
-        results: 30,
+        results: 20,
         ...params
       },
       type: "json"
@@ -61,7 +58,12 @@ class Datatable extends React.Component {
   };
 
   getColumnSearchProps = dataIndex => ({
-    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters
+    }) => (
       <div style={{ padding: 8 }}>
         <Input
           ref={node => {
@@ -69,9 +71,13 @@ class Datatable extends React.Component {
           }}
           placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
-          onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-          onPressEnter={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
-          style={{ width: 188, marginBottom: 8, display: 'block' }}
+          onChange={e =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() =>
+            this.handleSearch(selectedKeys, confirm, dataIndex)
+          }
+          style={{ width: 188, marginBottom: 8, display: "block" }}
         />
         <Button
           type="primary"
@@ -79,15 +85,21 @@ class Datatable extends React.Component {
           size="small"
           style={{ width: 90, marginRight: 8 }}
         >
-        <Icon type="search" style={{marginBottom: 10}} />
+          <Icon type="search" style={{ marginBottom: 10 }} />
           Search
         </Button>
-        <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+        <Button
+          onClick={() => this.handleReset(clearFilters)}
+          size="small"
+          style={{ width: 90 }}
+        >
           Reset
         </Button>
       </div>
     ),
-    filterIcon: filtered => <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />,
+    filterIcon: filtered => (
+      <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
+    ),
     onFilter: (value, record) =>
       record[dataIndex]
         .toString()
@@ -101,82 +113,91 @@ class Datatable extends React.Component {
     render: text =>
       this.state.searchedColumn === dataIndex ? (
         <Highlighter
-          highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
           searchWords={[this.state.searchText]}
           autoEscape
           textToHighlight={text.toString()}
         />
       ) : (
         text
-      ),
+      )
   });
   handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     this.setState({
       searchText: selectedKeys[0],
-      searchedColumn: dataIndex,
+      searchedColumn: dataIndex
     });
   };
 
   handleReset = clearFilters => {
     clearFilters();
-    this.setState({ searchText: '' });
+    this.setState({ searchText: "" });
   };
 
+  onShowSizeChange = (current, pageSizeOptions) => {
+    this.setState({ pageSizeOptions });
+    console.log(current, pageSizeOptions);
+  };
 
-  render() {const columns = [
-    {
-      title: "Name",
-      dataIndex: "name",
-      key: 'name',
-      render: name => ` ${name.first} ${name.last}`,
-      sorter:(a, b) => a.name.first.localeCompare(b.name.first),
-      width: "20%",
-    },
-    {
-      title:"age",
-      dataIndex: "dob",
-      key:'age',
-      defaultSortOrder: 'descend',
-      //dob is date of birth from api
-      render: dob => `${dob.age}`,
-      //a b used to sort from big to small
-      sorter: (a, b) => a.dob.age - b.dob.age,
-      
-    },
-    {
-      title: "Gender",
-      dataIndex: "gender",
-      key:'gender',
-      sorter:(a, b) => a.gender.length - b.gender.length,
-      filters: [
-        { text: "Male", value: "male" },
-        { text: "Female", value: "female" }
-      ],
-    },
-    {
-      title: "Email",
-      dataIndex: "email",
-      key: 'email',
-      sorter:(a, b) => a.email.localeCompare(b.email),
-      ...this.getColumnSearchProps('email'),
+  render() {
+    const columns = [
+      {
+        title: "Name",
+        dataIndex: "name",
+        key: "name",
+        render: name => ` ${name.first} ${name.last}`,
+        sorter: (a, b) => a.name.first.localeCompare(b.name.first),
+        width: "20%"
+      },
+      {
+        title: "age",
+        dataIndex: "dob",
+        key: "age",
+        defaultSortOrder: "descend",
+        //dob is date of birth from api
+        render: dob => `${dob.age}`,
+        //a b used to sort from big to small
+        sorter: (a, b) => a.dob.age - b.dob.age
+      },
+      {
+        title: "Gender",
+        dataIndex: "gender",
+        key: "gender",
+        sorter: (a, b) => a.gender.length - b.gender.length,
+        filters: [
+          { text: "Male", value: "male" },
+          { text: "Female", value: "female" }
+        ]
+      },
+      {
+        title: "Email",
+        dataIndex: "email",
+        key: "email",
+        sorter: (a, b) => a.email.localeCompare(b.email),
+        ...this.getColumnSearchProps("email")
+      },
+      {
+        title: "Location",
+        dataIndex: "location",
+        key: "location",
+        render: location => `${location.country} , ${location.state}`,
+        sorter: (a, b) => a.location.country.localeCompare(b.location.country)
+      }
+    ];
 
-  
-    },
-    {
-      title: "Location",
-      dataIndex: "location",
-      key:'location',
-      render: location => `${location.country} , ${location.state}`,
-      sorter: (a, b) =>a.location.country.localeCompare(b.location.country),
-    }
-  ];
-  
     return (
       <>
-        
-        {this.props.match.path === '/folderlist' && <QueryBuilder data={this.state.data} />}
+        {this.props.match.path === "/folderlist" && (
+          <QueryBuilder data={this.state.data} />
+        )}
+        {/* <Pagination
+        pagination={this.state.pagination}
+      showSizeChanger
+      onShowSizeChange={this.onShowSizeChange}
+      top
 
+    /> */}
         <Table
           columns={columns}
           rowKey={record => record.login.uuid}

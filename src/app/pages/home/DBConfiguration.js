@@ -95,19 +95,15 @@ class Dbconfiguration extends React.Component {
     return (
 <>
 <InputComp
+  title={"DB Configuration"}
 content={
   <>
 
-<div className="row d-flex justify-content-center" style={{margin:50}}>
+<div className="row d-flex justify-content-center" style={{margin:'50px'}}>
               <div className="col-md-12 ">
-              
       <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-      <div className="row d-flex justify-content-center">
+      <div className="row d-flex justify-content-between">
       <div className="col-md-6">
-      <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
-          <PortletBody fluidheight={true}>
-
-
       <Form.Item label="Driver Class">
           {getFieldDecorator("driverClass", {
             rules:[
@@ -132,38 +128,8 @@ content={
     <Option value="SQLServer">SQLServer</Option>
   </Select>)}
         </Form.Item>
-        <Form.Item label="Hostname">
-          {getFieldDecorator("hostname", {
-            rules: [
-              {
-                required: true,
-                message: "Please type the Hostname!",
-              }
-            ]
-          })(<Input placeholder="Hostname" />)}
-        </Form.Item>
-
-        <Form.Item label="User" >
-          {getFieldDecorator("user", {
-            rules: [
-              {
-                required: true,
-                message: "Please type your Username",
-              },
-           
-            ]
-          })(<Input placeholder="Username" />)}
-        </Form.Item>
-
-
-
-        </PortletBody>
-      </Portlet>
         </div>
         <div className="col-md-6">
-        <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
-          <PortletBody fluidheight={true}>
-
         <Form.Item label="Connection name">
           {getFieldDecorator("ConnectionName", {
             rules: [
@@ -172,21 +138,53 @@ content={
                 message: "Please type a REST Service URL"
               }
             ]
-          })(<Input placeholder="Connection Name" />)} 
+          })(<Input />)} 
         </Form.Item>
-
+        </div>
+        </div>
+        <div className="row d-flex justify-content-between">
+      <div className="col-md-6">
+        <Form.Item label="Hostname">
+          {getFieldDecorator("hostname", {
+            rules: [
+              {
+                required: true,
+                message: "Please type your username!",
+              }
+            ]
+          })(<Input />)}
+        </Form.Item>
+        </div>
+        <div className="col-md-6">
         <Form.Item label="Port" >
           {getFieldDecorator("port", {
             rules: [
               {
                 required: true,
-                message: "Please type the Port"
+                message: "Please input your password!"
               },
            
             ]
-          })(<Input placeholder="Port" />)}
+          })(<Input />)}
         </Form.Item>
-
+        </div>
+        </div>
+        <div className="row d-flex justify-content-between">
+        <div className="col-md-6">
+        <Form.Item label="User" >
+          {getFieldDecorator("user", {
+            rules: [
+              {
+                required: true,
+                message: "Please input your password!"
+              },
+           
+            ]
+          })(<Input />)}
+        </Form.Item>
+        
+        </div>
+        <div className="col-md-6">
         <Form.Item label="Password" >
           {getFieldDecorator("password", {
             rules: [
@@ -196,14 +194,10 @@ content={
               },
            
             ]
-          })(<Input.Password placeholder="Password" />)}
+          })(<Input.Password />)}
         </Form.Item>
-
-        </PortletBody>
-        </Portlet>
         </div>
         </div>
-
         <Form.Item {...tailFormItemLayout}>
           <Button type="primary" htmlType="submit">
             Save

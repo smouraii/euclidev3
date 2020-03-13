@@ -3,7 +3,7 @@ import StepsComp from "../../widgets/Steps";
 import { Button, Input, Descriptions, Divider, Transfer } from "antd";
 import { Formik, Form } from "formik";
 import { any } from "prop-types";
-import { Portlet, PortletBody, PortletHeader } from "../../partials/content/Portlet";
+import { Portlet, PortletBody } from "../../partials/content/Portlet";
 
 export default function NewRequest() {
 
@@ -25,7 +25,7 @@ export default function NewRequest() {
         key: i.toString(),
         title: `content${i + 1}`,
         description: `description of content${i + 1}`,
-        // chosen: Math.random() * 2 > 1,
+        chosen: Math.random() * 2 > 1,
       };
       if (data.chosen) {
         targetKeys.push(data.key);
@@ -53,8 +53,8 @@ export default function NewRequest() {
 
   return (
     <>
-    <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
-      <PortletBody fluidheight={true}>
+    <Portlet>
+      <PortletBody>
 
  
       <StepsComp
@@ -91,8 +91,8 @@ export default function NewRequest() {
                     handleBlur,
                     handleSubmit
                   }) => (
-                    <Portlet  className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
-                    <PortletBody fluidheight={true}>
+                    <Portlet>
+                    <PortletBody>
                     <Form>
                       <div className="inputContainer">
                         <label htmlFor="RequestNum">Request Number</label>
@@ -232,12 +232,7 @@ export default function NewRequest() {
                     handleBlur,
                     handleSubmit
                   }) => (
-                   
-
-                      
                     <Form>
-                    <Portlet  className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
-                      <PortletBody fluidheight={true}>
                       <div className="inputContainer">
                         <label htmlFor="Description">Description</label>
                         <Input
@@ -315,12 +310,7 @@ export default function NewRequest() {
                           </span>
                         )}
                       </div>
-                      </PortletBody>
-                    </Portlet>
-
                       <div className="col-md-12" style={{margin:20} }>
-                      <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
-                        <PortletBody fluidheight={true}>       
                       <Transfer
                         dataSource={mockData}
                         showSearch
@@ -333,8 +323,6 @@ export default function NewRequest() {
                         onChange={handleTransfer}
                         render={item => `${item.title}-${item.description}`}
                       />
-                      </PortletBody>
-                      </Portlet>
                       </div>
                       <div style={{marginTop:10}}>
                       <Button type="primary" htmlType="submit">
@@ -342,7 +330,6 @@ export default function NewRequest() {
                       </Button>
                       </div>
                     </Form>
-
                   )}
                 </Formik>
               </div>
@@ -350,13 +337,9 @@ export default function NewRequest() {
           </>
         }
         thirdcontent={
-
-                     <div className="row d-flex justify-content-center">
+          <div className="row d-flex justify-content-center">
               <div className="col-md-10 ">
-              <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
-                <PortletBody fluidheight={true}>
-                <PortletHeader title="Confirmation" />
-              <Descriptions >
+              <Descriptions title="Confirmation">
                 <Descriptions.Item label="Request Number">
                   {dataValues.RequestNum}
                 </Descriptions.Item>
@@ -376,12 +359,11 @@ export default function NewRequest() {
                   {dataValues.Created}
                 </Descriptions.Item>
               </Descriptions>
-              </PortletBody>
-              </Portlet>
             </div>
-            <div className="col-md-10 ">
-            <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
-                <PortletBody fluidheight={true}>
+
+            <Divider />
+
+            <div>
               <Descriptions>
                 <Descriptions.Item label="Description">
                   {dataValues.Description}
@@ -399,8 +381,6 @@ export default function NewRequest() {
                   {dataValues.Comments}
                 </Descriptions.Item>
               </Descriptions>
-              </PortletBody>
-              </Portlet>
             </div>
           </div>
         }

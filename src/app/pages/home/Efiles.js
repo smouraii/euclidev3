@@ -10,46 +10,22 @@ import Datatable from "../../widgets/DatatableAntd";
 export default function Efiles() {
   return (
     <>
-      <div className="d-flex justify-content-end">
-        <div>
-          <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
-            <PortletBody fluidheight={true} fit={true}>
-              <ModalAddFloder />
-            </PortletBody>
-          </Portlet>
-        </div>
-        <div>
-          <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
-            <PortletBody fluidheight={true} fit={true}>
-              <ModalUpload />
-            </PortletBody>
-          </Portlet>
-        </div>
-        <div>
-          <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
-            <PortletBody fluidheight={true} fit={true}>
-              <ModalDelete />
-            </PortletBody>
-          </Portlet>
-        </div>
-        <div>
-          <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
-            <PortletBody fluidheight={true} fit={true}>
-              <RefreshButton />
-            </PortletBody>
-          </Portlet>
-        </div>
-      </div>
+      <Portlet>
+        <PortletBody>
+          <div
+            className="d-flex justify-content-end"
 
-      <div className="row">
-        <Portlet>
-          <PortletBody fluid={true}>
-            <div className="col-md-12">
-              <Datatable />
-            </div>
-          </PortletBody>
-        </Portlet>
-      </div>
+          >
+            <ModalAddFloder />
+            <ModalUpload />
+            <ModalDelete />
+            <RefreshButton />
+          </div>
+          <div className="col-md-12" style={{margin:10}}>
+            <Datatable />
+          </div>
+        </PortletBody>
+      </Portlet>
     </>
   );
 }

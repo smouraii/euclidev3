@@ -34,7 +34,7 @@ export default function FolderList() {
   return (
     <>
       <Portlet>
-        <PortletBody fluid={true}>
+        <PortletBody fit={true}>
           <div className="row row-no-padding row-col-separator-x1">
             <div className="col-xl-12">
               <div
@@ -49,7 +49,7 @@ export default function FolderList() {
               </div>
                  </div>
                  
-                      <MaterialTableDemo />       
+                      <MaterialTableDemo/>       
              
             </div>
           </div>

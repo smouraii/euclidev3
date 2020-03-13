@@ -13,8 +13,8 @@ function handleChange(value) {
 export default function AuditConfiguration() {
   return (
     <>
-      <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
-        <PortletBody heightfluid={true}>
+      <Portlet>
+        <PortletBody>
           <Tabs defaultActiveKey="1">
             <TabPane
               tab={
@@ -25,7 +25,7 @@ export default function AuditConfiguration() {
               }
               key="1"
             >
-            <PortletBody heightfluid={true}>
+            <PortletBody fluid={true}>
               <TreeComp />
               </PortletBody>
             </TabPane>
@@ -41,11 +41,11 @@ export default function AuditConfiguration() {
               <div class="form row">
                 <div class="col-md-12">
                   <div class="row">
-                  <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
+                  <Portlet>
                   <PortletHeader
                     title= "Audit bugReport API"
                  />
-                <PortletBody heightfluid={true}>
+                <PortletBody fluid={true}>
                     <div class="col-md-6">
                      
 
@@ -64,9 +64,9 @@ export default function AuditConfiguration() {
                     </div>
                     </PortletBody>
                     </Portlet>
-                    <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
+                    <Portlet>
                     <PortletHeader title="BugReport synchronization" />
-                      <PortletBody heightfluid={true}>
+                      <PortletBody fluid={true}>
                     <div class="col-md-6">
                       <table class="table table-hover table-bordered">
                         <tbody>
@@ -106,9 +106,9 @@ export default function AuditConfiguration() {
             >
           
               <Form>
-              <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
+              <Portlet>
               <PortletHeader title="Log Settings" />
-              <PortletBody fluidheight={true}>
+              <PortletBody>
               <div className="col-md-6">
                 <div className="inputContainer">
                   <label htmlFor="fileName">File Name</label>
