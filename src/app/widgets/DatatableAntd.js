@@ -8,10 +8,10 @@ import Highlighter from "react-highlight-words";
 class Datatable extends React.Component {
   state = {
     data: [],
-    pagination: {pageSizeOptions:['10','25','50','100']},
+    pagination: {},
     loading: false,
-    searchText: "",
-    searchedColumn: ""
+    searchText:"",
+    searchedColumn:""
   };
 
   componentDidMount() {
@@ -40,7 +40,7 @@ class Datatable extends React.Component {
       url: "https://randomuser.me/api",
       method: "get",
       data: {
-        results: 20,
+        results: 10,
         ...params
       },
       type: "json"

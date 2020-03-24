@@ -125,7 +125,7 @@ export default function Dashboard() {
         <div className="col-xl-12">
           <div className="row row-full-height">
             <div className="col-sm-12 col-md-12 col-lg-6">
-            <Portlet fluidHeight={true}>
+            <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand" fluidHeight={true}>
             <PortletHeader
               title="Request per State per Month"
               // toolbar={
@@ -143,7 +143,7 @@ export default function Dashboard() {
           </Portlet>
             </div>
             <div className="col-sm-12 col-md-12 col-lg-6">
-            <Portlet fluidHeight={true}>
+            <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand" fluidHeight={true}>
             <PortletHeader
               title="Sample per Request"
               // toolbar={

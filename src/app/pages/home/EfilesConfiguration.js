@@ -31,19 +31,19 @@ export default function EfilesConfiguration() {
   };
 
   const plus = () => {
-    let percent = count + 10;
-    if (percent > 100) {
-      percent = 100;
+    let percentage = state + 10;
+    if (percentage > 100) {
+      percentage = 100;
     }
-    setState({ percent });
+    setState({ percentage });
   };
 
   const minus = () => {
-    let percent = count - 10;
-    if (percent < 0) {
-      percent = 0;
+    let percentage = state - 10;
+    if (percentage < 0) {
+      percentage = 0;
     }
-    setState({ percent });
+    setState({ percentage });
   };
 
   const { Panel } = Collapse;
@@ -58,7 +58,7 @@ export default function EfilesConfiguration() {
         </ButtonGroup>
       </div>
       <div className="col-md-6">
-        <Progress type="dashboard" percent={50} />
+        <Progress type="dashboard" percentage={50} />
         <Input />
         <ButtonGroup>
           <Button onClick={minus} icon="minus" />
@@ -92,13 +92,13 @@ export default function EfilesConfiguration() {
       <PortletBody>
         <Collapse accordion>
           <Panel header="This is panel header 1" key="1">
-            <p>{text}</p>
+            <div>{text}</div>
           </Panel>
           <Panel header="This is panel header 2" key="2">
-            <p>{text}</p>
+            <div>{text}</div>
           </Panel>
           <Panel header="This is panel header 3" key="3">
-            <p>{text}</p>
+            <div>{text}</div>
           </Panel>
         </Collapse>
       </PortletBody>

@@ -1,6 +1,10 @@
 import React from "react";
 import { Tabs, Icon, Button, Input, Select, Form } from "antd";
-import { Portlet, PortletBody, PortletHeader } from "../../partials/content/Portlet";
+import {
+  Portlet,
+  PortletBody,
+  PortletHeader
+} from "../../partials/content/Portlet";
 import TreeComp from "../../widgets/TreeComp";
 
 const { TabPane } = Tabs;
@@ -13,8 +17,8 @@ function handleChange(value) {
 export default function AuditConfiguration() {
   return (
     <>
-      <Portlet>
-        <PortletBody>
+      <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
+        <PortletBody heightfluid={true}>
           <Tabs defaultActiveKey="1">
             <TabPane
               tab={
@@ -25,8 +29,8 @@ export default function AuditConfiguration() {
               }
               key="1"
             >
-            <PortletBody fluid={true}>
-              <TreeComp />
+              <PortletBody heightfluid={true}>
+                <TreeComp />
               </PortletBody>
             </TabPane>
             <TabPane
@@ -41,55 +45,57 @@ export default function AuditConfiguration() {
               <div class="form row">
                 <div class="col-md-12">
                   <div class="row">
-                  <Portlet>
-                  <PortletHeader
-                    title= "Audit bugReport API"
-                 />
-                <PortletBody fluid={true}>
-                    <div class="col-md-6">
-                     
-
-                      <div class="form-group">
-                        <div class="input-group">
-                          <input
-                            name="apiURL"
-                            class="form-control"
-                            value="https://bug.euclide.io/api/soap/mantisconnect.php"
-                          />
-                          <span class="input-group-btn">
-                            <Button id="apiURL">Update</Button>
-                          </span>
+                         <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
+                      <PortletHeader title="Audit bugReport API" />
+                             <PortletBody widthfluid={true}>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <div class="input-group">
+                              <input
+                                name="apiURL"
+                                class="form-control"
+                                value="https://bug.euclide.io/api/soap/mantisconnect.php"
+                              />
+                              <span class="input-group-btn">
+                                <Button id="apiURL">Update</Button>
+                              </span>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                    </PortletBody>
+                      </PortletBody>
                     </Portlet>
-                    <Portlet>
-                    <PortletHeader title="BugReport synchronization" />
-                      <PortletBody fluid={true}>
-                    <div class="col-md-6">
-                      <table class="table table-hover table-bordered">
-                        <tbody>
-                          <tr>
-                            <td>issueReport customFields</td>
-                            <td>
-                              <Button class="btn default" id="customFieldSync">
-                                issueReport synchronize
-                              </Button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>issueReport categories</td>
-                            <td>
-                              <Button class="btn default" id="categoriesSync">
-                                issueReport synchronize
-                              </Button>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                    </PortletBody>
+                         <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
+                      <PortletHeader title="BugReport synchronization" />
+                             <PortletBody widthfluid={true}>
+                        <div class="col-md-6">
+                          <table class="table table-hover table-bordered">
+                            <tbody>
+                              <tr>
+                                <td>issueReport customFields</td>
+                                <td>
+                                  <Button
+                                    class="btn default"
+                                    id="customFieldSync"
+                                  >
+                                    issueReport synchronize
+                                  </Button>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>issueReport categories</td>
+                                <td>
+                                  <Button
+                                    class="btn default"
+                                    id="categoriesSync"
+                                  >
+                                    issueReport synchronize
+                                  </Button>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </PortletBody>
                     </Portlet>
                   </div>
                 </div>
@@ -104,48 +110,47 @@ export default function AuditConfiguration() {
               }
               key="3"
             >
-          
               <Form>
-              <Portlet>
-              <PortletHeader title="Log Settings" />
-              <PortletBody>
-              <div className="col-md-6">
-                <div className="inputContainer">
-                  <label htmlFor="fileName">File Name</label>
-                  <Input
-                    placeholder="File Name "
-                    name="fileName"
-                    onChange={handleChange}
-                  />
-                </div>
-                </div>
-                <div className="col-md-6">
-                <div className="inputContainer">
-                  <label htmlFor="fileLocation">File Location</label>
-                  <Input
-                    placeholder="File Location"
-                    name="fileLocation"
-                    onChange={handleChange}
-                  />
-                </div>
-                </div>
-                <div className="col-md-6"> 
-                  <label htmlFor="logtype">Log Type</label>
-                  <div>
-                    <Select
-                      defaultValue="dailyRolling"
-                      name="LogType"
-                      title="Log Type"
-                      onChange={handleChange}
-                    >
-                      <Option value="dailyRolling">DAILY ROLLING</Option>
-                      <Option value="rechSize">REACH SIZE</Option>
-                    </Select>
-                  </div>
-                </div>
-                </PortletBody>
-            </Portlet>
-              </Form>        
+                     <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand" >
+                  <PortletHeader title="Log Settings" />
+                         <PortletBody heightfluid={true}>
+                    <div className="col-md-6">
+                      <div className="inputContainer">
+                        <label htmlFor="fileName">File Name</label>
+                        <Input
+                          placeholder="File Name "
+                          name="fileName"
+                          onChange={handleChange}
+                        />
+                      </div>
+                    </div>
+                    <div className="col-md-6">
+                      <div className="inputContainer">
+                        <label htmlFor="fileLocation">File Location</label>
+                        <Input
+                          placeholder="File Location"
+                          name="fileLocation"
+                          onChange={handleChange}
+                        />
+                      </div>
+                    </div>
+                    <div className="col-md-6">
+                      <label htmlFor="logtype">Log Type</label>
+                      <div>
+                        <Select
+                          defaultValue="dailyRolling"
+                          name="LogType"
+                          title="Log Type"
+                          onChange={handleChange}
+                        >
+                          <Option value="dailyRolling">DAILY ROLLING</Option>
+                          <Option value="rechSize">REACH SIZE</Option>
+                        </Select>
+                      </div>
+                    </div>
+                  </PortletBody>
+                </Portlet>
+              </Form>
             </TabPane>
           </Tabs>
         </PortletBody>

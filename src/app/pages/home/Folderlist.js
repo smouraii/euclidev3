@@ -1,14 +1,11 @@
 import React from "react";
 import { Portlet, PortletBody } from "../../partials/content/Portlet";
-import ModalForm from "../../widgets/ModalForm";
-import reqwest from 'reqwest';
+import reqwest from "reqwest";
 import FullScreenButton from "../../widgets/FullscreenButton";
-import { Button, Input } from "antd";
-
-import QueryBuilder from "../../widgets/QueryBuilder";
-import MaterialTableDemo from "../../widgets/DatatableMaterialUI";
-
-
+import ModalAddFloder from "../../widgets/ModalAddFolder";
+import ModalUpload from "../../widgets/ModalUpload";
+import RefreshButton from "../../widgets/RefreshButton";
+import Datatable from "../../widgets/DatatableAntd";
 
 
 export default function FolderList() {
@@ -22,39 +19,50 @@ export default function FolderList() {
         results: 30,
         ...params
       }
-    })
-  }
-//  const search = myInput.on( 'keyup', function () {
-//     Datatable.search( this.value ).draw();
-// } );
+    });
+  };
+  //  const search = myInput.on( 'keyup', function () {
+  //     Datatable.search( this.value ).draw();
+  // } );
   // handleChange(event) {
   //   this.setState({value: event.target.value});
   // }
 
   return (
     <>
-      <Portlet>
-        <PortletBody fit={true}>
-          <div className="row row-no-padding row-col-separator-x1">
-            <div className="col-xl-12">
-              <div
-                style={{
-                  margin: "20px"
-                }}
-              >
-              
-                <ModalForm />
-                <div className="col-xl-6">
-              
-              </div>
-                 </div>
-                 
-                      <MaterialTableDemo/>       
-             
-            </div>
-          </div>
-        </PortletBody>
-      </Portlet>
+      <div className="d-flex justify-content-end">
+        <div style={{ margin: 5 }}>
+          <Portlet>
+            <PortletBody fit={true}>
+              <ModalAddFloder />
+            </PortletBody>
+          </Portlet>
+        </div>
+        <div style={{ margin: 5 }}>
+          <Portlet>
+            <PortletBody fit={true}>
+              <ModalUpload />
+            </PortletBody>
+          </Portlet>
+        </div>
+        <div style={{ margin: 5 }}>
+          <Portlet>
+            <PortletBody fit={true}>
+              <RefreshButton />
+            </PortletBody>
+          </Portlet>
+        </div>
+      </div>
+
+      <div className="row row-no-padding row-col-separator-x1">
+        <div className="col-xl-12">
+          <Portlet>
+            <PortletBody fit={true}>
+              <Datatable/>
+            </PortletBody>
+          </Portlet>
+        </div>
+      </div>
     </>
   );
 }
