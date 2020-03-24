@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Collapse, Progress, Button, Input, Select, Icon } from "antd";
 import { Circle } from "rc-progress";
 import { Portlet, PortletBody } from "../../partials/content/Portlet";
+import { StaticRouter } from "react-router-dom";
 
 const ButtonGroup = Button.Group;
 const { Option } = Select;
@@ -19,7 +20,7 @@ export default function EfilesConfiguration() {
     if (percent > 100) {
       percent = 100;
     }
-    setState({ percent });
+    setState(percent);
   };
 
   const decline = () => {
@@ -27,30 +28,30 @@ export default function EfilesConfiguration() {
     if (percent < 0) {
       percent = 0;
     }
-    setState({ percent });
+    setState(percent);
   };
 
   const plus = () => {
-    let percentage = state + 10;
-    if (percentage > 100) {
-      percentage = 100;
+    let percent = count + 10;
+    if (percent > 100) {
+      percent = 100;
     }
-    setState({ percentage });
+    setCount(percent );
   };
 
   const minus = () => {
-    let percentage = state - 10;
-    if (percentage < 0) {
-      percentage = 0;
+    let percent = count - 10;
+    if (percent < 0) {
+      percent = 0;
     }
-    setState({ percentage });
+    setCount(percent);
   };
 
   const { Panel } = Collapse;
   const text = (
     <div className="row justify-content-between ">
       <div className="col-md-6">
-        <Progress type="dashboard" percent={75} />
+        <Progress type="dashboard" percent={state} />
         <Input />
         <ButtonGroup>
           <Button onClick={decline} icon="minus" />
@@ -58,7 +59,7 @@ export default function EfilesConfiguration() {
         </ButtonGroup>
       </div>
       <div className="col-md-6">
-        <Progress type="dashboard" percentage={50} />
+        <Progress type="dashboard" percent={count} />
         <Input />
         <ButtonGroup>
           <Button onClick={minus} icon="minus" />
