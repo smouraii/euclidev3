@@ -1,6 +1,6 @@
 /* eslint-disable no-script-url,jsx-a11y/anchor-is-valid */
 import React from "react";
-import { toAbsoluteUrl } from "../../_Euclide/utils/utils";
+import { toAbsoluteUrl } from "../../_metronic/utils/utils";
 import PortletHeaderDropdown from "../partials/content/CustomDropdowns/PortletHeaderDropdown";
 
 export default function BestSellers() {
@@ -90,7 +90,7 @@ export default function BestSellers() {
                 </div>
                 <div className="kt-widget5__section">
                   <a className="kt-widget5__title">Branding Mockup</a>
-                  <p className="kt-widget5__desc">Euclide bootstrap themes.</p>
+                  <p className="kt-widget5__desc">Metronic bootstrap themes.</p>
                   <div className="kt-widget5__info">
                     <span>Author:</span>
                     <span className="kt-font-info">Fly themes</span>

@@ -2,13 +2,11 @@ import { toAbsoluteUrl } from "../utils/utils";
 
 export const initLayoutConfig = {
   demo: "demo4",
-  // Base Layout
   colors: {
     state: {
       brand: "#366cf3",
       light: "#ffffff",
       dark: "#282a3c",
-
       primary: "#5867dd",
       success: "#34bfa3",
       info: "#36a3f7",
@@ -22,24 +20,23 @@ export const initLayoutConfig = {
   },
   self: {
     body: {
-      "background-image": toAbsoluteUrl("/media/demos/demo4/header.jpg")
+      "background-image": "/media/demos/demo4/header.jpg"
     }
   },
   loader: {
     enabled: true,
     type: "brand"
   },
-  // Page toolbar
   toolbar: {
     display: true
   },
   header: {
     self: {
-      width: "fixed", // fixed|fluid
+      width: "fixed",
       fixed: {
         desktop: {
           enabled: true,
-          mode: "menu" //supported modes: all, topbar, menu
+          mode: "menu"
         },
         mobile: true
       }
@@ -70,23 +67,22 @@ export const initLayoutConfig = {
     display: true,
     layout: "subheader-v1",
     fixed: true,
-    width: "fixed", //fixed|fluid
+    width: "fixed",
     layouts: {
       "subheader-v1": "Subheader v1",
       "subheader-v2": "Subheader v2",
       "subheader-v3": "Subheader v3",
       "subheader-v4": "Subheader v4"
     },
-    style: "transparent" // transparent|solid
+    style: "transparent"
   },
-  // Content
   content: {
-    width: "fixed" // fixed/fluid
+    width: "fluid"
   },
   footer: {
     self: {
-      width: "fixed", // fixed|fluid
-      layout: "extended" // extended|basic
+      width: "fixed",
+      layout: "extended"
     }
   },
   aside: {

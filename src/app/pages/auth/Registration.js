@@ -249,7 +249,6 @@ function Registration(props) {
                   )}
                 />
               </div>
-              
 
               <div className="form-group mb-0">
                 <FormControlLabel
@@ -278,7 +277,12 @@ function Registration(props) {
               </div>
 
               <div className="kt-login__actions">
-            
+                <Link
+                  to="/auth/forgot-password"
+                  className="kt-link kt-login__link-forgot"
+                >
+                  <FormattedMessage id="AUTH.GENERAL.FORGOT_BUTTON" />
+                </Link>
 
                 <Link to="/auth">
                   <button type="button" className="btn btn-secondary btn-elevate kt-login__btn-secondary">

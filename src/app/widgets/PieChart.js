@@ -2,17 +2,19 @@ import React from "react";
 import { ResponsivePieCanvas } from "@nivo/pie";
 
 const MyResponsivePie = ({ data }) => (
-  <div style={{ height: "500px" }}>
+  <div style={{ height: 500,minWidth:450 }}>
     <ResponsivePieCanvas
       data={data}
       margin={{ top: 40, right: 200, bottom: 40, left: 80 }}
+      sortByValue={true}
       pixelRatio={1}
       innerRadius={0.5}
       padAngle={0.7}
       cornerRadius={3}
       colors={{ scheme: "paired" }}
       borderColor={{ from: "color", modifiers: [["darker", 0.6]] }}
-      radialLabelsSkipAngle={10}
+      radialLabel={function(e){return e.id+" ("+e.value+")"}}
+      radialLabelsSkipAngle={0}
       radialLabelsTextXOffset={6}
       radialLabelsTextColor="#333333"
       radialLabelsLinkOffset={0}
@@ -97,14 +99,27 @@ const MyResponsivePie = ({ data }) => (
       ]}
       legends={[
         {
-          anchor: "right",
-          direction: "column",
-          translateX: 140,
-          itemWidth: 300,
-          itemHeight: 70,
-          itemsSpacing: 2,
-          symbolSize: 14,
-          symbolShape: "circle"
+                dataFrom: 'keys',
+                anchor: 'bottom-right',
+                direction: 'column',
+                justify: false,
+                translateX: 120,
+                translateY: 0,
+                itemsSpacing: 2,
+                itemWidth: 100,
+                itemHeight: 20,
+                itemDirection: 'left-to-right',
+                itemOpacity: 0.85,
+                symbolShape:'circle',
+                symbolSize: 20,
+                effects: [
+                    {
+                        on: 'hover',
+                        style: {
+                            itemOpacity: 1
+                        }
+                      }
+                ]
         }
       ]}
     />

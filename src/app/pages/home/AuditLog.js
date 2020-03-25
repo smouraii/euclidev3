@@ -1,45 +1,36 @@
 import React from "react";
-import {
-  Portlet,
-  PortletBody,
-} from "../../partials/content/Portlet";
-import Datatable from "../../widgets/Datatables"
-import datatableData from "./data/datatableData.json"
+import { Portlet, PortletBody } from "../../partials/content/Portlet";
+import Datatables from "../../widgets/DatatablePrimeReact";
 import ModalForm from "../../widgets/ModalForm";
+import RefreshButton from "../../widgets/RefreshButton";
 
 export default function AuditLog() {
-
   return (
     <>
-    <Portlet>
-        <PortletBody fit={true}>
-          <div className="row row-no-padding row-col-separator-x1">
-            
-            <div className="col-xl-12">
-            <div
-                style={{
-                  float: "right",
-                  marginRight: "20px",
-                  marginTop: "20px"
-                }}
-              >
-                <ModalForm />
-              </div>
-              <Datatable
-                title="A Datatable "
-                data={datatableData}
-                desc="This is a Datatable"
-              />
-            </div>
+      <div className="row d-flex justify-content-end">
+        
+        <div style={{margin:5}}>
+          <Portlet>
+            <PortletBody fit={true}>
+              <ModalForm />
+            </PortletBody>
+          </Portlet>
           </div>
-        </PortletBody>
-      </Portlet>
-
+          <div style={{margin:5}}>
+          <Portlet>
+            <PortletBody fit={true}>
+              <RefreshButton />
+            </PortletBody>
+          </Portlet>
+        </div>
+        <div className="col-md-12">
+        <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
+          <PortletBody fit={true}>
+            <Datatables />
+          </PortletBody>
+        </Portlet>
+      </div>
+    </div>
     </>
-   );
-  }
-
-
-
-
-
+  );
+}

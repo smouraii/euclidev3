@@ -1,35 +1,34 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import Fullscreen from "react-full-screen";
 import {Button} from 'antd';
+import { Portlet } from "../partials/content/Portlet";
  
-class FullscreenButton extends Component {
-  constructor(props) {
-    super();
+export default function FullscreenButton(props)  {
+
  
-    this.state = {
-      isFull: false,
-    };
+const [isFull,setIsFull] = useState({isFull:false});
+ 
+const goFull = () => {
+    setIsFull({ isFull: true });
   }
  
-  goFull = () => {
-    this.setState({ isFull: true });
-  }
- 
-  render() {
+
     return (
-      <div className="App">
-        <Button onClick={this.goFull}>
+      <div className="Fullscreen">
+        <Button onClick={goFull}>
           Go Fullscreen
         </Button>
  
         <Fullscreen
-          enabled={this.state.isFull}
-          onChange={isFull => this.setState({isFull})}
+          enabled={isFull}
+          onChange={isFull => setIsFull({isFull:true})}
         >
+        <Portlet>
+        <div style={{margin:50}}>
+        {props.current}
+        </div>
+        </Portlet>
         </Fullscreen>
       </div>
     );
   }
-}
- 
-export default FullscreenButton;

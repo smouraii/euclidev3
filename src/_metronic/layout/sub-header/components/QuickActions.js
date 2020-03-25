@@ -2,31 +2,29 @@
 import React from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import Dropdown from "react-bootstrap/Dropdown";
-import { DatePicker } from "antd";
-import moment from 'moment';
 
-const { RangePicker } = DatePicker;
-
-function onChange(dates, dateStrings) {
-  console.log('From: ', dates[0], ', to: ', dates[1]);
-  console.log('From: ', dateStrings[0], ', to: ', dateStrings[1]);
-}
+const QuickActionsDropdownToggle = React.forwardRef((props, ref) => {
+  return (
+    <a
+      ref={ref}
+      href="#"
+      onClick={e => {
+        e.preventDefault();
+        props.onClick(e);
+      }}
+      id=""
+      className="btn btn-danger kt-subheader__btn-options"
+    >
+      Products
+    </a>
+  );
+});
 
 export class QuickActions extends React.Component {
   render() {
     return (
-     
       <>
- {/* <RangePicker
-      ranges={{
-        Today: [moment(), moment()],
-        'This Month': [moment().startOf('month'), moment().endOf('month')],
-      }}
-      onChange={onChange}
-    />
-    <br /> */}
-
-        {/* <OverlayTrigger
+        <OverlayTrigger
           placement="top"
           overlay={<Tooltip id="quick-actions-tooltip">Quick actions</Tooltip>}
         >
@@ -52,7 +50,7 @@ export class QuickActions extends React.Component {
               </a>
             </Dropdown.Menu>
           </Dropdown>
-        </OverlayTrigger> */}
+        </OverlayTrigger>
       </>
     );
   }

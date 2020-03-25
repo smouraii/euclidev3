@@ -1,6 +1,10 @@
 import React from "react";
 import { Tabs, Icon, Button, Input, Select, Form } from "antd";
-import { Portlet, PortletBody } from "../../partials/content/Portlet";
+import {
+  Portlet,
+  PortletBody,
+  PortletHeader
+} from "../../partials/content/Portlet";
 import TreeComp from "../../widgets/TreeComp";
 
 const { TabPane } = Tabs;
@@ -13,8 +17,8 @@ function handleChange(value) {
 export default function AuditConfiguration() {
   return (
     <>
-      <Portlet>
-        <PortletBody>
+      <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
+        <PortletBody heightfluid={true}>
           <Tabs defaultActiveKey="1">
             <TabPane
               tab={
@@ -25,7 +29,9 @@ export default function AuditConfiguration() {
               }
               key="1"
             >
-              <TreeComp />
+              <PortletBody heightfluid={true}>
+                <TreeComp />
+              </PortletBody>
             </TabPane>
             <TabPane
               tab={
@@ -39,46 +45,58 @@ export default function AuditConfiguration() {
               <div class="form row">
                 <div class="col-md-12">
                   <div class="row">
-                    <div class="col-md-6">
-                      <h3 class="form-section">audit bugReport api</h3>
-
-                      <div class="form-group">
-                        <div class="input-group">
-                          <input
-                            name="apiURL"
-                            class="form-control"
-                            value="https://bug.euclide.io/api/soap/mantisconnect.php"
-                          />
-                          <span class="input-group-btn">
-                            <Button id="apiURL">Update</Button>
-                          </span>
+                         <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
+                      <PortletHeader title="Audit bugReport API" />
+                             <PortletBody widthfluid={true}>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <div class="input-group">
+                              <input
+                                name="apiURL"
+                                class="form-control"
+                                value="https://bug.euclide.io/api/soap/mantisconnect.php"
+                              />
+                              <span class="input-group-btn">
+                                <Button id="apiURL">Update</Button>
+                              </span>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <h3 class="form-section">bugReport synchronization</h3>
-
-                      <table class="table table-hover table-bordered">
-                        <tbody>
-                          <tr>
-                            <td>issueReport customFields</td>
-                            <td>
-                              <Button class="btn default" id="customFieldSync">
-                                issueReport synchronize
-                              </Button>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>issueReport categories</td>
-                            <td>
-                              <Button class="btn default" id="categoriesSync">
-                                issueReport synchronize
-                              </Button>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
+                      </PortletBody>
+                    </Portlet>
+                         <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
+                      <PortletHeader title="BugReport synchronization" />
+                             <PortletBody widthfluid={true}>
+                        <div class="col-md-6">
+                          <table class="table table-hover table-bordered">
+                            <tbody>
+                              <tr>
+                                <td>issueReport customFields</td>
+                                <td>
+                                  <Button
+                                    class="btn default"
+                                    id="customFieldSync"
+                                  >
+                                    issueReport synchronize
+                                  </Button>
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>issueReport categories</td>
+                                <td>
+                                  <Button
+                                    class="btn default"
+                                    id="categoriesSync"
+                                  >
+                                    issueReport synchronize
+                                  </Button>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </PortletBody>
+                    </Portlet>
                   </div>
                 </div>
               </div>
@@ -93,37 +111,45 @@ export default function AuditConfiguration() {
               key="3"
             >
               <Form>
-                <div className="inputContainer">
-                  <label htmlFor="fileName">Request Number</label>
-                  <Input
-                    placeholder="File Name "
-                    name="fileName"
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="inputContainer">
-                  <label htmlFor="fileLocation">Request Number</label>
-                  <Input
-                    placeholder="File Location"
-                    name="fileLocation"
-                    onChange={handleChange}
-                  />
-                </div>
-                <div>
-                  <label htmlFor="logtype">Request Number</label>
-                  <div>
-                    <Select
-                      defaultValue="dailyRolling"
-                      name="LogType"
-                      title="Log Type"
-                      style={{ width: 700 }}
-                      onChange={handleChange}
-                    >
-                      <Option value="dailyRolling">DAILY ROLLING</Option>
-                      <Option value="rechSize">REACH SIZE</Option>
-                    </Select>
-                  </div>
-                </div>
+                     <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand" >
+                  <PortletHeader title="Log Settings" />
+                         <PortletBody heightfluid={true}>
+                    <div className="col-md-6">
+                      <div className="inputContainer">
+                        <label htmlFor="fileName">File Name</label>
+                        <Input
+                          placeholder="File Name "
+                          name="fileName"
+                          onChange={handleChange}
+                        />
+                      </div>
+                    </div>
+                    <div className="col-md-6">
+                      <div className="inputContainer">
+                        <label htmlFor="fileLocation">File Location</label>
+                        <Input
+                          placeholder="File Location"
+                          name="fileLocation"
+                          onChange={handleChange}
+                        />
+                      </div>
+                    </div>
+                    <div className="col-md-6">
+                      <label htmlFor="logtype">Log Type</label>
+                      <div>
+                        <Select
+                          defaultValue="dailyRolling"
+                          name="LogType"
+                          title="Log Type"
+                          onChange={handleChange}
+                        >
+                          <Option value="dailyRolling">DAILY ROLLING</Option>
+                          <Option value="rechSize">REACH SIZE</Option>
+                        </Select>
+                      </div>
+                    </div>
+                  </PortletBody>
+                </Portlet>
               </Form>
             </TabPane>
           </Tabs>

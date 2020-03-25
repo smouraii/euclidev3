@@ -24,17 +24,15 @@ const StepsComp = (props) => {
     }
   ];
     return (
-      <div>
+      <div style={{margin:5}}>
         <Steps current={props.current}> 
           {steps.map(item => (
             <Step className="stepcustom" key={item.title} title={item.title} />
           ))}
         </Steps>
-        <Portlet>
-          <PortletBody fit={true} margin-top="50px">
-            <div className="steps-content">{steps[props.current].content}</div>
-          </PortletBody>
-        </Portlet>
+
+            <div className="steps-content" style={{margin:10}}>{steps[props.current].content}</div>
+
         <div className="steps-action">
           {props.current === steps.length - 1 && (
             <Button

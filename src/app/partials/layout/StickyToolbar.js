@@ -7,7 +7,7 @@ export default class StickyToolbar extends React.Component {
   render() {
     return (
       <>
-        {/* <ul className="kt-sticky-toolbar" style={{ marginTop: "30px" }}>
+        <ul className="kt-sticky-toolbar" style={{ marginTop: "30px" }}>
   
           <OverlayTrigger
             placement="left"
@@ -40,7 +40,7 @@ export default class StickyToolbar extends React.Component {
               </a>
             </li>
           </OverlayTrigger>
-        </ul> */}
+        </ul>
       </>
     );
   };

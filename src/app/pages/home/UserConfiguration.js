@@ -3,8 +3,7 @@ import {
   Portlet,
   PortletBody
 } from "../../partials/content/Portlet";
-import Datatable from "../../widgets/Datatables";
-import datatableData from "./data/datatableData.json";
+import Datatables from "../../widgets/DatatablePrimeReact";
 import ModalForm from "../../widgets/ModalForm";
 import ModalChangeRole from "../../widgets/ModalChangeRole";
 import ModalActivate from "../../widgets/ModalActivate";
@@ -36,10 +35,7 @@ export default function UserConfiguration() {
                
                 </div>
 
-                <Datatable
-                title="A Datatable "
-                data={datatableData}
-                desc="This is a Datatable"
+                <Datatables
               />
            
         </PortletBody>

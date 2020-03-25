@@ -22,12 +22,6 @@ class Footer extends React.Component {
         id="kt_footer"
         style={{backgroundImage: `url(${toAbsoluteUrl("/media/bg/bg-2.jpg")})`}}
       >
-        {footerSelfLayoutIsExtended && (
-          <div className="kt-footer__top">
-            <div className={`kt-container ${footerContainerClasses}`}>
-            </div>
-          </div>
-        )}
         <div className="kt-footer__bottom" style={{backgroundColor: "transparent"}}>
           <div className={`kt-container ${footerContainerClasses}`}>
             <div className="kt-footer__wrapper">
@@ -47,9 +41,7 @@ class Footer extends React.Component {
                 </div>
               </div>
               <div className="kt-footer__menu">
-                <a href="http://keenthemes.com/metronic" target="_blank">
-                  Purchase License
-                </a>
+
                 <a href="http://keenthemes.com/metronic" target="_blank">
                   Team
                 </a>

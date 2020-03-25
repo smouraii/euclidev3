@@ -6,7 +6,7 @@ import { ResponsiveBar } from '@nivo/bar'
 // website examples showcase many properties,
 // you'll often use just a few of them.
 const MyResponsiveBar = ({ data /* see data tab */ }) => (
-    <div style={{ height: "500px", width:"max" }}>
+    <div style={{ height: 500, minWidth:400 }}>
     <ResponsiveBar
         data={data}
         keys={[ 'hot dog', 'burger', 'sandwich', 'kebab', 'fries', 'donut' ]}

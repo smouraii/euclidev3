@@ -1,8 +1,11 @@
 import React from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
-
+import BoxExamplesPage from "./layout/BoxExamplesPage";
 import ContainerExamplesPage from "./layout/ContainerExamplesPage";
-
+import GridExamplesPage from "./layout/GridExamplesPage";
+import GridListExamplesPage from "./layout/GridListExamplesPage";
+import HiddenExamplesPage from "./layout/HiddenExamplesPage";
+import AutocompleteExamplesPage from "./inputs/AutocompleteExamplesPage";
 import ButtonsExamplesPage from "./inputs/ButtonsExamplesPage";
 import CheckboxesExamplesPage from "./inputs/CheckboxesExamplesPage";
 import PickersExamplesPage from "./inputs/PickersExamplesPage";
@@ -45,35 +48,26 @@ import UseMediaQueryExamplesPage from "./utils/UseMediaQueryExamplesPage";
 import SliderExamplesPage from "./labs/SliderExamplesPage";
 import SpeedDialExamplesPage from "./labs/SpeedDialExamplesPage";
 import ToggleButtonExamplesPage from "./labs/ToggleButtonExamplesPage";
-import FolderList from "../FolderList";
-import NewRequest from "../NewRequest";
-import Efiles from "../Efiles"
-import SwitchComp from "../../../widgets/SwitchComp";
-import WrappedLims from "../Lims";
-import WrappedDbconfiguration from "../DBConfiguration";
-import MailServer from "../MailServer";
-import UserConfiguration from "../UserConfiguration";
-import AuditConfiguration from "../AuditConfiguration";
 
 export default function GoogleMaterialPage() {
   return (
     <Switch>
       <Redirect
         exact={true}
-        from="/lims"
-        to="/euclide/lims"
+        from="/google-material"
+        to="/google-material/layout/box"
       />
 
-       {/*Lims*/}
-       <Route 
-        path="folderlist" 
-        component={FolderList} 
+      {/* Layout */}
+      <Route 
+        path="/google-material/layout/box" 
+        component={BoxExamplesPage} 
       />
-       <Route 
-        path="newrequest" 
-        component={NewRequest} 
+      <Route
+        path="/google-material/layout/container"
+        component={ContainerExamplesPage}
       />
-     {/* <Route 
+      <Route 
         path="/google-material/layout/grid" 
         component={GridExamplesPage} 
       />
@@ -87,37 +81,89 @@ export default function GoogleMaterialPage() {
       />
 
       {/* Inputs */}
-     
-     {/*  <Route 
+      <Route 
         path="/google-material/inputs/autocomplete" 
         component={AutocompleteExamplesPage} 
-      />*/}
-     
+      />
       <Route
-        path="eFiles"
-        component={Efiles}
+        path="/google-material/inputs/buttons"
+        component={ButtonsExamplesPage}
+      />
+      <Route 
+        path="/google-material/inputs/checkboxes" 
+        component={CheckboxesExamplesPage} 
+      />
+      <Route
+        path="/google-material/inputs/pickers"
+        component={PickersExamplesPage}
+      />
+      <Route
+        path="/google-material/inputs/radio-buttons"
+        component={RadioButtonsExamplesPage}
+      />
+      <Route
+        path="/google-material/inputs/selects"
+        component={SelectsExamplesPage}
+      />
+      <Route 
+        path="/google-material/inputs/switches" 
+        component={SwitchesExamplesPage} 
+      />
+      <Route
+        path="/google-material/inputs/text-fields"
+        component={TextFieldsExamplesPage}
+      />
+      <Route
+        path="/google-material/inputs/transfer-list"
+        component={TransferListExamplesPage}
       />
 
-      {/* Euclide */}
+      {/* Navigation */}
       <Route
-        path="Lims"
-        component={WrappedLims}
+        path="/google-material/navigation/bottom-navigation"
+        component={BottomNavigationExamplesPage}
       />
       <Route
-        path="db-Configuration"
-        component={WrappedDbconfiguration}
+        path="/google-material/navigation/breadcrumbs"
+        component={BreadcrumbsExamplesPage}
       />
       <Route
-        path="mailServer"
-        component={MailServer}
+        path="/google-material/navigation/drawer"
+        component={DrawerExamplesPage}
       />
       <Route
-        path="/users-configuration"
-        component={UserConfiguration}
+        path="/google-material/navigation/links"
+        component={LinksExamplesPage}
       />
       <Route
-        path="audit-configuration"
-        component={AuditConfiguration}
+        path="/google-material/navigation/menus"
+        component={MenusExamplesPage}
+      />
+      <Route
+        path="/google-material/navigation/steppers"
+        component={SteppersExamplesPage}
+      />
+      <Route
+        path="/google-material/navigation/tabs"
+        component={TabsExamplesPage}
+      />
+
+      {/* Surfaces */}
+      <Route
+        path="/google-material/surfaces/app-bar"
+        component={AppBarExamplesPage}
+      />
+      <Route
+        path="/google-material/surfaces/paper"
+        component={PaperExamplesPage}
+      />
+      <Route
+        path="/google-material/surfaces/cards"
+        component={CardsExamplesPage}
+      />
+      <Route
+        path="/google-material/surfaces/expansion-panels"
+        component={ExpansionPanelsExamplesPage}
       />
 
       {/* Feedback */}

@@ -14,290 +14,21 @@ export default {
         root: true,
         alignment: "left",
         toggle: "click",
-        page: "limsMenu",
+        page: "google-material",
         submenu: [
           {
             title: "New Request",
-            bullet: "dot",
             page: "newrequest",
-           /* submenu: [
-              {
-                title: "Box",
-                bullet: "line",
-                page: "google-material/layout/box"
-              },
-              {
-                title: "Container",
-                bullet: "line",
-                page: "google-material/layout/container"
-              },
-              {
-                title: "Grid",
-                bullet: "line",
-                page: "google-material/layout/grid"
-              },
-              {
-                title: "Grid list",
-                bullet: "line",
-                page: "google-material/layout/grid-list"
-              },
-              {
-                title: "Hidden",
-                bullet: "line",
-                page: "google-material/layout/hidden"
-              }
-            ] */
           },
           {
             title: "Folder List",
-            bullet: "dot",
             page: "folderlist",
-          /*  submenu: [
-              {
-                title: "Autocomplete",
-                page: "google-material/inputs/autocomplete",
-                bullet: "line",
-                permission: "accessToECommerceModule"
-              },
-              {
-                title: "Buttons",
-                page: "google-material/inputs/buttons",
-                bullet: "line"
-              },
-              {
-                title: "Checkboxes",
-                page: "google-material/inputs/checkboxes",
-                bullet: "line"
-              },
-              {
-                title: "Pickers",
-                page: "google-material/inputs/pickers",
-                bullet: "line"
-              },
-              {
-                title: "Radio Buttons",
-                page: "google-material/inputs/radio-buttons",
-                bullet: "line"
-              },
-              {
-                title: "Selects",
-                page: "google-material/inputs/selects",
-                bullet: "line"
-              },
-              {
-                title: "Switches",
-                page: "google-material/inputs/switches",
-                bullet: "line"
-              },
-              {
-                title: "Text Fields",
-                page: "google-material/inputs/text-fields",
-                bullet: "line"
-              },
-              {
-                title: "Transfer List",
-                page: "google-material/inputs/transfer-list",
-                bullet: "line"
-              }
-            ] */
           },
-         /* {
-            title: "Navigation",
-            bullet: "dot",
-            page: "google-material/navigation/bottom-navigation",
-            submenu: [
-              {
-                title: "Bottom Navigation",
-                bullet: "line",
-                page: "google-material/navigation/bottom-navigation"
-              },
-              {
-                title: "Breadcrumbs",
-                bullet: "line",
-                page: "google-material/navigation/breadcrumbs"
-              },
-              {
-                title: "Drawers",
-                bullet: "line",
-                page: "google-material/navigation/drawer"
-              },
-              {
-                title: "Links",
-                bullet: "line",
-                page: "google-material/navigation/links"
-              },
-              {
-                title: "Menus",
-                bullet: "line",
-                page: "google-material/navigation/menus"
-              },
-              {
-                title: "Steppers",
-                bullet: "line",
-                page: "google-material/navigation/steppers"
-              },
-              {
-                title: "Tabs",
-                bullet: "line",
-                page: "google-material/navigation/tabs"
-              }
-            ]
-          },
-          {
-            title: "Surfaces",
-            bullet: "dot",
-            page: "google-material/surfaces/app-bar",
-            submenu: [
-              {
-                title: "App Bar",
-                bullet: "line",
-                page: "google-material/surfaces/app-bar"
-              },
-              {
-                title: "Paper",
-                bullet: "line",
-                page: "google-material/surfaces/paper"
-              },
-              {
-                title: "Cards",
-                bullet: "line",
-                page: "google-material/surfaces/cards"
-              },
-              {
-                title: "Expansion Panels",
-                bullet: "line",
-                page: "google-material/surfaces/expansion-panels"
-              }
-            ]
-          },
-          {
-            title: "Feedback",
-            bullet: "dot",
-            page: "google-material/feedback/progress",
-            submenu: [
-              {
-                title: "Progress",
-                bullet: "line",
-                page: "google-material/feedback/progress"
-              },
-              {
-                title: "Dialogs",
-                bullet: "line",
-                page: "google-material/feedback/dialogs"
-              },
-              {
-                title: "Snackbars",
-                bullet: "line",
-                page: "google-material/feedback/snackbars"
-              }
-            ]
-          },
-          {
-            title: "Data Display",
-            bullet: "dot",
-            page: "google-material/data-displays/avatars",
-            submenu: [
-              {
-                title: "Avatars",
-                bullet: "line",
-                page: "google-material/data-displays/avatars"
-              },
-              {
-                title: "Badges",
-                bullet: "line",
-                page: "google-material/data-displays/badges"
-              },
-              {
-                title: "Chips",
-                bullet: "line",
-                page: "google-material/data-displays/chips"
-              },
-              {
-                title: "Dividers",
-                bullet: "line",
-                page: "google-material/data-displays/dividers"
-              },
-              {
-                title: "Icons",
-                bullet: "line",
-                page: "google-material/data-displays/icons"
-              },
-              {
-                title: "Lists",
-                bullet: "line",
-                page: "google-material/data-displays/lists"
-              },
-              {
-                title: "Tables",
-                bullet: "line",
-                page: "google-material/data-displays/tables"
-              },
-              {
-                title: "Tooltips",
-                bullet: "line",
-                page: "google-material/data-displays/tooltips"
-              },
-              {
-                title: "Typography",
-                bullet: "line",
-                page: "google-material/data-displays/typography"
-              }
-            ]
-          },
-          {
-            title: "Utils",
-            bullet: "dot",
-            page: "google-material/utils/click-away-listener",
-            submenu: [
-              {
-                title: "Click Away Listener",
-                bullet: "line",
-                page: "google-material/utils/click-away-listener"
-              },
-              {
-                title: "Modal",
-                bullet: "line",
-                page: "google-material/utils/modal"
-              },
-              {
-                title: "No SSR",
-                bullet: "line",
-                page: "google-material/utils/no-ssr"
-              },
-              {
-                title: "Popover",
-                bullet: "line",
-                page: "google-material/utils/popover"
-              },
-              {
-                title: "Popper",
-                bullet: "line",
-                page: "google-material/utils/popper"
-              },
-              {
-                title: "Portal",
-                bullet: "line",
-                page: "google-material/utils/portal"
-              },
-              {
-                title: "Transitions",
-                bullet: "line",
-                page: "google-material/utils/transitions"
-              },
-              {
-                title: "useMediaQuery",
-                bullet: "line",
-                page: "google-material/utils/use-media-query"
-              }
-            ]
-          }*/
         ]
       },
       {
         title: "eFiles",
         root: true,
-        alignment: "left",
-        toggle: "click",
         page: "eFiles",
       },
       {
@@ -308,7 +39,7 @@ export default {
         page: "builder",
         submenu: [
           {
-            title: "LIMS",
+            title: "Lims",
             icon: "flaticon2-expand",
             page: "Lims"
           },
@@ -328,46 +59,19 @@ export default {
             page: "Security-Roles"
           },
           {
-            title: "Users configuration",
+            title: "Users Configuration",
             icon: "flaticon-users",
             page: "User-Configuration"
           },
           {
-            title: "Audit configuration",
+            title: "Audit Configuration",
             icon: "flaticon-visible",
             page: "Audit-Configuration"
           },
           {
-            title: "eFiles configuration",
-            bullet: "dot",
+            title: "eFiles Configuration",
             icon: "flaticon-upload",
-            page: "eFiles-Configuration", 
-          /*  submenu: [
-              {
-                title: "Error 1",
-                page: "error/error-v1"
-              },
-              {
-                title: "Error 2",
-                page: "error/error-v2"
-              },
-              {
-                title: "Error 3",
-                page: "error/error-v3"
-              },
-              {
-                title: "Error 4",
-                page: "error/error-v4"
-              },
-              {
-                title: "Error 5",
-                page: "error/error-v5"
-              },
-              {
-                title: "Error 6",
-                page: "error/error-v6"
-              }
-            ]*/
+            page: "eFiles-Configuration"
           }
         ]
       },
@@ -380,172 +84,18 @@ export default {
         submenu: [
           {
             title: "Bug report",
-            bullet: "line",
             page: "BugReport"
           },
           {
-            title: "Error log",
-            bullet: "line",
+            title: "Error Log",
             page: "ErrorLog"
           },
           {
-            title: "Audit log",
-            bullet: "line",
+            title: "Audit Log",
             page: "AuditLog"
-          }
-        ]
-      }
-    
-    ]
-  },
-  title: "Issue Admin",
-  root: true,
-  alignment: "left",
-  toggle: "click",
-  page: "react-bootstrap",
-  submenu: {
-    type: "mega",
-    width: "800px",
-    alignment: "left",
-    columns: [
-      {
-        items: [
-          {
-            title: "Alerts",
-            page: "react-bootstrap/alert"
           },
-          {
-            title: "Accordion",
-            page: "react-bootstrap/accordion"
-          },
-          {
-            title: "Badge",
-            page: "react-bootstrap/badge"
-          },
-          {
-            title: "Breadcrumb",
-            page: "react-bootstrap/breadcrumb"
-          },
-          {
-            title: "Buttons",
-            page: "react-bootstrap/buttons"
-          },
-          {
-            title: "Button Group",
-            page: "react-bootstrap/button-group"
-          },
-          {
-            title: "Cards",
-            page: "react-bootstrap/cards"
-          }
         ]
       },
-      {
-        items: [
-          {
-            title: "Carousel",
-            page: "react-bootstrap/carousel",
-            bullet: "line"
-          },
-          {
-            title: "Dropdowns",
-            page: "react-bootstrap/dropdowns",
-            bullet: "line"
-          },
-          {
-            title: "Forms",
-            page: "react-bootstrap/forms",
-            bullet: "line"
-          },
-          {
-            title: "Input Group",
-            page: "react-bootstrap/input-group",
-            bullet: "line"
-          },
-          {
-            title: "Images",
-            page: "react-bootstrap/images",
-            bullet: "line"
-          },
-          {
-            title: "Figures",
-            page: "react-bootstrap/figures",
-            bullet: "line"
-          },
-          {
-            title: "Jumbotron",
-            page: "react-bootstrap/jumbotron",
-            bullet: "line"
-          }
-        ]
-      },
-      {
-        items: [
-          {
-            title: "List group",
-            page: "react-bootstrap/list-group",
-            bullet: "dot"
-          },
-          {
-            title: "Modal",
-            page: "react-bootstrap/modal",
-            bullet: "dot"
-          },
-          {
-            title: "Navs",
-            page: "react-bootstrap/navs",
-            bullet: "dot"
-          },
-          {
-            title: "Navbar",
-            page: "react-bootstrap/navbar",
-            bullet: "dot"
-          },
-          {
-            title: "Overlays",
-            page: "react-bootstrap/overlays",
-            bullet: "dot"
-          },
-          {
-            title: "Pagination",
-            page: "react-bootstrap/pagination",
-            bullet: "dot"
-          },
-          {
-            title: "Popovers",
-            page: "react-bootstrap/popovers",
-            bullet: "dot"
-          }
-        ]
-      },
-      {
-        items: [
-          {
-            title: "Progress",
-            page: "react-bootstrap/progress"
-          },
-          {
-            title: "Spinners",
-            page: "react-bootstrap/spinners"
-          },
-          {
-            title: "Table",
-            page: "react-bootstrap/table"
-          },
-          {
-            title: "Tabs",
-            page: "react-bootstrap/tabs"
-          },
-          {
-            title: "Tooltips",
-            page: "react-bootstrap/tooltips"
-          },
-          {
-            title: "Toasts",
-            page: "react-bootstrap/toasts"
-          }
-        ]
-      }
     ]
   },
   aside: {
@@ -565,7 +115,7 @@ export default {
         icon: "flaticon2-expand",
         page: "builder"
       },
-     /* {
+      {
         title: "Bootstrap",
         root: true,
         bullet: "dot",
@@ -681,195 +231,16 @@ export default {
             page: "react-bootstrap/toasts"
           }
         ]
-      },*/
+      },
       {
-        title: "LIMS",
+        title: "Material UI",
         root: true,
         bullet: "line",
         icon: "flaticon2-browser-2",
         page: "google-material",
         submenu: [
           {
-            title: "Folders List",
-            bullet: "dot",
-            page: "google-material/layout/box",
-            
-          },
-          {
-            title: "New Request",
-            bullet: "dot",
-            page: "google-material/inputs/autocomplete",
-          },
-         {
-            title: "Navigation",
-            bullet: "dot",
-            page: "google-material/navigation/bottom-navigation",
-            submenu: [
-              {
-                title: "Bottom Navigation",
-                page: "google-material/navigation/bottom-navigation"
-              },
-              {
-                title: "Breadcrumbs",
-                page: "google-material/navigation/breadcrumbs"
-              },
-              {
-                title: "Drawers",
-                page: "google-material/navigation/drawer"
-              },
-              {
-                title: "Links",
-                page: "google-material/navigation/links"
-              },
-              {
-                title: "Menus",
-                page: "google-material/navigation/menus"
-              },
-              {
-                title: "Steppers",
-                page: "google-material/navigation/steppers"
-              },
-              {
-                title: "Tabs",
-                page: "google-material/navigation/tabs"
-              }
-            ]
-          },
-          {
-            title: "Surfaces",
-            bullet: "dot",
-            page: "google-material/surfaces/app-bar",
-            submenu: [
-              {
-                title: "App Bar",
-                page: "google-material/surfaces/app-bar"
-              },
-              {
-                title: "Paper",
-                page: "google-material/surfaces/paper"
-              },
-              {
-                title: "Cards",
-                page: "google-material/surfaces/cards"
-              },
-              {
-                title: "Expansion Panels",
-                page: "google-material/surfaces/expansion-panels"
-              }
-            ]
-          },
-          {
-            title: "Feedback",
-            bullet: "dot",
-            page: "google-material/feedback/progress",
-            submenu: [
-              {
-                title: "Progress",
-                page: "google-material/feedback/progress"
-              },
-              {
-                title: "Dialogs",
-                page: "google-material/feedback/dialogs"
-              },
-              {
-                title: "Snackbars",
-                page: "google-material/feedback/snackbars"
-              }
-            ]
-          },
-          {
-            title: "Data Display",
-            bullet: "dot",
-            page: "google-material/data-displays/avatars",
-            submenu: [
-              {
-                title: "Avatars",
-                page: "google-material/data-displays/avatars"
-              },
-              {
-                title: "Badges",
-                page: "google-material/data-displays/badges"
-              },
-              {
-                title: "Chips",
-                page: "google-material/data-displays/chips"
-              },
-              {
-                title: "Dividers",
-                page: "google-material/data-displays/dividers"
-              },
-              {
-                title: "Icons",
-                page: "google-material/data-displays/icons"
-              },
-              {
-                title: "Lists",
-                page: "google-material/data-displays/lists"
-              },
-              {
-                title: "Tables",
-                page: "google-material/data-displays/tables"
-              },
-              {
-                title: "Tooltips",
-                page: "google-material/data-displays/tooltips"
-              },
-              {
-                title: "Typography",
-                page: "google-material/data-displays/typography"
-              }
-            ]
-          },
-          {
-            title: "Utils",
-            bullet: "dot",
-            page: "google-material/utils/click-away-listener",
-            submenu: [
-              {
-                title: "Click Away Listener",
-                page: "google-material/utils/click-away-listener"
-              },
-              {
-                title: "Modal",
-                page: "google-material/utils/modal"
-              },
-              {
-                title: "No SSR",
-                page: "google-material/utils/no-ssr"
-              },
-              {
-                title: "Popover",
-                page: "google-material/utils/popover"
-              },
-              {
-                title: "Popper",
-                page: "google-material/utils/popper"
-              },
-              {
-                title: "Portal",
-                page: "google-material/utils/portal"
-              },
-              {
-                title: "Transitions",
-                page: "google-material/utils/transitions"
-              },
-              {
-                title: "useMediaQuery",
-                page: "google-material/utils/use-media-query"
-              }
-            ]
-          } 
-        ]
-      },
-      {
-        title: "eFiles",
-        root: true,
-        bullet: "line",
-        icon: "flaticon2-browser-2",
-        page: "eFiles",
-        submenu: [
-          {
-            title: "New Request",
+            title: "Layout",
             bullet: "dot",
             page: "google-material/layout/box",
             submenu: [
@@ -896,246 +267,7 @@ export default {
             ]
           },
           {
-            title: "Folders List",
-            bullet: "dot",
-            page: "google-material/inputs/autocomplete",
-            submenu: [
-              {
-                title: "Autocomplete",
-                page: "google-material/inputs/autocomplete",
-                permission: "accessToECommerceModule"
-              },
-              {
-                title: "Buttons",
-                page: "google-material/inputs/buttons"
-              },
-              {
-                title: "Checkboxes",
-                page: "google-material/inputs/checkboxes"
-               },
-              {
-                title: "Pickers",
-                page: "google-material/inputs/pickers"
-              },
-              {
-                title: "Radio Buttons",
-                page: "google-material/inputs/radio-buttons"
-              },
-              {
-                title: "Selects",
-                page: "google-material/inputs/selects"
-              },
-              {
-                title: "Switches",
-                page: "google-material/inputs/switches"
-              },
-              {
-                title: "Text Fields",
-                page: "google-material/inputs/text-fields"
-              },
-              {
-                title: "Transfer List",
-                page: "google-material/inputs/transfer-list"
-              }
-            ]
-          },
-          {
-            title: "Navigation",
-            bullet: "dot",
-            page: "google-material/navigation/bottom-navigation",
-            submenu: [
-              {
-                title: "Bottom Navigation",
-                page: "google-material/navigation/bottom-navigation"
-              },
-              {
-                title: "Breadcrumbs",
-                page: "google-material/navigation/breadcrumbs"
-              },
-              {
-                title: "Drawers",
-                page: "google-material/navigation/drawer"
-              },
-              {
-                title: "Links",
-                page: "google-material/navigation/links"
-              },
-              {
-                title: "Menus",
-                page: "google-material/navigation/menus"
-              },
-              {
-                title: "Steppers",
-                page: "google-material/navigation/steppers"
-              },
-              {
-                title: "Tabs",
-                page: "google-material/navigation/tabs"
-              }
-            ]
-          },
-          {
-            title: "Surfaces",
-            bullet: "dot",
-            page: "google-material/surfaces/app-bar",
-            submenu: [
-              {
-                title: "App Bar",
-                page: "google-material/surfaces/app-bar"
-              },
-              {
-                title: "Paper",
-                page: "google-material/surfaces/paper"
-              },
-              {
-                title: "Cards",
-                page: "google-material/surfaces/cards"
-              },
-              {
-                title: "Expansion Panels",
-                page: "google-material/surfaces/expansion-panels"
-              }
-            ]
-          },
-          {
-            title: "Feedback",
-            bullet: "dot",
-            page: "google-material/feedback/progress",
-            submenu: [
-              {
-                title: "Progress",
-                page: "google-material/feedback/progress"
-              },
-              {
-                title: "Dialogs",
-                page: "google-material/feedback/dialogs"
-              },
-              {
-                title: "Snackbars",
-                page: "google-material/feedback/snackbars"
-              }
-            ]
-          },
-          {
-            title: "Data Display",
-            bullet: "dot",
-            page: "google-material/data-displays/avatars",
-            submenu: [
-              {
-                title: "Avatars",
-                page: "google-material/data-displays/avatars"
-              },
-              {
-                title: "Badges",
-                page: "google-material/data-displays/badges"
-              },
-              {
-                title: "Chips",
-                page: "google-material/data-displays/chips"
-              },
-              {
-                title: "Dividers",
-                page: "google-material/data-displays/dividers"
-              },
-              {
-                title: "Icons",
-                page: "google-material/data-displays/icons"
-              },
-              {
-                title: "Lists",
-                page: "google-material/data-displays/lists"
-              },
-              {
-                title: "Tables",
-                page: "google-material/data-displays/tables"
-              },
-              {
-                title: "Tooltips",
-                page: "google-material/data-displays/tooltips"
-              },
-              {
-                title: "Typography",
-                page: "google-material/data-displays/typography"
-              }
-            ]
-          },
-          {
-            title: "Utils",
-            bullet: "dot",
-            page: "google-material/utils/click-away-listener",
-            submenu: [
-              {
-                title: "Click Away Listener",
-                page: "google-material/utils/click-away-listener"
-              },
-              {
-                title: "Modal",
-                page: "google-material/utils/modal"
-              },
-              {
-                title: "No SSR",
-                page: "google-material/utils/no-ssr"
-              },
-              {
-                title: "Popover",
-                page: "google-material/utils/popover"
-              },
-              {
-                title: "Popper",
-                page: "google-material/utils/popper"
-              },
-              {
-                title: "Portal",
-                page: "google-material/utils/portal"
-              },
-              {
-                title: "Transitions",
-                page: "google-material/utils/transitions"
-              },
-              {
-                title: "useMediaQuery",
-                page: "google-material/utils/use-media-query"
-              }
-            ]
-          }  
-        ]
-      },
-      {
-        title: "Euclide",
-        root: true,
-        bullet: "line",
-        icon: "flaticon2-browser-2",
-        page: "google-material",
-        submenu: [
-          {
-            title: "Create Request",
-            bullet: "dot",
-            page: "google-material/layout/box",
-            submenu: [
-              {
-                title: "Box",
-                page: "google-material/layout/box"
-              },
-              {
-                title: "Container",
-                page: "google-material/layout/container"
-              },
-              {
-                title: "Grid",
-                page: "google-material/layout/grid"
-              },
-              {
-                title: "Grid list",
-                page: "google-material/layout/grid-list"
-              },
-              {
-                title: "Hidden",
-                page: "google-material/layout/hidden"
-              }
-            ]
-          },
-          {
-            title: "Folders List",
+            title: "Inputs",
             bullet: "dot",
             page: "google-material/inputs/autocomplete",
             submenu: [
@@ -1336,11 +468,11 @@ export default {
                 page: "google-material/utils/use-media-query"
               }
             ]
-          } 
+          }
         ]
       },
       {
-        title: "Error pages",
+        title: "Error Pages",
         root: true,
         bullet: "dot",
         icon: "flaticon-danger",

@@ -96,7 +96,7 @@ export default function AuthorsProfit() {
                 >
                   Trump Themes
                 </a>
-                <p className="kt-widget4__text">Euclide is Great</p>
+                <p className="kt-widget4__text">Make Metronic Great Again</p>
               </div>
               <span className="kt-widget4__number kt-font-brand">+$2500</span>
             </div>

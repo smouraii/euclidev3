@@ -1,13 +1,13 @@
 import React, { Suspense, lazy } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
-
+import Builder from "./Builder";
 import Dashboard from "./Dashboard";
-
+import DocsPage from "./docs/DocsPage";
 import { LayoutSplashScreen } from "../../../_metronic";
-import FolderList from "./FolderList";
+import FolderList from "./Folderlist";
+
 import NewRequest from "./NewRequest";
 import Efiles from "./Efiles";
-import Lims from "./Lims";
 import MailServer from "./MailServer";
 import DBConfiguration from "./DBConfiguration";
 import SecurityRoles from "./SecurityRoles";
@@ -17,7 +17,6 @@ import EfilesConfiguration from "./EfilesConfiguration";
 import BugReport from "./BugReport";
 import ErrorLog from "./ErrorLog";
 import AuditLog from "./AuditLog";
-import WrappedInputComp from "./Lims";
 import SwitchComp from "../../widgets/SwitchComp";
 import WrappedLims from "./Lims";
 import WrappedDbconfiguration from "./DBConfiguration";
@@ -37,8 +36,12 @@ export default function HomePage() {
           /* Redirect from root URL to /dashboard. */
           <Redirect exact from="/" to="/dashboard" />
         }
-        {/* <Route path="/builder" component={Builder} /> */}
+        <Route path="/builder" component={Builder} />
         <Route path="/dashboard" component={Dashboard} />
+        <Route path="/google-material" component={GoogleMaterialPage} />
+        <Route path="/react-bootstrap" component={ReactBootstrapPage} />
+        <Route path="/docs" component={DocsPage} />
+
         <Route path="/google-material" component={GoogleMaterialPage} />
         <Route path="/react-bootstrap" component={ReactBootstrapPage} />
         {/* <Route path="/docs" component={DocsPage} /> */}
@@ -57,7 +60,7 @@ export default function HomePage() {
        <Route path="/bugreport" component={BugReport} /> 
         <Route path="/errorlog" component={ErrorLog} />
         <Route path="/auditlog" component={AuditLog} /> 
-        
+
         <Redirect to="/error/error-v1" />
       </Switch>
     </Suspense>
