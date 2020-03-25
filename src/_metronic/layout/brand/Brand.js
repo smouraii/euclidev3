@@ -19,12 +19,12 @@ class Brand extends React.Component {
         <Link to="" className="kt-header__brand-logo">
           <img
             alt="logo"
-            src={toAbsoluteUrl("/media/logos/logo-4.png")}
+            src={toAbsoluteUrl("/media/logos/asset_19.png")}
             className="kt-header__brand-logo-default"
           />
           <img
             alt="logo"
-            src={toAbsoluteUrl("/media/logos/logo-4-sm.png")}
+            src={toAbsoluteUrl("/media/logos/logo_euclide_sm.png")}
             className="kt-header__brand-logo-sticky"
           />
         </Link>

@@ -26,10 +26,10 @@ export default function BestSellers() {
                 </div>
                 <div className="kt-widget5__section">
                   <a className="kt-widget5__title">Great Logo Design</a>
-                  <p className="kt-widget5__desc">Metronic admin themes.</p>
+                  <p className="kt-widget5__desc">Euclide.</p>
                   <div className="kt-widget5__info">
                     <span>Author:</span>
-                    <span className="kt-font-info">Keenthemes</span>
+                    <span className="kt-font-info">Labvantage</span>
                     <span>Released:</span>
                     <span className="kt-font-info">23.08.17</span>
                   </div>
@@ -58,7 +58,7 @@ export default function BestSellers() {
                 <div className="kt-widget5__section">
                   <a className="kt-widget5__title">Awesome Mobile App</a>
                   <p className="kt-widget5__desc">
-                    Metronic admin themes. Lorem Ipsum Amet.
+                    Euclide Lorem Ipsum Amet.
                   </p>
                   <div className="kt-widget5__info">
                     <span>Author:</span>

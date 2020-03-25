@@ -30,7 +30,7 @@ class Footer extends React.Component {
                   <img
                     alt="Logo"
                     className="kt-header__brand-logo-sticky"
-                    src={toAbsoluteUrl("/media/logos/logo-4-sm.png")}
+                    src={toAbsoluteUrl("/media/logos/logo_euclide_sm.png")}
                   />
                 </Link>
                 <div className="kt-footer__copyright">

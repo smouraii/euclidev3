@@ -1,14 +1,18 @@
 import React from "react";
-import { Formik } from "formik";
+import { Formik, Field } from "formik";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { Checkbox, FormControlLabel, TextField } from "@material-ui/core";
 import * as auth from "../../store/ducks/auth.duck";
 import { register } from "../../crud/auth.crud";
+import Select from 'react-select'
+import countryList from 'react-select-country-list'
 
 function Registration(props) {
   const { intl } = props;
+  const countries = countryList().getData();
+  
 
   return (
     <div className="kt-login__body">
@@ -19,14 +23,17 @@ function Registration(props) {
           </h3>
         </div>
 
-        <Formik
+        <Formik 
           initialValues={{
-            email: "",
-            fullname: "",
-            username: "",
-            password: "",
-            acceptTerms: true,
-            confirmPassword: ""
+            Email: "",
+            Firstname: "",
+            Lastname:"",
+            Address: "",
+            Username: "",
+            Password: "",
+            Country:"",
+            AcceptTerms: true,
+            ConfirmPassword: ""
           }}
           validate={values => {
             const errors = {};
@@ -43,14 +50,26 @@ function Registration(props) {
               });
             }
 
-            if (!values.fullname) {
-              errors.fullname = intl.formatMessage({
+            if (!values.firstname) {
+              errors.firstname = intl.formatMessage({
+                id: "AUTH.VALIDATION.REQUIRED_FIELD"
+              });
+            }
+
+            if (!values.lastname) {
+              errors.lastname = intl.formatMessage({
                 id: "AUTH.VALIDATION.REQUIRED_FIELD"
               });
             }
 
             if (!values.username) {
               errors.username = intl.formatMessage({
+                id: "AUTH.VALIDATION.REQUIRED_FIELD"
+              });
+            }
+
+            if (!values.address) {
+              errors.address = intl.formatMessage({
                 id: "AUTH.VALIDATION.REQUIRED_FIELD"
               });
             }
@@ -79,7 +98,10 @@ function Registration(props) {
           onSubmit={(values, { setStatus, setSubmitting }) => {
             register(
               values.email,
-              values.fullname,
+              values.firstname,
+              values.lastname,
+              values.Address,
+              values.Country,
               values.username,
               values.password
             )
@@ -116,14 +138,28 @@ function Registration(props) {
               <div className="form-group mb-0">
                 <TextField
                   margin="normal"
-                  label="Fullname"
+                  label="Firstname"
                   className="kt-width-full"
-                  name="fullname"
+                  name="firstname"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.fullname}
-                  helperText={touched.fullname && errors.fullname}
-                  error={Boolean(touched.fullname && errors.fullname)}
+                  value={values.firstname}
+                  helperText={touched.firstname && errors.firstname}
+                  error={Boolean(touched.firstname && errors.firstname)}
+                />
+              </div>
+
+              <div className="form-group mb-0">
+                <TextField
+                  margin="normal"
+                  label="Lastname"
+                  className="kt-width-full"
+                  name="lastname"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.lastname}
+                  helperText={touched.lastname && errors.lastname}
+                  error={Boolean(touched.lastname && errors.lastname)}
                 />
               </div>
 
@@ -141,6 +177,33 @@ function Registration(props) {
                 />
               </div>
 
+
+              <div className="form-group mb-0">
+                <TextField
+                  label="Address"
+                  margin="normal"
+                  className="kt-width-full"
+                  name="address"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.address}
+                  helperText={touched.address && errors.address}
+                  error={Boolean(touched.address && errors.address)}
+                />
+              </div>
+              <div>
+                <Field   
+                 label="Country"
+                  margin="normal"
+                  className="kt-width-full"
+                  name="country"
+                  onBlur={handleBlur}
+                  onChange={e => console.log(e)}
+                  value={values.country}
+                  helperText={touched.country && errors.country}
+                  error={Boolean(touched.country && errors.country)}
+                  placeholder="Select your country" options={countries} component={Select}/>
+              </div>
               <div className="form-group mb-0">
                 <TextField
                   margin="normal"
