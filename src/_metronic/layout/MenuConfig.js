@@ -18,12 +18,10 @@ export default {
         submenu: [
           {
             title: "New Request",
-            bullet: "dot",
             page: "newrequest",
           },
           {
             title: "Folder List",
-            bullet: "dot",
             page: "folderlist",
           },
         ]
@@ -47,33 +45,32 @@ export default {
           },
           {
             title: "Mail Server",
-            icon: "flaticon2-expand",
+            icon: "flaticon2-envelope",
             page: "MailServer"
           },
           {
             title: "DB Configuration",
-            icon: "flaticon2-expand",
+            icon: "flaticon-coins",
             page: "DB-Configuration"
           },
           {
             title: "Security Roles",
-            icon: "flaticon2-expand",
-            page: "Security Roles"
+            icon: "flaticon-lock",
+            page: "Security-Roles"
           },
           {
             title: "Users Configuration",
-            bullet: "dot",
-            icon: "flaticon2-warning",
+            icon: "flaticon-users",
             page: "User-Configuration"
           },
           {
             title: "Audit Configuration",
-            icon: "flaticon2-expand",
+            icon: "flaticon-visible",
             page: "Audit-Configuration"
           },
           {
             title: "eFiles Configuration",
-            icon: "flaticon2-expand",
+            icon: "flaticon-upload",
             page: "eFiles-Configuration"
           }
         ]
@@ -87,18 +84,15 @@ export default {
         submenu: [
           {
             title: "Bug report",
-            icon: "flaticon2-expand",
             page: "BugReport"
           },
           {
             title: "Error Log",
-            icon: "flaticon2-expand",
             page: "ErrorLog"
           },
           {
             title: "Audit Log",
-            icon: "flaticon2-expand",
-            page: "Audit log"
+            page: "AuditLog"
           },
         ]
       },

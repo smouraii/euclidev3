@@ -8,10 +8,10 @@ import Highlighter from "react-highlight-words";
 class Datatable extends React.Component {
   state = {
     data: [],
-    pagination: {pageSizeOptions:['10','25','50','100']},
+    pagination: {},
     loading: false,
-    searchText: "",
-    searchedColumn: ""
+    searchText:"",
+    searchedColumn:""
   };
 
   componentDidMount() {
@@ -24,47 +24,59 @@ class Datatable extends React.Component {
     this.setState({
       pagination: pager
     });
-    this.fetch({
-      results: pagination.pageSizeOptions,
-      page: pagination.current,
-      sortField: sorter.field,
-      sortOrder: sorter.order,
-      ...filters
-    });
+    // this.fetch({
+    //   results: pagination.pageSize,
+    //   page: pagination.current,
+    //   sortField: sorter.field,
+    //   sortOrder: sorter.order,
+    //   ...filters
+    // });
   };
 
   fetch = (params = {}) => {
-    console.log("params:", params);
+    
     this.setState({ loading: true });
     reqwest({
       url: "https://randomuser.me/api",
       method: "get",
       data: {
-        results: 20,
+        results: 10,
         ...params
       },
       type: "json"
     }).then(data => {
+      console.log(data)
+      const mapData = data.results.map(user=>{
+        return{
+          ...user,
+          name:`${user.name.first} ${user.name.last}`,
+          location:`${user.location.country} ${user.location.state}`
+        }
+      })
       const pagination = { ...this.state.pagination };
       // Read total count from server
       // pagination.total = data.totalCount;
       pagination.total = 200;
       this.setState({
         loading: false,
-        data: data.results,
+        data: mapData,
         pagination
       });
+    
     });
   };
 
   getColumnSearchProps = dataIndex => ({
+    
     filterDropdown: ({
       setSelectedKeys,
       selectedKeys,
       confirm,
       clearFilters
     }) => (
+    
       <div style={{ padding: 8 }}>
+      {console.log(dataIndex)}
         <Input
           ref={node => {
             this.searchInput = node;
@@ -75,13 +87,13 @@ class Datatable extends React.Component {
             setSelectedKeys(e.target.value ? [e.target.value] : [])
           }
           onPressEnter={() =>
-            this.handleSearch(selectedKeys, confirm, dataIndex)
+            this.handleSearch(selectedKeys, confirm, dataIndex.first)
           }
           style={{ width: 188, marginBottom: 8, display: "block" }}
         />
         <Button
           type="primary"
-          onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+          onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex.first)}
           size="small"
           style={{ width: 90, marginRight: 8 }}
         >
@@ -146,9 +158,9 @@ class Datatable extends React.Component {
         title: "Name",
         dataIndex: "name",
         key: "name",
-        render: name => ` ${name.first} ${name.last}`,
-        sorter: (a, b) => a.name.first.localeCompare(b.name.first),
-        width: "20%"
+        sorter: (a, b) => a.name.localeCompare(b.name),
+        width: "20%",
+        ...this.getColumnSearchProps("name")
       },
       {
         title: "age",
@@ -158,7 +170,7 @@ class Datatable extends React.Component {
         //dob is date of birth from api
         render: dob => `${dob.age}`,
         //a b used to sort from big to small
-        sorter: (a, b) => a.dob.age - b.dob.age
+        sorter: (a, b) => a.dob.age - b.dob.age,    
       },
       {
         title: "Gender",
@@ -181,8 +193,8 @@ class Datatable extends React.Component {
         title: "Location",
         dataIndex: "location",
         key: "location",
-        render: location => `${location.country} , ${location.state}`,
-        sorter: (a, b) => a.location.country.localeCompare(b.location.country)
+        sorter: (a, b) => a.location.localeCompare(b.location),
+        ...this.getColumnSearchProps("location")
       }
     ];
 
