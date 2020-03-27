@@ -1,68 +1,46 @@
 import React from "react";
-import { Portlet, PortletBody } from "../../partials/content/Portlet";
-import reqwest from "reqwest";
-import FullScreenButton from "../../widgets/FullscreenButton";
-import ModalAddFloder from "../../widgets/ModalAddFolder";
-import ModalUpload from "../../widgets/ModalUpload";
-import RefreshButton from "../../widgets/RefreshButton";
-import Datatable from "../../widgets/DatatableAntd";
+import {
+  Portlet,
+  PortletBody,
+} from "../../partials/content/Portlet";
 
+import Datatable from "../../widgets/Datatables";
+import datatableData from "./data/datatableData.json";
+import ModalForm from "../../widgets/ModalForm";
 
 export default function FolderList() {
-  fetch = (params = {}) => {
-    console.log("params:", params);
-    this.setState({ loading: true });
-    reqwest({
-      url: "https://randomuser.me/api",
-      method: "get",
-      data: {
-        results: 30,
-        ...params
-      }
-    });
-  };
-  //  const search = myInput.on( 'keyup', function () {
-  //     Datatable.search( this.value ).draw();
-  // } );
-  // handleChange(event) {
-  //   this.setState({value: event.target.value});
-  // }
 
   return (
     <>
-      <div className="d-flex justify-content-end">
-        <div style={{ margin: 5 }}>
-          <Portlet>
-            <PortletBody fit={true}>
-              <ModalAddFloder />
-            </PortletBody>
-          </Portlet>
-        </div>
-        <div style={{ margin: 5 }}>
-          <Portlet>
-            <PortletBody fit={true}>
-              <ModalUpload />
-            </PortletBody>
-          </Portlet>
-        </div>
-        <div style={{ margin: 5 }}>
-          <Portlet>
-            <PortletBody fit={true}>
-              <RefreshButton />
-            </PortletBody>
-          </Portlet>
-        </div>
-      </div>
+    <Portlet>
+        <PortletBody fit={true}>
+          <div className="row row-no-padding row-col-separator-x1">
+            
+            <div className="col-xl-12">
+            <div
+                style={{
+                  float: "right",
+                  marginRight: "20px",
+                  marginTop: "20px"
+                }}
+              >
+                <ModalForm />
+              </div>
+              <Datatable
+                title="A Datatable "
+                data={datatableData}
+                desc="This is a Datatable"
+              />
+            </div>
+          </div>
+        </PortletBody>
+      </Portlet>
 
-      <div className="row row-no-padding row-col-separator-x1">
-        <div className="col-xl-12">
-          <Portlet>
-            <PortletBody fit={true}>
-              <Datatable/>
-            </PortletBody>
-          </Portlet>
-        </div>
-      </div>
     </>
-  );
-}
+   );
+  }
+
+
+
+
+

@@ -30,25 +30,17 @@ class Footer extends React.Component {
                   <img
                     alt="Logo"
                     className="kt-header__brand-logo-sticky"
-                    src={toAbsoluteUrl("/media/logos/logo_euclide_sm.png")}
+                    src={toAbsoluteUrl("/media/logos/logo_euclide_footer.png")}
                   />
                 </Link>
-                <div className="kt-footer__copyright">
-                  {today}&nbsp;&copy;&nbsp;
-                  <a href="https://www.labvantage.com/" target="_blank">
-                    labvantage
-                  </a>
-                </div>
+                
               </div>
               <div className="kt-footer__menu">
-
-                <a href="http://keenthemes.com/metronic" target="_blank">
-                  Team
-                </a>
-                <a href="http://keenthemes.com/metronic" target="_blank">
-                  Contact
-                </a>
-              </div>
+                 {/* <span color="#a9a7bc">{today}&nbsp;&copy;&nbsp;</span> */}
+                  <a href="https://www.labvantage.com/" target="_blank">
+                    LabVantage
+                  </a>
+                </div>
             </div>
           </div>
         </div>

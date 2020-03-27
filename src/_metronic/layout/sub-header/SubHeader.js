@@ -43,10 +43,10 @@ class SubHeader extends React.Component {
             </LayoutContextConsumer>
           </div>
 
-          <div className="kt-subheader__toolbar">
-            <div className="kt-subheader__wrapper">
+          <div className="kt-subheader__toolbar ">
+            <div className="kt-subheader__wrapper ">
             {this.props.location.pathname === "/dashboard" && (
-          <DatePickerComp/>
+          <DatePickerComp />
         )}    
         {console.log(this.props)}
                 </div>
