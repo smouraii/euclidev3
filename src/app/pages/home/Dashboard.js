@@ -81,84 +81,146 @@ export default function Dashboard() {
         <div className="col-xl-12">
           <div className="row row-full-height">
             <div className="col-sm-12 col-md-12 col-lg-4">
-              <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
-                <PortletBody fluid={true}>
-                  <QuickStatsChart
-                    value={570}
-                    desc="Total Sales"
-                    data={chartOptions.chart1.data}
-                    color={chartOptions.chart1.color}
-                    border={chartOptions.chart1.border}
-                  />
-                </PortletBody>
+              <Portlet className="kt-portlet--height-fluid">
+                <div className="kt-widget1">
+                  <div className="kt-widget1__item ng-star-inserted">
+                    <div className="kt-widget1__info">
+                      <h3 className="kt-widget1__title">Total Requests Submitted</h3>
+                      <span className="kt-widget1__desc">Submitted thru Euclide</span>
+                    </div>
+                    <span className="kt-widget1__number kt-font-danger">450</span>
+                  </div>
+                </div>
               </Portlet>
             </div>
             <div className="col-sm-12 col-md-12 col-lg-4">
-              <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
-                <PortletBody fluid={true}>
-                  <QuickStatsChart
-                    value="234+"
-                    desc="Transactions"
-                    data={chartOptions.chart3.data}
-                    color={chartOptions.chart3.color}
-                    border={chartOptions.chart3.border}
-                  />
-                </PortletBody>
+            <Portlet className="kt-portlet--height-fluid">
+              <div className="kt-widget1">
+                <div className="kt-widget1__item ng-star-inserted">
+                  <div className="kt-widget1__info">
+                    <h3 className="kt-widget1__title">Requests In Proccessing</h3>
+                    <span className="kt-widget1__desc">Multiple Status</span>
+                  </div>
+                  <span className="kt-widget1__number kt-font-warning">150</span>
+                </div>
+              </div>
               </Portlet>
             </div>
             <div className="col-sm-12 col-md-12 col-lg-4">
-              <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
-              <PortletHeader
-             title="Daily Sales" />
-                <PortletBody fluid={true}>
-                <SalesBarChart
-                desc="Check out each column for more details"
-              />
-                </PortletBody>
+            <Portlet className="kt-portlet--height-fluid">
+              <div className="kt-widget1">
+                <div className="kt-widget1__item ng-star-inserted">
+                  <div className="kt-widget1__info">
+                    <h3 className="kt-widget1__title">Requests Completed</h3>
+                    <span className="kt-widget1__desc">Lifetime Requests Completed</span>
+                  </div>
+                  <span className="kt-widget1__number kt-font-success">300</span>
+                </div>
+              </div>
               </Portlet>
             </div>
           </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          {/* <div className="row row-full-height">
+            <div className="col-sm-12 col-md-12 col-lg-4">
+              <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-dark">
+                <PortletHeader
+                  title="Total Requests Submitted" />
+                  <PortletBody fluid={true}>
+                  <div className="kt-widget26">
+                    <div className="kt-widget26__content">
+                      <span className="kt-widget26__number kt-font-danger">{450}</span>
+                    </div>
+                  </div>
+                  </PortletBody>
+              </Portlet>
+            </div>
+            <div className="col-sm-12 col-md-12 col-lg-4">
+              <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-dark">
+                <PortletHeader
+                  title="Requests In Proccessing" />
+                  <PortletBody fluid={true}>
+                  <div className="kt-widget26">
+                    <div className="kt-widget26__content">
+                      <span className="kt-widget26__number kt-font-warning">{150}</span>
+                    </div>
+                  </div>
+                  </PortletBody>
+              </Portlet>
+            </div>
+            <div className="col-sm-12 col-md-12 col-lg-4">
+              <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-dark">
+                <PortletHeader
+                  title="Requests Completed" />
+                  <PortletBody fluid={true}>
+                  <div className="kt-widget26">
+                    <div className="kt-widget26__content">
+                      <span className="kt-widget26__number kt-font-success" >{350}</span>
+                    </div>
+                  </div>
+                  </PortletBody>
+              </Portlet>
+            </div>
+          </div> */}
         </div>
-        
+
 
 
         <div className="col-xl-12">
           <div className="row row-full-height">
             <div className="col-sm-12 col-md-12 col-lg-6">
-            <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand" fluidHeight={true}>
-            <PortletHeader
-              title="Request per State per Month"
-              // toolbar={
-              //   <PortletHeaderToolbar>
-              //     <PortletHeaderDropdown />
-              //   </PortletHeaderToolbar>
-              // }
-            />
+              <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-dark" fluidHeight={true}>
+                <PortletHeader
+                  title="Request per State per Month"
+                // toolbar={
+                //   <PortletHeaderToolbar>
+                //     <PortletHeaderDropdown />
+                //   </PortletHeaderToolbar>
+                // }
+                />
 
-            <PortletBody>
-            <MyResponsiveBar 
-                data={barData}
-              />
-            </PortletBody>
-          </Portlet>
+                <PortletBody>
+                  <MyResponsiveBar
+                    data={barData}
+                  />
+                </PortletBody>
+              </Portlet>
             </div>
             <div className="col-sm-12 col-md-12 col-lg-6">
-            <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand" fluidHeight={true}>
-            <PortletHeader
-              title="Sample per Request"
-              // toolbar={
-              //   <PortletHeaderToolbar>
-              //     <PortletHeaderDropdown />
-              //   </PortletHeaderToolbar>
-              // }
-            />
+              <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-dark" fluidHeight={true}>
+                <PortletHeader
+                  title="Sample per Request"
+                // toolbar={
+                //   <PortletHeaderToolbar>
+                //     <PortletHeaderDropdown />
+                //   </PortletHeaderToolbar>
+                // }
+                />
 
-            <PortletBody>
-            <MyResponsivePie
-                data={pieData}
-              />
-            </PortletBody>
-          </Portlet>
+                <PortletBody>
+                  <MyResponsivePie
+                    data={pieData}
+                  />
+                </PortletBody>
+              </Portlet>
             </div>
           </div>
         </div>
