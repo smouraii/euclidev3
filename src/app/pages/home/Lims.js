@@ -127,8 +127,10 @@ class Lims extends React.Component {
                         ]
                       })(<Input.Password />)}
                     </Form.Item>
-
-                    <SwitchComp style={{ marginRight: "50px" }} />
+                    
+                    <Form.Item label="Start Creating Domain">
+                    <SwitchComp />
+                    </Form.Item>
 
                     <Form.Item {...tailFormItemLayout}>
                       <Button type="primary" htmlType="submit">
