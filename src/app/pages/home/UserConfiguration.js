@@ -1,6 +1,5 @@
 import React from "react";
 import { Portlet, PortletBody } from "../../partials/content/Portlet";
-import Datatables from "../../widgets/DatatablePrimeReact";
 import ModalForm from "../../widgets/ModalForm";
 import ModalChangeRole from "../../widgets/ModalChangeRole";
 import ModalActivate from "../../widgets/ModalActivate";
@@ -10,75 +9,84 @@ import ModalAllocateAddresses from "../../widgets/ModalAllocateAddresses";
 import ModalChangePassword from "../../widgets/ModalChangePassword";
 import RefreshButton from "../../widgets/RefreshButton";
 import FullscreenButton from "../../widgets/FullscreenButton";
+import Datatable from "../../widgets/DatatableAntd";
 
 export default function UserConfiguration() {
   return (
     <>
-      <Portlet>
-        <PortletBody>
-          <div className="d-flex justify-content-end">
-            
-          <div style={{ margin: 5 }}>
+      <div className="d-flex justify-content-end">
+        <div style={{ margin: 5 }}>
           <Portlet>
             <PortletBody fit={true}>
-                <RefreshButton />
-              </PortletBody>
-            </Portlet>
-            </div>
-            <div style={{ margin: 5 }}>
+              <RefreshButton />
+            </PortletBody>
+          </Portlet>
+        </div>
+        <div style={{ margin: 5 }}>
           <Portlet>
             <PortletBody fit={true}>
-                <ModalForm />
-              </PortletBody>
-            </Portlet>
-            </div>
-            <div style={{ margin: 5 }}>
+              <ModalForm />
+            </PortletBody>
+          </Portlet>
+        </div>
+        <div style={{ margin: 5 }}>
           <Portlet>
             <PortletBody fit={true}>
-                <ModalChangeRole />
-              </PortletBody>
-            </Portlet>
-            </div>
-            <div style={{ margin: 5 }}>
+              <ModalChangeRole />
+            </PortletBody>
+          </Portlet>
+        </div>
+        <div style={{ margin: 5 }}>
           <Portlet>
             <PortletBody fit={true}>
-                <ModalActivate />
-              </PortletBody>
-            </Portlet>
-            </div>
-            <div style={{ margin: 5 }}>
+              <ModalActivate />
+            </PortletBody>
+          </Portlet>
+        </div>
+        <div style={{ margin: 5 }}>
           <Portlet>
             <PortletBody fit={true}>
-                <ModalDisableUser />
-              </PortletBody>
-            </Portlet>
-            </div>
-            <div style={{ margin: 5 }}>
+              <ModalDisableUser />
+            </PortletBody>
+          </Portlet>
+        </div>
+        <div style={{ margin: 5 }}>
           <Portlet>
             <PortletBody fit={true}>
-                <ModalSuspendUser />
-              </PortletBody>
-            </Portlet>
-            </div>
-            <div style={{ margin: 5 }}>
+              <ModalSuspendUser />
+            </PortletBody>
+          </Portlet>
+        </div>
+        <div style={{ margin: 5 }}>
           <Portlet>
             <PortletBody fit={true}>
-                <ModalAllocateAddresses />
-              </PortletBody>
-            </Portlet>
-            </div>
-            <div style={{ margin: 5 }}>
+              <ModalAllocateAddresses />
+            </PortletBody>
+          </Portlet>
+        </div>
+        <div style={{ margin: 5 }}>
           <Portlet>
             <PortletBody fit={true}>
-                <ModalChangePassword />
-              </PortletBody>
-            </Portlet>
-            </div>
-          </div>
+              <ModalChangePassword />
+            </PortletBody>
+          </Portlet>
+        </div>
+      </div>
 
-          <Datatables />
-        </PortletBody>
-      </Portlet>
+      {/* <FullscreenButton
+current= {<> */}
+      <div className="col-xl-12">
+        <Portlet
+          className="kt-portlet--height-fluid kt-portlet--border-bottom-dark"
+          fluidHeight={true}
+        >
+          <PortletBody fit={true}>
+            <Datatable />
+          </PortletBody>
+        </Portlet>
+      </div>
+      {/* </>
+        } /> */}
     </>
   );
 }

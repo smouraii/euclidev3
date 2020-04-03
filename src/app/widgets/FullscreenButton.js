@@ -23,11 +23,10 @@ const goFull = () => {
           enabled={isFull}
           onChange={isFull => setIsFull({isFull})}
         >
-        <Portlet>
-        <div style={{margin:50}}>
+       
+        <div>
         {props.current}
         </div>
-        </Portlet>
         </Fullscreen>
       </div>
     );
