@@ -1,33 +1,24 @@
 import React, { Component, useState } from "react";
 import Fullscreen from "react-full-screen";
-import {Button} from 'antd';
+import { Button } from "antd";
 import { Portlet } from "../partials/content/Portlet";
- 
-export default function FullscreenButton(props)  {
 
- 
-const [isFull,setIsFull] = useState({isFull:false});
- 
-const goFull = () => {
-    setIsFull({ isFull: true });
-  }
- 
+export default function FullscreenButton({ isFull, setIsFull, current }) {
+  const goFull = () => {
+    setIsFull(true);
+  };
+React.useEffect(()=>{
+  console.log(setIsFull)
+});
 
-    return (
-      <div className="Fullscreen">
-        <Button onClick={goFull}>
-          Go Fullscreen
-        </Button>
- 
-        <Fullscreen
-          enabled={isFull}
-          onChange={isFull => setIsFull({isFull})}
-        >
-       
-        <div>
-        {props.current}
-        </div>
-        </Fullscreen>
-      </div>
-    );
-  }
+
+  return (
+    <div className="Fullscreen">
+      <Button onClick={goFull}>Go Fullscreen</Button>
+
+      <Fullscreen enabled={isFull} onChange={isFull => setIsFull(isFull)}>
+        <div>{current}</div>
+      </Fullscreen>
+    </div>
+  );
+}

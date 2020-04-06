@@ -8,6 +8,7 @@ import {
   PortletBody,
   PortletHeader
 } from "../../partials/content/Portlet";
+import EditableFormTable from "../../widgets/DatatableEditable";
 
 export default function NewRequest() {
   const [mockData, setMockData] = React.useState([]);
@@ -248,6 +249,8 @@ export default function NewRequest() {
                         handleSubmit
                       }) => (
                         <Form>
+                        <div className="row d-flex justify-content-end">
+                        <div className="col-sm-12 col-md-6 col-lg-6">
                           <div className="row d-flex justify-content-center">
                             <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
                               <PortletBody>
@@ -361,6 +364,18 @@ export default function NewRequest() {
                                 </div>
                               </PortletBody>
                             </Portlet>
+                          </div>
+                          </div>
+                          <div className="col-sm-12 col-md-6 col-lg-6">
+                          <Portlet
+                              className="kt-portlet--height-fluid kt-portlet--border-bottom-brand"
+                              fluidHeight={true}
+                            >
+                              <PortletBody>
+                                <EditableFormTable/>
+                              </PortletBody>
+                            </Portlet>
+                          </div>
                           </div>
                           <div>
                             <Button type="primary" htmlType="submit">
