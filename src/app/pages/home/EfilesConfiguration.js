@@ -50,26 +50,25 @@ export default function EfilesConfiguration() {
   const { Panel } = Collapse;
   const text = (
     <div className="row justify-content-between ">
-      <div className="col-md-6">
+      <div className="col-sm-12 col-md-12 col-lg-8">
         <Progress type="dashboard" percent={state} />
-        <Input />
         <ButtonGroup>
           <Button onClick={decline} icon="minus" />
           <Button onClick={increase} icon="plus" />
         </ButtonGroup>
       </div>
-      <div className="col-md-6">
+      <div className="col-sm-12 col-md-12 col-lg-6">
         <Progress type="dashboard" percent={count} />
-        <Input />
         <ButtonGroup>
           <Button onClick={minus} icon="minus" />
           <Button onClick={plus} icon="plus" />
         </ButtonGroup>
       </div>
       <div className="row">
-     <div className="col-md-12">
+     <div className="col-sm-12 col-md-12 col-lg-8">
       <Select
-        defaultValue="word"
+       mode="multiple"
+        placeholder="select your formats"   
         style={{ width: 900 , margin: 10}}
         onChange={handleChange}
       >

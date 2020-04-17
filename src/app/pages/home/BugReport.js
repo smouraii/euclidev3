@@ -32,7 +32,7 @@ export default function BugReport() {
         isFull={isFull}
         setIsFull={setIsFull}
         current={
-          <div className="col-md-12">
+          <div className="col-sm-12 col-md-12 col-lg-12">
             <Portlet
               className="kt-portlet--height-fluid kt-portlet--border-bottom-dark"
               fluidHeight={true}

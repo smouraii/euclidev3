@@ -4,6 +4,9 @@ import reqwest from "reqwest";
 import { withRouter } from "react-router-dom";
 import QueryBuilder from "./QueryBuilder";
 import Highlighter from "react-highlight-words";
+import Search from "antd/lib/input/Search";
+
+
 
 class Datatable extends React.Component {
   state = {
@@ -13,6 +16,8 @@ class Datatable extends React.Component {
     searchText:"",
     searchedColumn:""
   };
+
+  
 
   componentDidMount() {
     this.fetch();
@@ -152,6 +157,8 @@ class Datatable extends React.Component {
     console.log(current, pageSizeOptions);
   };
 
+  
+
   render() {
     const columns = [
       {
@@ -200,8 +207,13 @@ class Datatable extends React.Component {
 
     return (
       <>
-        {this.props.match.path === "/folderlist" && (
-          <QueryBuilder data={this.state.data} />
+      
+        {this.props.match.path === "/folderlist" && (<> <div className="d-flex justify-content-end"><Search
+      placeholder="input search text"
+      onSearch={value => console.log(value)}
+      style={{ width: 200 ,margin:20}}
+    /></div>
+          <QueryBuilder data={this.state.data} /></>
         )}
         {/* <Pagination
         pagination={this.state.pagination}
@@ -218,6 +230,7 @@ class Datatable extends React.Component {
           loading={this.state.loading}
           onChange={this.handleTableChange}
         />
+      
         {console.log(this)}
       </>
     );

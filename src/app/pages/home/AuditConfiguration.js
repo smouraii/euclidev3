@@ -43,7 +43,7 @@ export default function AuditConfiguration() {
               key="2"
             >
               <div class="form row">
-                <div class="col-md-12">
+                <div class="col-sm-12 col-md-12 col-lg-6">
                   <div class="row">
                          <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
                       <PortletHeader title="Audit bugReport API" />
@@ -67,7 +67,7 @@ export default function AuditConfiguration() {
                          <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
                       <PortletHeader title="BugReport synchronization" />
                              <PortletBody widthfluid={true}>
-                        <div class="col-md-6">
+                        <div class="col-sm-12 col-md-12 col-lg-6">
                           <table class="table table-hover table-bordered">
                             <tbody>
                               <tr>
@@ -114,7 +114,7 @@ export default function AuditConfiguration() {
                      <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand" >
                   <PortletHeader title="Log Settings" />
                          <PortletBody heightfluid={true}>
-                    <div className="col-md-6">
+                    <div className="col-sm-12 col-md-6 col-lg-6">
                       <div className="inputContainer">
                         <label htmlFor="fileName">File Name</label>
                         <Input
@@ -124,7 +124,7 @@ export default function AuditConfiguration() {
                         />
                       </div>
                     </div>
-                    <div className="col-md-6">
+                    <div className="col-sm-12 col-md-6 col-lg-6">
                       <div className="inputContainer">
                         <label htmlFor="fileLocation">File Location</label>
                         <Input
@@ -134,7 +134,7 @@ export default function AuditConfiguration() {
                         />
                       </div>
                     </div>
-                    <div className="col-md-6">
+                    <div className="col-sm-12 col-md-6 col-lg-6">
                       <label htmlFor="logtype">Log Type</label>
                       <div>
                         <Select

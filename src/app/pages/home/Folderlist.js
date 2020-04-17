@@ -8,6 +8,7 @@ import RefreshButton from "../../widgets/RefreshButton";
 import Datatable from "../../widgets/DatatableAntd";
 
 
+
 export default function FolderList() {
   fetch = (params = {}) => {
     console.log("params:", params);
@@ -58,7 +59,9 @@ export default function FolderList() {
         <div className="col-xl-12">
           <Portlet>
             <PortletBody fit={true}>
+            
               <Datatable/>
+             
             </PortletBody>
           </Portlet>
         </div>
