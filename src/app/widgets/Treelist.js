@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Tree, Checkbox } from "antd";
+import { Tree, Checkbox, Icon } from "antd";
 import {
   Portlet,
   PortletBody,
@@ -7,163 +7,33 @@ import {
 } from "../partials/content/Portlet";
 
 const { TreeNode } = Tree;
-const euclideData = [
-  {
-    title: "Euclide",
-    key: "euclide",
-    children: [
-      {
-        title: "Lims",
-        key: "Lims"
-      },
-      {
-        title: "Mail Server",
-        key: "Mail Server"
-      },
-      {
-        title: "DB Configuration",
-        key: "DB Configuration"
-      },
-      {
-        title: "Security Roles",
-        key: "Security Roles"
-      },
-      {
-        title: "User Configuration",
-        key: "User Configuration"
-      },
-      {
-        title: "Audit Configuration",
-        key: "Audit Configuration"
-      },
-      {
-        title: "EFiles Configuration",
-        key: "EFiles Configuration"
-      }
-    ]
-  }
-];
-const dashboardData = [
-    {
-      title: "Dashboard",
-      key: "dashboard",
-      children: [
-        {
-          title: "Request Per Status",
-          key: "requestPerStatus"
-        },
-        {
-            title: "Sample Per Request",
-            key: "samplePerRequest"
-          },
-      ]
-    }
-  ];
-  const eFilesData = [
-    {
-      title: "eFiles Data",
-      key: "eFilesData",
-      children: [
-        {
-          title: "eFiles Client",
-          key: "eFilesClient"
-        },
-      ]
-    }
-  ];
-  const bugReportData = [
-    {
-      title: "Bug Report",
-      key: "bugReport",
-      children: [
-        {
-          title: "Report List",
-          key: "reportList"
-        },
-        {
-          title: "Error Log",
-          key: "errorLog"
-        },
-        {
-          title: "Audti List",
-          key: "AuditList"
-        },
-        {
-          title: "Online Users",
-          key: "onlineUsers"
-        },
-      ]
-    }
-  ];
-  const DDCData = [
-    {
-      title: "DDC",
-      key: "DDC",
-      children: [
-        {
-          title: "Analysis Request",
-          key: "analysisRequest",
-          children:[
-              {
-                  title:"Request01",
-                  key:"request01",
-              },
-              {
-                  title:"List01",
-                  key:"list01",
-              },
-          ],
-        },
-        {
-          title: "Analysis Request 2",
-          key: "analysisRequest02",
-          children:[
-             { 
-                 title:"Analysis Request Without RI",
-                 key:"analysisRequestWithoutRI",
-            }
-          ]
-        },
-        {
-          title: "Adress",
-          key: "Adress",
-          children:[
-              {
-                  title:"Adress Billing",
-                  key:"AdressBilling",
-              },
-              {
-                title:"AdressReportTo",
-                key:"AdressReportTo",
-            },
-            {
-                title:"AdressList",
-                key:"AdressList",
-            },
-          ]
-        },
-        {
-          title: "Post Message",
-          key: "Post Message",
-          children:[
-              {
-                  title:"Post Message",
-                  key:"postMessage",
-              },
-              {
-                title:"Message List",
-                key:"MessageList",
-            }
-          ]
-        },
-      ]
-    }
-  ];
 
-export default function TreeList() {
-  const [expandedKeys, setExpandedKeys] = useState(['euclide','dashboard','eFilesData','bugReport','DDC']);
-  const [checkedKeys, setCheckedKeys] = useState([]);
-  const [selectedKeys, setSelectedKeys] = useState([]);
+
+export default function TreeList({
+  checkedKeys,
+  setCheckedKeys,
+  checkedKeysDashboard,
+  setCheckedKeysDashboard,
+  checkedKeysEFilesData,
+  setCheckedKeysEFilesData,
+  checkedKeysBugReport,
+  setCheckedKeysBugReport,
+  checkedKeysDDC,
+  setCheckedKeysDDC,
+  euclideData,
+  dashboardData,
+  bugReportData,
+  eFilesData,
+  DDCData
+}) {
+  const [expandedKeys, setExpandedKeys] = useState([
+    "euclide",
+    "dashboard",
+    "eFilesData",
+    "bugReport",
+    "DDC"
+  ]);
+
   const [autoExpandParent, setAutoExpandParent] = useState(true);
 
   const onExpand = expandedKeys => {
@@ -174,14 +44,9 @@ export default function TreeList() {
     setAutoExpandParent(false);
   };
 
-  const onCheck = checkedKeys => {
-    console.log("onCheck", checkedKeys);
-    setCheckedKeys(checkedKeys);
-  };
-
-  const onSelect = (selectedKeys, info) => {
-    console.log("onSelect", info);
-    setSelectedKeys(selectedKeys);
+  const onCheck = (keys, setKeys, e) => {
+    console.log("onCheck", e);
+    setKeys(e);
   };
 
   return (
@@ -204,10 +69,8 @@ export default function TreeList() {
                     onExpand={onExpand}
                     expandedKeys={expandedKeys}
                     autoExpandParent={autoExpandParent}
-                    onCheck={onCheck}
+                    onCheck={e => onCheck(checkedKeys, setCheckedKeys, e)}
                     checkedKeys={checkedKeys}
-                    onSelect={onSelect}
-                    selectedKeys={selectedKeys}
                     treeData={euclideData}
                   />
                 </PortletBody>
@@ -225,10 +88,10 @@ export default function TreeList() {
                     onExpand={onExpand}
                     expandedKeys={expandedKeys}
                     autoExpandParent={autoExpandParent}
-                    onCheck={onCheck}
-                    checkedKeys={checkedKeys}
-                    onSelect={onSelect}
-                    selectedKeys={selectedKeys}
+                    onCheck={e =>
+                      onCheck(checkedKeysDashboard, setCheckedKeysDashboard, e)
+                    }
+                    checkedKeys={checkedKeysDashboard}
                     treeData={dashboardData}
                   />
                 </PortletBody>
@@ -246,10 +109,14 @@ export default function TreeList() {
                     onExpand={onExpand}
                     expandedKeys={expandedKeys}
                     autoExpandParent={autoExpandParent}
-                    onCheck={onCheck}
-                    checkedKeys={checkedKeys}
-                    onSelect={onSelect}
-                    selectedKeys={selectedKeys}
+                    onCheck={e =>
+                      onCheck(
+                        checkedKeysEFilesData,
+                        setCheckedKeysEFilesData,
+                        e
+                      )
+                    }
+                    checkedKeys={checkedKeysEFilesData}
                     treeData={eFilesData}
                   />
                 </PortletBody>
@@ -267,10 +134,10 @@ export default function TreeList() {
                     onExpand={onExpand}
                     expandedKeys={expandedKeys}
                     autoExpandParent={autoExpandParent}
-                    onCheck={onCheck}
-                    checkedKeys={checkedKeys}
-                    onSelect={onSelect}
-                    selectedKeys={selectedKeys}
+                    onCheck={e =>
+                      onCheck(checkedKeysBugReport, setCheckedKeysBugReport, e)
+                    }
+                    checkedKeys={checkedKeysBugReport}
                     treeData={bugReportData}
                   />
                 </PortletBody>
@@ -288,10 +155,8 @@ export default function TreeList() {
                     onExpand={onExpand}
                     expandedKeys={expandedKeys}
                     autoExpandParent={autoExpandParent}
-                    onCheck={onCheck}
-                    checkedKeys={checkedKeys}
-                    onSelect={onSelect}
-                    selectedKeys={selectedKeys}
+                    onCheck={e => onCheck(checkedKeysDDC, setCheckedKeysDDC, e)}
+                    checkedKeys={checkedKeysDDC}
                     treeData={DDCData}
                   />
                 </PortletBody>

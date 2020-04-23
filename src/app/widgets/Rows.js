@@ -1,3 +1,6 @@
+import React from 'react';
+
+
 import React, { useState } from "react";
 import { Table, Icon } from "antd";
 import {
@@ -208,12 +211,18 @@ export default function SecurityRoles() {
     { title: "EFiles", dataIndex: "eFiles", key: "eFiles" },
     { title: "bugReport", dataIndex: "bugReport", key: "bugReport" },
     { title: "DDC", dataIndex: "DDC", key: "DDC" }
+
+    { title: "Euclide", dataIndex: "euclide2", key: "euclide2" },
+    { title: "Dashboard", dataIndex: "dashboard2", key: "dashboard2" },
+    { title: "EFiles", dataIndex: "eFiles2", key: "eFiles2" },
+    { title: "bugReport", dataIndex: "bugReport2", key: "bugReport2" },
+    { title: "DDC", dataIndex: "DDC2", key: "DDC2" }
   ];
 
   const data = [];
   data.push({
     key: 1,
-    role: "Screem",
+    role: "Administrateur",
     euclide:status(checkedKeys,euclideData[0].children.length),
     dashboard: status(checkedKeysDashboard,dashboardData[0].children.length) ,
     eFiles: status(checkedKeysEFilesData,eFilesData[0].children.length),
@@ -222,22 +231,22 @@ export default function SecurityRoles() {
   });
   data.push({
     key: 2,
-    role: "Screem",
+    role: "Client",
+    euclide2:status(checkedKeys,euclideData[0].children.length),
+    dashboard2: status(checkedKeysDashboard,dashboardData[0].children.length) ,
+    eFiles2: status(checkedKeysEFilesData,eFilesData[0].children.length),
+    bugReport2: status(checkedKeysBugReport,bugReportData[0].children.length),
+    DDC2: status(checkedKeysDDC,13)
+  });
+  data.push({
+    key: 3,
+    role: "User",
     euclide:status(checkedKeys,euclideData[0].children.length),
     dashboard: status(checkedKeysDashboard,dashboardData[0].children.length) ,
     eFiles: status(checkedKeysEFilesData,eFilesData[0].children.length),
     bugReport: status(checkedKeysBugReport,bugReportData[0].children.length),
     DDC: status(checkedKeysDDC,13)
   });
-  // data.push({
-  //   key: 3,
-  //   role: "Screem",
-  //   euclide:status(checkedKeys,euclideData[0].children.length),
-  //   dashboard: status(checkedKeysDashboard,dashboardData[0].children.length) ,
-  //   eFiles: status(checkedKeysEFilesData,eFilesData[0].children.length),
-  //   bugReport: status(checkedKeysBugReport,bugReportData[0].children.length),
-  //   DDC: status(checkedKeysDDC,13)
-  // });
 
   return (
     <Portlet>
