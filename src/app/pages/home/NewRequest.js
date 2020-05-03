@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
 import StepsComp from "../../widgets/Steps";
 import { Button, Input, Descriptions, Divider, Transfer } from "antd";
-import { FormattedMessage, injectIntl } from "react-intl";
-import axios from "axios";
 import { Formik, Form } from "formik";
 import { any } from "prop-types";
 import {
@@ -12,8 +10,7 @@ import {
 } from "../../partials/content/Portlet";
 import EditableFormTable from "../../widgets/DatatableEditable";
 
-export default function NewRequest(props) {
-  const { intl } = props;
+export default function NewRequest() {
   const [mockData, setMockData] = React.useState([]);
   const [targetKeys, setTargetKeys] = React.useState([]);
 
@@ -54,9 +51,6 @@ export default function NewRequest(props) {
   const prev = () => {
     setCurrent(current - 1);
   };
-  function validate(email, firstname, lastname, username, address, country, password) {
-    return axios.post(REGISTER_URL, { email, firstname, lastname, username, address, country, password });
-  }
 
   return (
     <>
@@ -83,35 +77,11 @@ export default function NewRequest(props) {
                         Created: "",
                         ...dataValues
                       }}
-                      validate={values => {
-                        const errors = {};
-
-                        if (!values.firstname) {
-                          errors.firstname = intl.formatMessage({
-                            id: "AUTH.VALIDATION.REQUIRED_FIELD"
-                          });
-                        }
-                        return errors;
-                      }}
-                      onSubmit={(data, {setStatus, setSubmitting }) => {
+                      onSubmit={(data, { setSubmitting }) => {
                         next();
                         setDataValues(data);
                         setSubmitting(false);
-                        validate(
-                          values.RequestNum
-                        )
-                        .then(({ data}) => {
-                props.next(data);
-              })
-              .catch(() => {
-                setSubmitting(false);
-                setStatus(
-                  intl.formatMessage({
-                    id: "AUTH.VALIDATION.INVALID_LOGIN"
-                  })
-                );
-              });
-              }}
+                      }}
                     >
                       {({
                         values,
@@ -279,136 +249,133 @@ export default function NewRequest(props) {
                         handleSubmit
                       }) => (
                         <Form>
-                          <div className="row d-flex justify-content-end">
-                            <div className="col-sm-12 col-md-6 col-lg-6">
-                              <div className="row d-flex justify-content-center">
-                                <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
-                                  <PortletBody>
-                                    <div className="inputContainer">
-                                      <label htmlFor="Description">
-                                        Description
-                                      </label>
-                                      <Input
-                                        name="Description"
-                                        onBlur={handleBlur}
-                                        onChange={handleChange}
-                                        value={values.Description}
-                                        placeholder="Description"
-                                      />
-                                      {!touched.Description &&
-                                        !errors.Description && (
-                                          <span className="errorContainer">
-                                            {errors.Description}
-                                          </span>
-                                        )}
-                                    </div>
+                        <div className="row d-flex justify-content-end">
+                        <div className="col-sm-12 col-md-6 col-lg-6">
+                          <div className="row d-flex justify-content-center">
+                            <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
+                              <PortletBody>
+                                <div className="inputContainer">
+                                  <label htmlFor="Description">
+                                    Description
+                                  </label>
+                                  <Input
+                                    name="Description"
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    value={values.Description}
+                                    placeholder="Description"
+                                  />
+                                  {!touched.Description &&
+                                    !errors.Description && (
+                                      <span className="errorContainer">
+                                        {errors.Description}
+                                      </span>
+                                    )}
+                                </div>
 
-                                    <div className="inputContainer">
-                                      <label htmlFor="Types">Types</label>
-                                      <Input
-                                        name="Types"
-                                        onBlur={handleBlur}
-                                        onChange={handleChange}
-                                        value={values.Types}
-                                        placeholder="Types"
-                                      />
-                                      {!touched.Types && !errors.Types && (
-                                        <span className="errorContainer">
-                                          {errors.Types}
-                                        </span>
-                                      )}
-                                    </div>
+                                <div className="inputContainer">
+                                  <label htmlFor="Types">Types</label>
+                                  <Input
+                                    name="Types"
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    value={values.Types}
+                                    placeholder="Types"
+                                  />
+                                  {!touched.Types && !errors.Types && (
+                                    <span className="errorContainer">
+                                      {errors.Types}
+                                    </span>
+                                  )}
+                                </div>
 
-                                    <div className="inputContainer">
-                                      <label htmlFor="Products">Products</label>
-                                      <Input
-                                        name="Products"
-                                        onBlur={handleBlur}
-                                        onChange={handleChange}
-                                        value={values.Products}
-                                        placeholder="Products"
-                                      />
-                                      {!touched.Products &&
-                                        !errors.Products && (
-                                          <span className="errorContainer">
-                                            {errors.Products}
-                                          </span>
-                                        )}
-                                    </div>
+                                <div className="inputContainer">
+                                  <label htmlFor="Products">Products</label>
+                                  <Input
+                                    name="Products"
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    value={values.Products}
+                                    placeholder="Products"
+                                  />
+                                  {!touched.Products && !errors.Products && (
+                                    <span className="errorContainer">
+                                      {errors.Products}
+                                    </span>
+                                  )}
+                                </div>
 
-                                    <div className="inputContainer">
-                                      <label htmlFor="Analysis">Analysis</label>
-                                      <Input
-                                        name="Analysis"
-                                        onBlur={handleBlur}
-                                        onChange={handleChange}
-                                        value={values.Analysis}
-                                        placeholder="Analysis"
-                                      />
-                                      {!touched.Analysis &&
-                                        !errors.Analysis && (
-                                          <span className="errorContainer">
-                                            {errors.Analysis}
-                                          </span>
-                                        )}
-                                    </div>
+                                <div className="inputContainer">
+                                  <label htmlFor="Analysis">Analysis</label>
+                                  <Input
+                                    name="Analysis"
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    value={values.Analysis}
+                                    placeholder="Analysis"
+                                  />
+                                  {!touched.Analysis && !errors.Analysis && (
+                                    <span className="errorContainer">
+                                      {errors.Analysis}
+                                    </span>
+                                  )}
+                                </div>
 
-                                    <div className="inputContainer">
-                                      <label htmlFor="Comments">Comments</label>
-                                      <Input
-                                        name="Comments"
-                                        onBlur={handleBlur}
-                                        onChange={handleChange}
-                                        value={values.Comments}
-                                        placeholder="Comments"
-                                      />
-                                      {!touched.Comments &&
-                                        !errors.Comments && (
-                                          <span className="errorContainer">
-                                            {errors.Comments}
-                                          </span>
-                                        )}
-                                    </div>
-                                  </PortletBody>
-                                </Portlet>
-                              </div>
+                                <div className="inputContainer">
+                                  <label htmlFor="Comments">Comments</label>
+                                  <Input
+                                    name="Comments"
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    value={values.Comments}
+                                    placeholder="Comments"
+                                  />
+                                  {!touched.Comments && !errors.Comments && (
+                                    <span className="errorContainer">
+                                      {errors.Comments}
+                                    </span>
+                                  )}
+                                </div>
+                              </PortletBody>
+                            </Portlet>
+                          </div>
 
-                              <div className="col-md-12">
-                                <Portlet
-                                  className="kt-portlet--height-fluid kt-portlet--border-bottom-brand"
-                                  fluidHeight={true}
-                                >
-                                  <PortletBody>
-                                    <div className="row d-flex justify-content-center">
-                                      <Transfer
-                                        dataSource={mockData}
-                                        showSearch
-                                        listStyle={{
-                                          width: 250,
-                                          height: 300
-                                        }}
-                                        operations={["to right", "to left"]}
-                                        targetKeys={targetKeys}
-                                        onChange={handleTransfer}
-                                        render={item =>
-                                          `${item.title}-${item.description}`
-                                        }
-                                      />
-                                    </div>
-                                  </PortletBody>
-                                </Portlet>
-                              </div>
-                            </div>
-                            <div className="col-sm-12 col-md-6 col-lg-6">
-                              <Portlet
-                                className="kt-portlet--height-fluid kt-portlet--border-bottom-brand"
-                                fluidHeight={true}
-                              >
-                                <PortletBody>
-                                  <EditableFormTable />
-                                </PortletBody>
-                              </Portlet>
-                            </div>
+                          <div className="col-md-12">
+                            <Portlet
+                              className="kt-portlet--height-fluid kt-portlet--border-bottom-brand"
+                              fluidHeight={true}
+                            >
+                              <PortletBody>
+                                <div className="row d-flex justify-content-center">
+                                  <Transfer
+                                    dataSource={mockData}
+                                    showSearch
+                                    listStyle={{
+                                      width: 250,
+                                      height: 300
+                                    }}
+                                    operations={["to right", "to left"]}
+                                    targetKeys={targetKeys}
+                                    onChange={handleTransfer}
+                                    render={item =>
+                                      `${item.title}-${item.description}`
+                                    }
+                                  />
+                                </div>
+                              </PortletBody>
+                            </Portlet>
+                          </div>
+                          </div>
+                          <div className="col-sm-12 col-md-6 col-lg-6">
+                          <Portlet
+                              className="kt-portlet--height-fluid kt-portlet--border-bottom-brand"
+                              fluidHeight={true}
+                            >
+                              <PortletBody>
+                                <EditableFormTable/>
+                              </PortletBody>
+                            </Portlet>
+                          </div>
                           </div>
                           <div>
                             <Button type="primary" htmlType="submit">
@@ -463,7 +430,7 @@ export default function NewRequest(props) {
                   className="kt-portlet--height-fluid kt-portlet--border-bottom-brand"
                   fluidHeight={true}
                 >
-                  <PortletHeader title="Adding Sample/Analysis" />
+                                  <PortletHeader title="Adding Sample/Analysis" />
 
                   <PortletBody>
                     <div className="row d-flex justify-content-center">

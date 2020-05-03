@@ -32,6 +32,11 @@ export default {
         page: "eFiles",
       },
       {
+        title: "Form Builder",
+        root: true,
+        page: "formbuilder",
+      },
+      {
         title: "Euclide",
         root: true,
         alignment: "left",

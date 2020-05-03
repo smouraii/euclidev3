@@ -9,7 +9,6 @@ import FolderList from "./Folderlist";
 import NewRequest from "./NewRequest";
 import Efiles from "./Efiles";
 import MailServer from "./MailServer";
-import DBConfiguration from "./DBConfiguration";
 import SecurityRoles from "./SecurityRoles";
 import UserConfiguration from "./UserConfiguration";
 import AuditConfiguration from "./AuditConfiguration";
@@ -20,6 +19,7 @@ import AuditLog from "./AuditLog";
 import SwitchComp from "../../widgets/SwitchComp";
 import WrappedLims from "./Lims";
 import WrappedDbconfiguration from "./DBConfiguration";
+import FormBuilderPage from "./FormBuilderPage.Js";
 
 const GoogleMaterialPage = lazy(() =>
   import("./google-material/GoogleMaterialPage")
@@ -60,6 +60,7 @@ export default function HomePage() {
        <Route path="/bugreport" component={BugReport} /> 
         <Route path="/errorlog" component={ErrorLog} />
         <Route path="/auditlog" component={AuditLog} /> 
+        <Route path="/formbuilder" component={FormBuilderPage} />
 
         <Redirect to="/error/error-v1" />
       </Switch>
