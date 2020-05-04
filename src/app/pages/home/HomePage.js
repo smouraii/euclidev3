@@ -20,6 +20,7 @@ import SwitchComp from "../../widgets/SwitchComp";
 import WrappedLims from "./Lims";
 import WrappedDbconfiguration from "./DBConfiguration";
 import FormBuilderPage from "./FormBuilderPage.Js";
+import FormBuilderComp from "../../widgets/FormBuilder";
 
 const GoogleMaterialPage = lazy(() =>
   import("./google-material/GoogleMaterialPage")

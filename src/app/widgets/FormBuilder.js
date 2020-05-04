@@ -1,34 +1,103 @@
 import React from "react";
-import { withFormsy } from '@sdv/formsy-react';
- 
-class FormBuilderComp extends React.Component {
- 
-    // setValue() will set the value of the component, which in
-    // turn will validate it and the rest of the form
-    changeValue = (event) => {
-        this.props.setValue(event.currentTarget.value);
-    }
- 
-    render() {
- 
-        // Set a specific className based on the validation
-        // state of this component. showRequired() is true
-        // when the value is empty and the required prop is
-        // passed to the input. showError() is true when the
-        // value typed is invalid
-        const className = this.props.showRequired() ? 'required' : this.props.showError() ? 'error' : null;
-    
-        // An error message is returned ONLY if the component is invalid
-        // or the server has returned an error message
-        const errorMessage = this.props.getErrorMessage();
-    
-        return (
-            <div className={className}>
-                <input type="text" onChange={this.changeValue} value={this.props.getValue()}/>
-                <span>{errorMessage}</span>
-            </div>
-        );
-    }
+import { FormBuilder } from "th-react-formbuilder";
+
+export default function FormBuilderComp(props) {
+    const items = [
+        {
+          key: "Header",
+          name: "Header Text",
+          icon: "fa fa-header"
+        },
+        {
+          key: "Label",
+          name: "Label",
+          icon: "fa fa-font"
+        },
+        {
+          key: "Paragraph",
+          name: "Paragraph",
+          icon: "fa fa-paragraph"
+        },
+        {
+          key: "LineBreak",
+          name: "Line Break",
+          icon: "fa fa-arrows-h"
+        },
+        {
+          key: "Dropdown",
+          name: "Dropdown",
+          icon: "fa fa-caret-square-o-down"
+        },
+        {
+          key: "Tags",
+          name: "Tags",
+          icon: "fa fa-tags"
+        },
+        {
+          key: "Checkboxes",
+          name: "Checkboxes",
+          icon: "fa fa-check-square-o"
+        },
+        {
+          key: "RadioButtons",
+          name: "Multiple Choice",
+          icon: "fa fa-dot-circle-o"
+        },
+        {
+          key: "TextInput",
+          name: "Text Input",
+          icon: "fa fa-font"
+        },
+        {
+          key: "NumberInput",
+          name: "Number Input",
+          icon: "fa fa-plus"
+        },
+        {
+          key: "TextArea",
+          name: "Multi-line Input",
+          icon: "fa fa-text-height"
+        },
+        {
+          key: "Rating",
+          name: "Rating",
+          icon: "fa fa-star"
+        },
+        {
+          key: "HyperLink",
+          name: "Web site",
+          icon: "fa fa-link"
+        },
+        {
+          key: "Range",
+          name: "Range",
+          icon: "fa fa-sliders"
+        },
+        {
+          key: "Email",
+          name: "Email",
+          icon: "fa fa-at"
+        },
+        {
+          key: "Date",
+          name: "Date",
+          icon: "fa fa-calendar"
+        },
+        {
+          key: "Signature",
+          name: "Signature",
+          icon: "fa fa-edit"
+        }
+      ];
+
+  const onSubmitFunc = () => {
+    // Submit Function
+  };
+
+  return (
+<FormBuilder 
+  items={items} 
+  onSubmit={onSubmitFunc} 
+/>
+  );
 }
- 
-export default withFormsy(FormBuilderComp)
