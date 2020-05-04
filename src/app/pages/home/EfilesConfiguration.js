@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Collapse, Progress, Button, Input, Select, Icon } from "antd";
+import { Collapse, Progress, Button, Input, Select, Icon, InputNumber } from "antd";
 import { Circle } from "rc-progress";
 import { Portlet, PortletBody } from "../../partials/content/Portlet";
 import { StaticRouter } from "react-router-dom";
@@ -11,12 +11,16 @@ export default function EfilesConfiguration() {
   const [state, setState] = useState(0);
   const [count, setCount] = useState(0);
 
+  function onChange(value) {
+    console.log('changed', value);
+  }
+
   function handleChange(value) {
     console.log(`selected ${value}`);
   }
 
   const increase = () => {
-    let percent = state + 10;
+    let percent = state + 1;
     if (percent > 100) {
       percent = 100;
     }
@@ -24,7 +28,7 @@ export default function EfilesConfiguration() {
   };
 
   const decline = () => {
-    let percent = state - 10;
+    let percent = state - 1;
     if (percent < 0) {
       percent = 0;
     }
@@ -32,7 +36,7 @@ export default function EfilesConfiguration() {
   };
 
   const plus = () => {
-    let percent = count + 10;
+    let percent = count + 1;
     if (percent > 100) {
       percent = 100;
     }
@@ -40,7 +44,7 @@ export default function EfilesConfiguration() {
   };
 
   const minus = () => {
-    let percent = count - 10;
+    let percent = count - 1;
     if (percent < 0) {
       percent = 0;
     }
@@ -50,22 +54,34 @@ export default function EfilesConfiguration() {
   const { Panel } = Collapse;
   const text = (
     <div className="row justify-content-between ">
-      <div className="col-sm-12 col-md-12 col-lg-8">
-        <Progress type="dashboard" percent={state} />
+      <div className="col-sm-12 col-md-6 col-lg-6">
+        <Progress type="dashboard" percent={state} format={percent => `${percent} GB`} />
         <ButtonGroup>
           <Button onClick={decline} icon="minus" />
           <Button onClick={increase} icon="plus" />
         </ButtonGroup>
       </div>
-      <div className="col-sm-12 col-md-12 col-lg-6">
-        <Progress type="dashboard" percent={count} />
+      <div className="col-sm-12 col-md-6 col-lg-6">
+        <Progress type="dashboard" percent={count} format={percent => `${percent} GB`}/>
         <ButtonGroup>
           <Button onClick={minus} icon="minus" />
           <Button onClick={plus} icon="plus" />
         </ButtonGroup>
       </div>
-      <div className="row">
-     <div className="col-sm-12 col-md-12 col-lg-8">
+
+      <div className="d-flex flex-column bd-highlight mb-3">
+     <div className="p-2 bd-highlight"style={{marginLeft:10}}>
+      <InputNumber
+      defaultValue={30}
+      min={0}
+      max={100}
+      formatter={value => `${value} days`}
+      parser={value => value.replace(' days', '')}
+      onChange={onChange}
+    />
+      </div>
+      
+     <div className="p-2 bd-highlight">
       <Select
        mode="multiple"
         placeholder="select your formats"   

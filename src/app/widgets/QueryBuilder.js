@@ -46,9 +46,16 @@ const queryValue = {"id": QbUtils.uuid(), "type": "group"};
 export default class QueryBuilder extends Component {
     state = {
       tree: QbUtils.checkTree(QbUtils.loadTree(queryValue), config),
-      config: config
+      config: config,
+      value:'',
     };
-    
+
+
+     onChange = event => {
+        localStorage.setItem('myValueInLocalStorage', this.jsonTree);
+     
+        this.setValue(this.jsonTree);
+      };
     render = () => (
       <div>
         <Query
@@ -63,7 +70,7 @@ export default class QueryBuilder extends Component {
 
     renderBuilder = (props) => (
       <div className="query-builder-container" style={{padding: '10px'}}>
-        <div className="query-builder qb-lite">
+        <div className="query-builder ">
             <Builder {...props} />
         </div>
       </div>

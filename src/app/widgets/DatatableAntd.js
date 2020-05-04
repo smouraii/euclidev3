@@ -208,11 +208,13 @@ class Datatable extends React.Component {
     return (
       <>
       
-        {this.props.match.path === "/folderlist" && (<> <div className="d-flex justify-content-end"><Search
+        {this.props.match.path === "/folderlist" && (<> <div className="d-flex justify-content-end">
+        {/* <Search
       placeholder="input search text"
       onSearch={value => console.log(value)}
       style={{ width: 200 ,margin:20}}
-    /></div>
+    /> */}
+    </div>
           <QueryBuilder data={this.state.data} /></>
         )}
         {/* <Pagination
