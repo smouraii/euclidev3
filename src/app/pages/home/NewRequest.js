@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import StepsComp from "../../widgets/Steps";
 import { Button, Input, Descriptions, Divider, Transfer } from "antd";
 import { Formik, Form } from "formik";
-import { any } from "prop-types";
 import {
   Portlet,
   PortletBody,
@@ -23,10 +22,9 @@ export default function NewRequest() {
     const mockData = [];
     for (let i = 0; i < 20; i++) {
       const data = {
-        key: i.toString(),
-        title: `content${i + 1}`,
-        description: `description of content${i + 1}`,
-        chosen: Math.random() * 2 > 1
+        key: "test",
+        title: `test`,
+        description: `description of test`,
       };
       if (data.chosen) {
         targetKeys.push(data.key);
@@ -225,11 +223,14 @@ export default function NewRequest() {
                   <div className="col-sm-10 col-md-10 col-lg-10">
                     <Formik
                       initialValues={{
-                        Description: "",
-                        Types: "",
-                        Products: "",
-                        Analysis: "",
-                        Comments: "",
+                        description: "",
+                        sampleTemplate: "",
+                        products: "",
+                        sampleCount: "",
+                        shippingLocation: "",
+                        contact:"",
+                        quantity:"",
+                        quantityUnits:"",
                         ...dataValues
                       }}
                       onSubmit={(data, { setSubmitting }) => {
@@ -255,84 +256,129 @@ export default function NewRequest() {
                             <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
                               <PortletBody>
                                 <div className="inputContainer">
-                                  <label htmlFor="Description">
+                                  <label htmlFor="description">
                                     Description
                                   </label>
                                   <Input
-                                    name="Description"
+                                    name="description"
                                     onBlur={handleBlur}
                                     onChange={handleChange}
-                                    value={values.Description}
+                                    value={values.description}
                                     placeholder="Description"
                                   />
-                                  {!touched.Description &&
-                                    !errors.Description && (
+                                  {!touched.description &&
+                                    !errors.description && (
                                       <span className="errorContainer">
-                                        {errors.Description}
+                                        {errors.description}
                                       </span>
                                     )}
                                 </div>
 
                                 <div className="inputContainer">
-                                  <label htmlFor="Types">Types</label>
+                                  <label htmlFor="sampleTemplate">Sample Template</label>
                                   <Input
-                                    name="Types"
+                                    name="sampleTemplate"
                                     onBlur={handleBlur}
                                     onChange={handleChange}
-                                    value={values.Types}
-                                    placeholder="Types"
+                                    value={values.sampleTemplate}
+                                    placeholder="Sample Template"
                                   />
-                                  {!touched.Types && !errors.Types && (
+                                  {!touched.sampleTemplate && !errors.sampleTemplate && (
                                     <span className="errorContainer">
-                                      {errors.Types}
+                                      {errors.sampleTemplate}
                                     </span>
                                   )}
                                 </div>
 
                                 <div className="inputContainer">
-                                  <label htmlFor="Products">Products</label>
+                                  <label htmlFor="products">Products</label>
                                   <Input
-                                    name="Products"
+                                    name="products"
                                     onBlur={handleBlur}
                                     onChange={handleChange}
-                                    value={values.Products}
+                                    value={values.products}
                                     placeholder="Products"
                                   />
-                                  {!touched.Products && !errors.Products && (
+                                  {!touched.products && !errors.products && (
                                     <span className="errorContainer">
-                                      {errors.Products}
+                                      {errors.products}
                                     </span>
                                   )}
                                 </div>
 
                                 <div className="inputContainer">
-                                  <label htmlFor="Analysis">Analysis</label>
+                                  <label htmlFor="sampleCount">Sample Count</label>
                                   <Input
-                                    name="Analysis"
+                                    name="sampleCount"
                                     onBlur={handleBlur}
                                     onChange={handleChange}
-                                    value={values.Analysis}
-                                    placeholder="Analysis"
+                                    value={values.sampleCount}
+                                    placeholder="Sample Count"
                                   />
-                                  {!touched.Analysis && !errors.Analysis && (
+                                  {!touched.sampleCount && !errors.sampleCount && (
                                     <span className="errorContainer">
-                                      {errors.Analysis}
+                                      {errors.sampleCount}
                                     </span>
                                   )}
                                 </div>
 
                                 <div className="inputContainer">
-                                  <label htmlFor="Comments">Comments</label>
+                                  <label htmlFor="shippingLocation">Shipping Location</label>
                                   <Input
-                                    name="Comments"
+                                    name="shippingLocation"
                                     onBlur={handleBlur}
                                     onChange={handleChange}
-                                    value={values.Comments}
-                                    placeholder="Comments"
+                                    value={values.shippingLocation}
+                                    placeholder="Shipping Location"
                                   />
-                                  {!touched.Comments && !errors.Comments && (
+                                  {!touched.shippingLocation && !errors.shippingLocation && (
                                     <span className="errorContainer">
-                                      {errors.Comments}
+                                      {errors.shippingLocation}
+                                    </span>
+                                  )}
+                                </div>
+                                <div className="inputContainer">
+                                  <label htmlFor="contact">Contact</label>
+                                  <Input
+                                    name="contact"
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    value={values.contact}
+                                    placeholder="Contact"
+                                  />
+                                  {!touched.contact && !errors.contact && (
+                                    <span className="errorContainer">
+                                      {errors.contact}
+                                    </span>
+                                  )}
+                                </div>
+                                <div className="inputContainer">
+                                  <label htmlFor="quantity">Quantity</label>
+                                  <Input
+                                    name="quantity"
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    value={values.quantity}
+                                    placeholder="Quantity"
+                                  />
+                                  {!touched.quantity && !errors.quantity && (
+                                    <span className="errorContainer">
+                                      {errors.quantity}
+                                    </span>
+                                  )}
+                                </div>
+                                <div className="inputContainer">
+                                  <label htmlFor="quantityUnits">Quantity Units</label>
+                                  <Input
+                                    name="quantityUnits"
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    value={values.quantityUnits}
+                                    placeholder="Quantity Units"
+                                  />
+                                  {!touched.quantityUnits && !errors.quantityUnits && (
+                                    <span className="errorContainer">
+                                      {errors.quantityUnits}
                                     </span>
                                   )}
                                 </div>
@@ -436,11 +482,11 @@ export default function NewRequest() {
                     <div className="row d-flex justify-content-center">
                       <div className="col-md-10 ">
                         <Descriptions>
-                          <Descriptions.Item label="Description">
-                            {dataValues.Description}
+                          <Descriptions.Item label="description">
+                            {dataValues.description}
                           </Descriptions.Item>
-                          <Descriptions.Item label="Types">
-                            {dataValues.Types}
+                          <Descriptions.Item label="sampleTemplate">
+                            {dataValues.sampleTemplate}
                           </Descriptions.Item>
                           <Descriptions.Item label="Products">
                             {dataValues.Products}
