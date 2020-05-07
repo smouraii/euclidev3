@@ -22,9 +22,10 @@ export default function NewRequest() {
     const mockData = [];
     for (let i = 0; i < 20; i++) {
       const data = {
-        key: "test",
-        title: `test`,
-        description: `description of test`,
+        key: i.toString(),
+        title: `test${i + 1}`,
+        description: `description of test${i + 1}`,
+        
       };
       if (data.chosen) {
         targetKeys.push(data.key);
@@ -404,7 +405,7 @@ export default function NewRequest() {
                                     targetKeys={targetKeys}
                                     onChange={handleTransfer}
                                     render={item =>
-                                      `${item.title}-${item.description}`
+                                      `${item.title}`
                                     }
                                   />
                                 </div>

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Query, Builder, BasicConfig, Utils as QbUtils} from 'react-awesome-query-builder';
+import { Button } from 'antd';
 
 // You need to provide your own config. See below 'Config format'
 const config = {
@@ -50,12 +51,17 @@ export default class QueryBuilder extends Component {
       value:'',
     };
 
-
-     onChange = event => {
-        localStorage.setItem('myValueInLocalStorage', this.jsonTree);
-     
-        this.setValue(this.jsonTree);
-      };
+    onSubmit = (e) => {
+      e.preventDefault();
+      console.log(this.state);
+    }
+    
+    onChange = event => {
+      localStorage.setItem('myValueInLocalStorage', event.target.value);
+   
+      this.setValue(event.target.value);
+    }
+ 
     render = () => (
       <div>
         <Query
@@ -73,6 +79,7 @@ export default class QueryBuilder extends Component {
         <div className="query-builder ">
             <Builder {...props} />
         </div>
+        <Button onSubmit={this.onSubmit}>save</Button>
       </div>
     )
 
@@ -91,4 +98,5 @@ export default class QueryBuilder extends Component {
       console.log(jsonTree);
       // `jsonTree` can be saved to backend, and later loaded to `queryValue`
     }
+   
 }

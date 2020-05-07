@@ -213,16 +213,7 @@ export default function SecurityRoles() {
   const data = [];
   data.push({
     key: 1,
-    role: "Screem",
-    euclide:status(checkedKeys,euclideData[0].children.length),
-    dashboard: status(checkedKeysDashboard,dashboardData[0].children.length) ,
-    eFiles: status(checkedKeysEFilesData,eFilesData[0].children.length),
-    bugReport: status(checkedKeysBugReport,bugReportData[0].children.length),
-    DDC: status(checkedKeysDDC,13)
-  });
-  data.push({
-    key: 2,
-    role: "Screem",
+    role: "Administrateur",
     euclide:status(checkedKeys,euclideData[0].children.length),
     dashboard: status(checkedKeysDashboard,dashboardData[0].children.length) ,
     eFiles: status(checkedKeysEFilesData,eFilesData[0].children.length),
