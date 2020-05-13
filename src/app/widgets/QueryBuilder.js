@@ -55,12 +55,6 @@ export default class QueryBuilder extends Component {
       e.preventDefault();
       console.log(this.state);
     }
-    
-    onChange = event => {
-      localStorage.setItem('myValueInLocalStorage', event.target.value);
-   
-      this.setValue(event.target.value);
-    }
  
     render = () => (
       <div>
@@ -79,7 +73,6 @@ export default class QueryBuilder extends Component {
         <div className="query-builder ">
             <Builder {...props} />
         </div>
-        <Button onSubmit={this.onSubmit}>save</Button>
       </div>
     )
 
@@ -95,8 +88,13 @@ export default class QueryBuilder extends Component {
       this.setState({tree: immutableTree, config: config});
 
       const jsonTree = QbUtils.getTree(immutableTree);
-      console.log(jsonTree);
+      console.log(jsonTree,immutableTree);
       // `jsonTree` can be saved to backend, and later loaded to `queryValue`
+        localStorage.setItem('QueryStoredValue', JSON.stringify({jsonTree}));
+    }   
+    componentDidMount() {
+      const QueryStoredValue = localStorage.getItem('QueryStoredValue')=== 'true';
+      this.setState({ QueryStoredValue });
     }
    
 }

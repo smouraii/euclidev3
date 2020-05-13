@@ -43,7 +43,7 @@ export default function AuditConfiguration() {
               key="2"
             >
               <div class="form row">
-                <div class="col-sm-12 col-md-12 col-lg-6">
+                <div class="col-md-12">
                   <div class="row">
                          <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
                       <PortletHeader title="Audit bugReport API" />

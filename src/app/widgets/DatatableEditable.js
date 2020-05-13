@@ -375,5 +375,5 @@ class EditableTable extends React.Component {
   }
 }
 
-const EditableFormTable = Form.create()(EditableTable);
+const   EditableFormTable = Form.create()(EditableTable);
 export default EditableFormTable;

@@ -1,60 +1,68 @@
 import React, { useState } from "react";
-import Paper from "@material-ui/core/Paper";
-import {
-  SelectionState,
-  IntegratedSelection,
-  TreeDataState,
-  CustomTreeData
-} from "@devexpress/dx-react-grid";
-import {
-  Grid,
-  Table,
-  TableHeaderRow,
-  TableTreeColumn
-} from "@devexpress/dx-react-grid-material-ui";
+import { Table, Icon, Switch } from "antd";
+import { Portlet, PortletBody } from "../partials/content/Portlet";
+import ModalAddRole from "./ModalAddRole";
+import DatatableAuditConfig from "./DatatableAuditConfig";
 
-import {
-  generateRows,
-  defaultColumnValues
-} from "./generator";
 
-const getChildRows = (row, rootRows) => {
-  const childRows = rootRows.filter(r => r.parentId === (row ? row.id : null));
-  return childRows.length ? childRows : null;
-};
 
 export default () => {
-  const [columns, useColumns] = useState([
-    {name:"tree", title:" "},
-    { name: "name", title: "Domain" },
-    { name: "car", title: "Audit" }
-  ]);
-  const data = generateRows({
-    columnValues: {
-      id: ({ index }) => index,
-      parentId: ({ index, random }) =>
-        index > 0 ? Math.trunc((random() * index) / 2) : null,
-      ...defaultColumnValues
-    
-    },
-    length: 20
+
+  const [checkedKeysDDC, setCheckedKeysDDC] = useState([]);
+
+  const expandedRowRender = () => {
+    return (
+      <DatatableAuditConfig/>
+    );
+  };
+
+  const status = (keys, data) => {
+    console.log(keys.length, data);
+    if (keys.length >= data) {
+      return <Icon type="check" style={{ color: "green" }} />;
+    } else if (1 <= keys.length && keys.length < data) {
+      return <Icon type="check" style={{ color: "orange" }} />;
+    } else if (keys.length === 0) {
+      return <Icon type="minus" style={{ color: "red" }} />;
+    }
+  };
+
+  const columns = [
+    { title: "Domain", dataIndex: "domain", key: "domain" },
+
+    { title: "Audit", dataIndex: "Audit", key: "Audit" },
+  ];
+
+  const data = [];
+  data.push({
+    key: 1,
+    domain: "AttachementFile",
+    Audit: <Switch/>,
   });
-  const [tableColumnExtensions] = useState([
-    { columnName: "tree", width: 300 }
-  ]);
-  const [defaultExpandedRowIds] = useState([0]);
+  // data.push({
+  //   key: 3,
+  //   role: "Screem",
+  //   euclide:status(checkedKeys,euclideData[0].children.length),
+  //   dashboard: status(checkedKeysDashboard,dashboardData[0].children.length) ,
+  //   eFiles: status(checkedKeysEFilesData,eFilesData[0].children.length),
+  //   bugReport: status(checkedKeysBugReport,bugReportData[0].children.length),
+  //   DDC: status(checkedKeysDDC,13)
+  // });
 
   return (
-    <Paper>
-      <Grid rows={data} columns={columns}>
-        <SelectionState />
-        <TreeDataState defaultExpandedRowIds={defaultExpandedRowIds} />
-        <CustomTreeData getChildRows={getChildRows} />
-        <IntegratedSelection />
-        <Table columnExtensions={tableColumnExtensions} />
-        <TableHeaderRow />
-        <TableTreeColumn for="tree" showSelectionControls showSelectAll />
-      </Grid>
-    </Paper>
+    <Portlet>
+      <PortletBody>
+        <div className="d-flex justify-content-end">
+          <ModalAddRole />
+        </div>
+        <Table
+          className="components-table-demo-nested"
+          columns={columns}
+          expandedRowRender={expandedRowRender}
+          dataSource={data}
+          pagination={false}
+        />
+      </PortletBody>
+    </Portlet>
   );
 };
