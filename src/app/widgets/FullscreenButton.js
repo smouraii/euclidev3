@@ -14,9 +14,12 @@ React.useEffect(()=>{
 
   return (
     <div className="Fullscreen">
-      <Button onClick={goFull}>Go Fullscreen</Button>
+      <Button  style={{
+                   position:'relative',
+                   bottom:55
+                  }} onClick={goFull}>Go Fullscreen</Button>
 
-      <Fullscreen enabled={isFull} onChange={isFull => setIsFull(isFull)}>
+      <Fullscreen   enabled={isFull} onChange={isFull => setIsFull(isFull)}>
         <div>{current}</div>
       </Fullscreen>
     </div>

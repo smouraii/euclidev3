@@ -6,7 +6,7 @@ import DatatableAuditConfig from "./DatatableAuditConfig";
 
 
 
-export default () => {
+export default  () => {
 
   const [checkedKeysDDC, setCheckedKeysDDC] = useState([]);
 
@@ -30,15 +30,50 @@ export default () => {
   const columns = [
     { title: "Domain", dataIndex: "domain", key: "domain" },
 
-    { title: "Audit", dataIndex: "Audit", key: "Audit" },
+    { title: "audit", dataIndex: "audit", key: "audit" },
   ];
 
   const data = [];
   data.push({
     key: 1,
     domain: "AttachementFile",
-    Audit: <Switch/>,
+    audit: <Switch/>,
   });
+  data.push({
+    key:2,
+    domain:"CalendarEvent",
+    audit:<Switch/>
+  })
+  data.push({
+    key:3,
+    domain:"Client",
+    audit:<Switch/>
+  })
+  data.push({
+    key:4,
+    domain:"Dossier",
+    audit:<Switch/>
+  })
+  data.push({
+    key:5,
+    domain:"Echantillon",
+    audit:<Switch/>
+  })
+  data.push({
+    key:6,
+    domain:"EFolder",
+    audit:<Switch/>
+  })
+  data.push({
+    key:2,
+    domain:"Issue",
+    audit:<Switch/>
+  })
+  data.push({
+    key:2,
+    domain:"Utilisateur",
+    audit:<Switch/>
+  })
   // data.push({
   //   key: 3,
   //   role: "Screem",

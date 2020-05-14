@@ -35,20 +35,6 @@ export default function FolderList() {
         <div style={{ margin: 5 }}>
           <Portlet>
             <PortletBody fit={true}>
-              <ModalAddFloder />
-            </PortletBody>
-          </Portlet>
-        </div>
-        <div style={{ margin: 5 }}>
-          <Portlet>
-            <PortletBody fit={true}>
-              <ModalUpload />
-            </PortletBody>
-          </Portlet>
-        </div>
-        <div style={{ margin: 5 }}>
-          <Portlet>
-            <PortletBody fit={true}>
               <RefreshButton />
             </PortletBody>
           </Portlet>

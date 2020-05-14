@@ -23,7 +23,7 @@ export default function DatatableAuditConfig() {
   const data = [
     {
       key: "1",
-      propertie: "folder",
+      propertie: "content-type",
      },
      {
         key: "2",
@@ -31,27 +31,27 @@ export default function DatatableAuditConfig() {
        },
        {
         key: "3",
-        propertie: "flder",
+        propertie: "folder",
        },
        {
         key: "4",
-        propertie: "flder",
+        propertie: "alias",
        },
        {
         key: "5",
-        propertie: "flder",
+        propertie: "newFileName",
        },
        {
         key: "6",
-        propertie: "flder",
+        propertie: "fileExtention",
        },
        {
         key: "7",
-        propertie: "flder",
+        propertie: "members",
        },
        {
         key: "8",
-        propertie: "flder",
+        propertie: "thumbnailFile",
        },
                    
   ];

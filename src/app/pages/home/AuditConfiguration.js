@@ -3,7 +3,7 @@ import { Tabs, Icon, Button, Input, Select, Form } from "antd";
 import {
   Portlet,
   PortletBody,
-  PortletHeader
+  PortletHeader,
 } from "../../partials/content/Portlet";
 import TreeComp from "../../widgets/TreeComp";
 
@@ -24,7 +24,7 @@ export default function AuditConfiguration() {
               tab={
                 <span>
                   <Icon type="book" />
-                  Tab 1
+                  Audit Log
                 </span>
               }
               key="1"
@@ -37,7 +37,7 @@ export default function AuditConfiguration() {
               tab={
                 <span>
                   <Icon type="bug" />
-                  Tab 2
+                  Bug Report
                 </span>
               }
               key="2"
@@ -45,9 +45,9 @@ export default function AuditConfiguration() {
               <div class="form row">
                 <div class="col-md-12">
                   <div class="row">
-                         <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
+                    <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
                       <PortletHeader title="Audit bugReport API" />
-                             <PortletBody widthfluid={true}>
+                      <PortletBody widthfluid={true}>
                         <div class="col-md-6">
                           <div class="form-group">
                             <div class="input-group">
@@ -64,9 +64,9 @@ export default function AuditConfiguration() {
                         </div>
                       </PortletBody>
                     </Portlet>
-                         <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
+                    <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
                       <PortletHeader title="BugReport synchronization" />
-                             <PortletBody widthfluid={true}>
+                      <PortletBody widthfluid={true}>
                         <div class="col-sm-12 col-md-12 col-lg-6">
                           <table class="table table-hover table-bordered">
                             <tbody>
@@ -105,15 +105,15 @@ export default function AuditConfiguration() {
               tab={
                 <span>
                   <Icon type="file-exclamation" />
-                  Tab 3
+                  Error Log Configuration
                 </span>
               }
               key="3"
             >
               <Form>
-                     <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand" >
+                <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
                   <PortletHeader title="Log Settings" />
-                         <PortletBody heightfluid={true}>
+                  <PortletBody heightfluid={true}>
                     <div className="col-sm-12 col-md-6 col-lg-6">
                       <div className="inputContainer">
                         <label htmlFor="fileName">File Name</label>

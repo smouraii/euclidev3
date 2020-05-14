@@ -12,6 +12,8 @@ import FullscreenButton from "../../widgets/FullscreenButton";
 import Datatable from "../../widgets/DatatableAntd";
 
 export default function UserConfiguration() {
+  const [isFull, setIsFull] = React.useState(false);
+
   return (
     <>
       <div className="d-flex justify-content-end">
@@ -80,9 +82,16 @@ current= {<> */}
           className="kt-portlet--height-fluid kt-portlet--border-bottom-dark"
           fluidHeight={true}
         >
-          <PortletBody fit={true}>
-            <Datatable />
-          </PortletBody>
+          <FullscreenButton
+            style={{ margin: 10 }}
+            isFull={isFull}
+            setIsFull={setIsFull}
+            current={
+              <PortletBody fit={true}>
+                <Datatable />
+              </PortletBody>
+            }
+          />
         </Portlet>
       </div>
       {/* </>

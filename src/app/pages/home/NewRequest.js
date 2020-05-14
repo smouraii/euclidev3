@@ -7,7 +7,7 @@ import {
   PortletBody,
   PortletHeader
 } from "../../partials/content/Portlet";
-import EditableFormTable from "../../widgets/DatatableEditable";
+import EditableFormTable from "../../widgets/DatatableRequest";
 
 export default function NewRequest() {
   const [mockData, setMockData] = React.useState([]);

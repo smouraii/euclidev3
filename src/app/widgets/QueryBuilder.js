@@ -51,7 +51,11 @@ export default class QueryBuilder extends Component {
       value:'',
     };
 
-    onSubmit = (e) => {
+    handleClick = (e) => {
+      console.log(e.target)
+    }
+
+    handleSubmit = (e) => {
       e.preventDefault();
       console.log(this.state);
     }
@@ -76,13 +80,24 @@ export default class QueryBuilder extends Component {
       </div>
     )
 
-    renderResult = ({tree: immutableTree, config}) => (
+    renderResult = ({tree,tree: immutableTree, config}) => (
       <div className="query-builder-result" style={{padding: '10px'}}>
           <div>SQL where: <pre>{JSON.stringify(QbUtils.sqlFormat(immutableTree, config))}</pre></div>
           <div>JsonLogic: <pre>{JSON.stringify(QbUtils.jsonLogicFormat(immutableTree, config))}</pre></div>
+          <Button
+        onClick={() => {
+          const jsonTree = QbUtils.getTree(tree);
+          localStorage.setItem(
+            "QueryStoredValue",
+            JSON.stringify({ ...jsonTree, name: "69420" })
+          );
+        }}
+      >
+        test
+      </Button>
       </div>
     )
-    
+
     onChange = (immutableTree, config) => {
       // Tip: for better performance you can apply `throttle` - see `examples/demo`
       this.setState({tree: immutableTree, config: config});
@@ -90,11 +105,30 @@ export default class QueryBuilder extends Component {
       const jsonTree = QbUtils.getTree(immutableTree);
       console.log(jsonTree,immutableTree);
       // `jsonTree` can be saved to backend, and later loaded to `queryValue`
-        localStorage.setItem('QueryStoredValue', JSON.stringify({jsonTree}));
+        localStorage.setItem('QueryStoredValue', JSON.stringify(jsonTree));
+        
     }   
     componentDidMount() {
-      const QueryStoredValue = localStorage.getItem('QueryStoredValue')=== 'true';
+      const QueryStoredValue = localStorage.getItem('QueryStoredValue');
       this.setState({ QueryStoredValue });
     }
-   
+
+     QuerySaveButton =({jsonTree})=>{
+    const querySaved = jsonTree.length ?( jsonTree.map(jsonTree =>{
+      return(
+        <div className="querySaveButton" key={jsonTree.id}>
+          <Button onclick={()=>{this.handleClick(jsonTree.id)}}>{jsonTree.content}</Button>
+        </div>
+      )
+    }
+      )): (<p> you have no saved query </p>)
+      return(
+        <div>
+        <Button>test</Button>
+          {querySaved}
+        </div>
+        
+      )
+  }
+    
 }

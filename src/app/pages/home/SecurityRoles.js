@@ -3,10 +3,11 @@ import { Table, Icon } from "antd";
 import {
   Portlet,
   PortletBody,
-  PortletHeader
+  PortletHeader,
 } from "../../partials/content/Portlet";
 import ModalAddRole from "./../../widgets/ModalAddRole";
 import TreeList from "../../widgets/Treelist";
+import FullscreenButton from "../../widgets/FullscreenButton";
 
 const euclideData = [
   {
@@ -15,34 +16,34 @@ const euclideData = [
     children: [
       {
         title: "Lims",
-        key: "Lims"
+        key: "Lims",
       },
       {
         title: "Mail Server",
-        key: "MailServer"
+        key: "MailServer",
       },
       {
         title: "DB Configuration",
-        key: "DBConfiguration"
+        key: "DBConfiguration",
       },
       {
         title: "Security Roles",
-        key: "SecurityRoles"
+        key: "SecurityRoles",
       },
       {
         title: "User Configuration",
-        key: "UserConfiguration"
+        key: "UserConfiguration",
       },
       {
         title: "Audit Configuration",
-        key: "Audit Configuration"
+        key: "Audit Configuration",
       },
       {
         title: "EFiles Configuration",
-        key: "EFilesConfiguration"
-      }
-    ]
-  }
+        key: "EFilesConfiguration",
+      },
+    ],
+  },
 ];
 const dashboardData = [
   {
@@ -51,14 +52,14 @@ const dashboardData = [
     children: [
       {
         title: "Request Per Status",
-        key: "requestPerStatus"
+        key: "requestPerStatus",
       },
       {
         title: "Sample Per Request",
-        key: "samplePerRequest"
-      }
-    ]
-  }
+        key: "samplePerRequest",
+      },
+    ],
+  },
 ];
 const eFilesData = [
   {
@@ -67,10 +68,10 @@ const eFilesData = [
     children: [
       {
         title: "eFiles Client",
-        key: "eFilesClient"
-      }
-    ]
-  }
+        key: "eFilesClient",
+      },
+    ],
+  },
 ];
 const bugReportData = [
   {
@@ -79,22 +80,22 @@ const bugReportData = [
     children: [
       {
         title: "Report List",
-        key: "reportList"
+        key: "reportList",
       },
       {
         title: "Error Log",
-        key: "errorLog"
+        key: "errorLog",
       },
       {
         title: "Audti List",
-        key: "AuditList"
+        key: "AuditList",
       },
       {
         title: "Online Users",
-        key: "onlineUsers"
-      }
-    ]
-  }
+        key: "onlineUsers",
+      },
+    ],
+  },
 ];
 const DDCData = [
   {
@@ -107,13 +108,13 @@ const DDCData = [
         children: [
           {
             title: "Request01",
-            key: "request01"
+            key: "request01",
           },
           {
             title: "List01",
-            key: "list01"
-          }
-        ]
+            key: "list01",
+          },
+        ],
       },
       {
         title: "Analysis Request 2",
@@ -121,9 +122,9 @@ const DDCData = [
         children: [
           {
             title: "Analysis Request Without RI",
-            key: "analysisRequestWithoutRI"
-          }
-        ]
+            key: "analysisRequestWithoutRI",
+          },
+        ],
       },
       {
         title: "Adress",
@@ -131,17 +132,17 @@ const DDCData = [
         children: [
           {
             title: "Adress Billing",
-            key: "AdressBilling"
+            key: "AdressBilling",
           },
           {
             title: "AdressReportTo",
-            key: "AdressReportTo"
+            key: "AdressReportTo",
           },
           {
             title: "AdressList",
-            key: "AdressList"
-          }
-        ]
+            key: "AdressList",
+          },
+        ],
       },
       {
         title: "Post Message",
@@ -149,16 +150,16 @@ const DDCData = [
         children: [
           {
             title: "Post Message",
-            key: "postMessage"
+            key: "postMessage",
           },
           {
             title: "Message List",
-            key: "MessageList"
-          }
-        ]
-      }
-    ]
-  }
+            key: "MessageList",
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 export default function SecurityRoles() {
@@ -167,6 +168,8 @@ export default function SecurityRoles() {
   const [checkedKeysEFilesData, setCheckedKeysEFilesData] = useState([]);
   const [checkedKeysBugReport, setCheckedKeysBugReport] = useState([]);
   const [checkedKeysDDC, setCheckedKeysDDC] = useState([]);
+
+  const [isFull, setIsFull] = React.useState(false);
 
   const expandedRowRender = () => {
     return (
@@ -191,7 +194,7 @@ export default function SecurityRoles() {
   };
 
   const status = (keys, data) => {
-    console.log(keys.length,data)
+    console.log(keys.length, data);
     if (keys.length >= data) {
       return <Icon type="check" style={{ color: "green" }} />;
     } else if (1 <= keys.length && keys.length < data) {
@@ -207,18 +210,18 @@ export default function SecurityRoles() {
     { title: "Dashboard", dataIndex: "dashboard", key: "dashboard" },
     { title: "EFiles", dataIndex: "eFiles", key: "eFiles" },
     { title: "bugReport", dataIndex: "bugReport", key: "bugReport" },
-    { title: "DDC", dataIndex: "DDC", key: "DDC" }
+    { title: "DDC", dataIndex: "DDC", key: "DDC" },
   ];
 
   const data = [];
   data.push({
     key: 1,
     role: "Administrateur",
-    euclide:status(checkedKeys,euclideData[0].children.length),
-    dashboard: status(checkedKeysDashboard,dashboardData[0].children.length) ,
-    eFiles: status(checkedKeysEFilesData,eFilesData[0].children.length),
-    bugReport: status(checkedKeysBugReport,bugReportData[0].children.length),
-    DDC: status(checkedKeysDDC,13)
+    euclide: status(checkedKeys, euclideData[0].children.length),
+    dashboard: status(checkedKeysDashboard, dashboardData[0].children.length),
+    eFiles: status(checkedKeysEFilesData, eFilesData[0].children.length),
+    bugReport: status(checkedKeysBugReport, bugReportData[0].children.length),
+    DDC: status(checkedKeysDDC, 13),
   });
   // data.push({
   //   key: 3,
@@ -231,19 +234,34 @@ export default function SecurityRoles() {
   // });
 
   return (
-    <Portlet>
-      <PortletBody>
-        <div className="d-flex justify-content-end">
-          <ModalAddRole />
+    <PortletBody heightfluid={true}>
+      <div className="d-flex justify-content-end">
+        <div style={{ margin: 5 }}>
+          <Portlet>
+            <PortletBody fit={true}>
+              <ModalAddRole />
+            </PortletBody>
+          </Portlet>
         </div>
-        <Table
-          className="components-table-demo-nested"
-          columns={columns}
-          expandedRowRender={expandedRowRender}
-          dataSource={data}
-          pagination={false}
-        />
-      </PortletBody>
-    </Portlet>
+      </div>
+
+      <FullscreenButton
+        style={{ margin: 10 }}
+        isFull={isFull}
+        setIsFull={setIsFull}
+        current={
+          <PortletBody fit={true}>
+            <Table
+              style={{ backgroundColor: "white" }}
+              className="components-table-demo-nested"
+              columns={columns}
+              expandedRowRender={expandedRowRender}
+              dataSource={data}
+              pagination={false}
+            />
+          </PortletBody>
+        }
+      />
+    </PortletBody>
   );
 }
