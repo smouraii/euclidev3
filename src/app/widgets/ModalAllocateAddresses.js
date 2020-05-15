@@ -2,6 +2,7 @@ import React from "react";
 import { Modal, Button, Icon, Input, Alert } from "antd";
 import { Formik, Form } from "formik";
 import SwitchComp from "./SwitchComp";
+import SwitchCompAllocate from "./SwitchCompAllocate";
 
 const { TextArea } = Input;
 const { Search } = Input;
@@ -83,7 +84,7 @@ class ModalAllocateAddresses extends React.Component {
                   <Alert message="Select at least 1 Adress" type="warning" />
                   <div className="d-flex justify-content-between">
                     <div className="col-md-6">
-                      <SwitchComp />
+                      <SwitchCompAllocate />
                     </div>
                     <div className="col-md-6">
                       <Search

@@ -6,28 +6,24 @@ import QueryBuilder from "./QueryBuilder";
 import Highlighter from "react-highlight-words";
 import Search from "antd/lib/input/Search";
 
-
-
-class DatatableBugReport extends React.Component {
+class DatatableOnlineUser extends React.Component {
   state = {
     data: [],
     pagination: {},
     loading: false,
-    searchText:"",
-    searchedColumn:""
+    searchText: "",
+    searchedColumn: "",
   };
 
-  
+  //   componentDidMount() {
+  //     this.fetch();
+  //   }
 
-//   componentDidMount() {
-//     this.fetch();
-//   }
-
-  handleTableChange = (pagination, filters, sorter, ) => {
-    const pager = { ...this.state.pagination };;
+  handleTableChange = (pagination, filters, sorter) => {
+    const pager = { ...this.state.pagination };
     pager.current = pagination.current;
     this.setState({
-      pagination: pager
+      pagination: pager,
     });
     // this.fetch({
     //   results: pagination.pageSize,
@@ -38,57 +34,55 @@ class DatatableBugReport extends React.Component {
     // });
   };
 
-//   fetch = (params = {}) => {
-    
-//     this.setState({ loading: true });
-//     reqwest({
-//       url: "https://randomuser.me/api",
-//       method: "get",
-//       data: {
-//         results: 10,
-//         ...params
-//       },
-//       type: "json"
-//     }).then(data => {
-//       console.log(data)
-//       const mapData = data.results.map(user=>{
-//         return{
-//           ...user,
-//           name:`${user.name.first} ${user.name.last}`,
-//           location:`${user.location.country} ${user.location.state}`
-//         }
-//       })
-//       const pagination = { ...this.state.pagination };
-//       // Read total count from server
-//       // pagination.total = data.totalCount;
-//       pagination.total = 200;
-//       this.setState({
-//         loading: false,
-//         data: mapData,
-//         pagination
-//       });
-    
-//     });
-//   };
+  //   fetch = (params = {}) => {
 
-  getColumnSearchProps = dataIndex => ({
-    
+  //     this.setState({ loading: true });
+  //     reqwest({
+  //       url: "https://randomuser.me/api",
+  //       method: "get",
+  //       data: {
+  //         results: 10,
+  //         ...params
+  //       },
+  //       type: "json"
+  //     }).then(data => {
+  //       console.log(data)
+  //       const mapData = data.results.map(user=>{
+  //         return{
+  //           ...user,
+  //           name:`${user.name.first} ${user.name.last}`,
+  //           location:`${user.location.country} ${user.location.state}`
+  //         }
+  //       })
+  //       const pagination = { ...this.state.pagination };
+  //       // Read total count from server
+  //       // pagination.total = data.totalCount;
+  //       pagination.total = 200;
+  //       this.setState({
+  //         loading: false,
+  //         data: mapData,
+  //         pagination
+  //       });
+
+  //     });
+  //   };
+
+  getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
       setSelectedKeys,
       selectedKeys,
       confirm,
-      clearFilters
+      clearFilters,
     }) => (
-    
       <div style={{ padding: 8 }}>
-      {console.log(dataIndex)}
+        {console.log(dataIndex)}
         <Input
-          ref={node => {
+          ref={(node) => {
             this.searchInput = node;
           }}
           placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
-          onChange={e =>
+          onChange={(e) =>
             setSelectedKeys(e.target.value ? [e.target.value] : [])
           }
           onPressEnter={() =>
@@ -98,7 +92,9 @@ class DatatableBugReport extends React.Component {
         />
         <Button
           type="primary"
-          onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex.first)}
+          onClick={() =>
+            this.handleSearch(selectedKeys, confirm, dataIndex.first)
+          }
           size="small"
           style={{ width: 90, marginRight: 8 }}
         >
@@ -114,7 +110,7 @@ class DatatableBugReport extends React.Component {
         </Button>
       </div>
     ),
-    filterIcon: filtered => (
+    filterIcon: (filtered) => (
       <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
     ),
     onFilter: (value, record) =>
@@ -122,12 +118,12 @@ class DatatableBugReport extends React.Component {
         .toString()
         .toLowerCase()
         .includes(value.toLowerCase()),
-    onFilterDropdownVisibleChange: visible => {
+    onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
         setTimeout(() => this.searchInput.select());
       }
     },
-    render: text =>
+    render: (text) =>
       this.state.searchedColumn === dataIndex ? (
         <Highlighter
           highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
@@ -137,17 +133,17 @@ class DatatableBugReport extends React.Component {
         />
       ) : (
         text
-      )
+      ),
   });
   handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     this.setState({
       searchText: selectedKeys[0],
-      searchedColumn: dataIndex
+      searchedColumn: dataIndex,
     });
   };
 
-  handleReset = clearFilters => {
+  handleReset = (clearFilters) => {
     clearFilters();
     this.setState({ searchText: "" });
   };
@@ -157,81 +153,62 @@ class DatatableBugReport extends React.Component {
     console.log(current, pageSizeOptions);
   };
 
-  
-
   render() {
     const columns = [
       {
-        title: "",
-        key: "action",
-        render: () => (
-          <span>
-            <Checkbox />
-          </span>
-        ),
+        title: "Last Name",
+        dataIndex: "lastName",
+        key: "lastName",
+        render: (name) => `${name.lastName}`,
+        sorter: (a, b) => a.name.lastName - b.name.lastName,
+        ...this.getColumnSearchProps("lastName"),
       },
       {
-        title: "id",
-        dataIndex: "id",
-        key: "id",
-        sorter: (a, b) => a.dob.id - b.dob.id,
-        width: "5%",
-        ...this.getColumnSearchProps("id")
-      },
-      {
-        title: "Severity",
-        dataIndex: "dob",
-        key: "severity",
+        title: "First Name",
+        dataIndex: "firstName",
+        key: "firstName",
         defaultSortOrder: "descend",
         //dob is date of birth from api
-        render: dob => `${dob.severity}`,
+        render: (name) => `${name.firstName}`,
         //a b used to sort from big to small
-        sorter: (a, b) => a.severity.localeCompare(b.severity),
+        sorter: (a, b) => a.firstName.localeCompare(b.firstName),
       },
       {
-        title: "Date Submitted",
-        dataIndex: "dateSubmitted",
-        key: "dateSubmitted",
-        sorter: (a, b) => a.dateSubmitted.length - b.dateSubmitted.length,
-        filters: [
-          { text: "Male", value: "male" },
-          { text: "Female", value: "female" }
-        ]
+        title: "email",
+        dataIndex: "email",
+        key: "email",
+        sorter: (a, b) => a.email.localeCompare(b.email),
       },
       {
-        title: "Summary",
-        dataIndex: "summary",
-        key: "summary",
-        sorter: (a, b) => a.summary.localeCompare(b.summary),
-        ...this.getColumnSearchProps("summary")
+        title: "login",
+        dataIndex: "login",
+        key: "login",
+        sorter: (a, b) => a.login.localeCompare(b.login),
+        ...this.getColumnSearchProps("login"),
       },
       {
-        title: "Reporter",
-        dataIndex: "reporter",
-        key: "reporter",
-        sorter: (a, b) => a.reporter.localeCompare(b.reporter),
-        ...this.getColumnSearchProps("reporter")
+        title: "Login Last Time",
+        dataIndex: "loginLastTime",
+        key: "loginLastTime",
+        sorter: (a, b) => a.loginLastTime.localeCompare(b.loginLastTime),
+        ...this.getColumnSearchProps("loginLastTime"),
       },
-      {
-        title: "Status",
-        dataIndex: "status",
-        key: "status",
-        sorter: (a, b) => a.status.localeCompare(b.status),
-        ...this.getColumnSearchProps("status")
-      }
     ];
 
     return (
       <>
-      
-        {this.props.match.path === "/folderlist" && (<> <div className="d-flex justify-content-end">
-        {/* <Search
+        {this.props.match.path === "/folderlist" && (
+          <>
+            {" "}
+            <div className="d-flex justify-content-end">
+              {/* <Search
       placeholder="input search text"
       onSearch={value => console.log(value)}
       style={{ width: 200 ,margin:20}}
     /> */}
-    </div>
-          <QueryBuilder data={this.state.data} /></>
+            </div>
+            <QueryBuilder data={this.state.data} />
+          </>
         )}
         {/* <Pagination
         pagination={this.state.pagination}
@@ -242,16 +219,16 @@ class DatatableBugReport extends React.Component {
     /> */}
         <Table
           columns={columns}
-          rowKey={record => record.login.uuid}
+          rowKey={(record) => record.login.uuid}
           dataSource={this.state.data}
           pagination={this.state.pagination}
           loading={this.state.loading}
           onChange={this.handleTableChange}
         />
-      
+
         {console.log(this)}
       </>
     );
   }
 }
-export default withRouter(DatatableBugReport);
+export default withRouter(DatatableOnlineUser);
