@@ -492,11 +492,20 @@ export default function NewRequest() {
                           <Descriptions.Item label="Products">
                             {dataValues.Products}
                           </Descriptions.Item>
-                          <Descriptions.Item label="Analysis">
-                            {dataValues.Analysis}
+                          <Descriptions.Item label="sampleCount">
+                            {dataValues.sampleCount}
                           </Descriptions.Item>
-                          <Descriptions.Item label="Comments">
-                            {dataValues.Comments}
+                          <Descriptions.Item label="shippingLocation">
+                            {dataValues.shippingLocation}
+                          </Descriptions.Item>
+                          <Descriptions.Item label="contact">
+                            {dataValues.contact}
+                          </Descriptions.Item>
+                          <Descriptions.Item label="quantity">
+                            {dataValues.quantity}
+                          </Descriptions.Item>
+                          <Descriptions.Item label="quantityUnits">
+                            {dataValues.quantityUnits}
                           </Descriptions.Item>
                         </Descriptions>
                       </div>

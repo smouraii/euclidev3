@@ -53,8 +53,6 @@ export default function BugReport() {
                         </PortletBody>
                       </Portlet>
                     </div>
-                  }
-                />
               </PortletBody>
             </TabPane>
             <TabPane

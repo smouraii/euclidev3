@@ -6,6 +6,7 @@ import Datatable from "../../widgets/DatatableAntd";
 import { Tabs, Icon } from "antd";
 import DatatableAuditLog from "../../widgets/DatatableAuditLog";
 import DatatableOnlineUser from "../../widgets/DatatableOnlineUser";
+import DatePickerComp from "../../widgets/DatePicker";
 
 
 const { TabPane } = Tabs;
@@ -37,7 +38,7 @@ export default function AuditLog() {
                   <div style={{ margin: 5 }}>
                     <Portlet>
                       <PortletBody fit={true}>
-                        <ModalForm />
+                        <DatePickerComp />
                       </PortletBody>
                     </Portlet>
                   </div>
@@ -70,13 +71,7 @@ export default function AuditLog() {
                       </PortletBody>
                     </Portlet>
                   </div>
-                  <div style={{ margin: 5 }}>
-                    <Portlet>
-                      <PortletBody fit={true}>
-                        <ModalForm />
-                      </PortletBody>
-                    </Portlet>
-                  </div>
+
 
                   <div className="col-md-12">
                     <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
