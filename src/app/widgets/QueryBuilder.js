@@ -5,7 +5,7 @@ import {
   BasicConfig,
   Utils as QbUtils,
 } from "react-awesome-query-builder";
-import { Modal, Button, Input } from "antd";
+import { Modal, Button, Input, Menu, Dropdown } from "antd";
 
 // You need to provide your own config. See below 'Config format'
 const config = {
@@ -56,6 +56,20 @@ export default class QueryBuilder extends Component {
     visible: false,
   };
 
+  // localStorage.removeItem()
+
+  // menu = (elem) => {
+  //   return (
+  //     <Menu>
+  //       <Menu.Item  key="edit">
+  //         Edit
+  //       </Menu.Item>
+  //       <Menu.Item key="delete">Delete</Menu.Item>
+  //       <Menu.Item key="copy">Create a copy from this query</Menu.Item>
+  //     </Menu>
+  //   );
+  // };
+
   showModal = () => {
     this.setState({
       visible: true,
@@ -63,7 +77,7 @@ export default class QueryBuilder extends Component {
   };
 
   handleOk = (e) => {
-    console.log(this.state.input);
+    console.log(this.elem);
     this.setState({
       visible: false,
     });
@@ -114,7 +128,9 @@ export default class QueryBuilder extends Component {
       </div>
 
       <div>
-        <Button onClick={this.showModal}>Save</Button>
+        <Button style={{ marginBottom: 10 }} onClick={this.showModal}>
+          Save
+        </Button>
         <Modal
           title="Basic Modal"
           visible={this.state.visible}
@@ -123,7 +139,7 @@ export default class QueryBuilder extends Component {
             const queryStoredValue = localStorage.getItem("queryStoredValue");
             const array = JSON.parse(queryStoredValue);
             if (queryStoredValue) {
-              console.log("petit penis de sbntr");
+              console.log("test");
               localStorage.setItem(
                 "queryStoredValue",
                 JSON.stringify([
@@ -147,9 +163,40 @@ export default class QueryBuilder extends Component {
 
       {localStorage.getItem("queryStoredValue") &&
         JSON.parse(localStorage.getItem("queryStoredValue")).map((elem) => (
-          <Button onClick={() => this.setState({ tree:QbUtils.loadTree(elem, config)})} key={elem.name}>
-            {elem.name}
-          </Button>
+          <Dropdown
+            style={{ marginRight: 10 }}
+            overlay={
+              <Menu>
+                <Menu.Item
+                  key="edit"
+                >
+                  Edit
+                </Menu.Item>
+                <Menu.Item 
+                 onClick={() => localStorage.removeItem("querystoredvalue")}
+                key="delete">Delete</Menu.Item>
+                <Menu.Item
+                  onClick={() =>
+                    this.setState({ tree: QbUtils.loadTree(elem, config) })
+                  }
+                  key="copy"
+                >
+                  Create a copy from this query
+                </Menu.Item>
+              </Menu>
+            }
+            trigger={["contextMenu"]}
+          >
+            <Button
+              style={{ marginRight: 10 }}
+              onClick={() =>
+                this.setState({ tree: QbUtils.loadTree(elem, config) })
+              }
+              key={elem.name}
+            >
+              {elem.name}
+            </Button>
+          </Dropdown>
         ))}
     </div>
   );

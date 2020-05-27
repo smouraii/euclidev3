@@ -1,10 +1,9 @@
 import React from "react";
-import { Table, Input, Button, Icon, Pagination, Checkbox } from "antd";
+import { Table, Input, Button, Icon, Checkbox,Space, DatePicker } from "antd";
 import reqwest from "reqwest";
 import { withRouter } from "react-router-dom";
 import QueryBuilder from "./QueryBuilder";
 import Highlighter from "react-highlight-words";
-import Search from "antd/lib/input/Search";
 
 
 
@@ -157,7 +156,73 @@ class Datatable extends React.Component {
     console.log(current, pageSizeOptions);
   };
 
-  
+  getColumnSearchPropsDate = (dataIndex) => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+      autoFocus,
+      handleChange,
+      placeholder,
+      value,
+      format,
+      handleSearch,
+      handleClear,
+    }) => (
+      <div style={{ padding: 8 }}>
+        <DatePicker.RangePicker
+          autoFocus={autoFocus}
+          onChange={handleChange}
+          placeholder={placeholder}
+          value={value}
+          format={format}
+          style={{ marginBottom: 8 }}
+        />
+        <Button
+          type="primary"
+          role="search"
+          onClick={handleSearch}
+          style={{ width: 90 }}
+          size="small"
+        >
+          search
+        </Button>
+        <Button
+          role="reset"
+          style={{ width: 90 }}
+          onClick={handleClear}
+          size="small"
+        >
+         reset
+        </Button>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex]
+        .toString()
+        .toLowerCase()
+        .includes(value.toLowerCase()),
+    onFilterDropdownVisibleChange: (visible) => {
+      if (visible) {
+        setTimeout(() => this.searchInput.select());
+      }
+    },
+    render: (text) =>
+      this.state.searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
+          searchWords={[this.state.searchText]}
+          autoEscape
+          textToHighlight={text.toString()}
+        />
+      ) : (
+        text
+      ),
+  });
 
   render() {
     const columns = [
@@ -189,6 +254,17 @@ class Datatable extends React.Component {
         sorter: (a, b) => a.dob.age - b.dob.age,    
       },
       {
+        title: "Date",
+        dataIndex: "dob",
+        key: "date",
+        defaultSortOrder: "descend",
+        //dob is date of birth from api
+        render: dob => `${dob.date}`,
+        //a b used to sort from big to small
+        sorter: (a, b) => a.dob.date - b.dob.date,
+        ...this.getColumnSearchPropsDate("date")
+      },
+      {
         title: "Gender",
         dataIndex: "gender",
         key: "gender",
@@ -196,7 +272,8 @@ class Datatable extends React.Component {
         filters: [
           { text: "Male", value: "male" },
           { text: "Female", value: "female" }
-        ]
+        ],
+        onFilter: (value, record) => record.gender.indexOf(value) === 0,
       },
       {
         title: "Email",
