@@ -54,6 +54,7 @@ export default class QueryBuilder extends Component {
     value: "",
     input: "",
     visible: false,
+    selectedItem: null,
   };
 
   // localStorage.removeItem()
@@ -128,9 +129,50 @@ export default class QueryBuilder extends Component {
       </div>
 
       <div>
-        <Button style={{ marginBottom: 10 }} onClick={this.showModal}>
-          Save
-        </Button>
+        {this.state.selectedItem ? (
+          <>
+            <Button
+              style={{ marginBottom: 10 }}
+              onClick={() => {
+                const jsonTree = QbUtils.getTree(immutableTree);
+                const queryStoredValue = localStorage.getItem(
+                  "queryStoredValue"
+                );
+                if (queryStoredValue) {
+                  console.log("test");
+                  const queryStoredArray = JSON.parse(queryStoredValue);
+                  const filteredArray = queryStoredArray.filter(
+                    (arrayelem) => arrayelem.name !== this.state.selectedItem
+                  );
+
+                  filteredArray.push({
+                    ...jsonTree,
+                    name: this.state.selectedItem,
+                  });
+                  localStorage.setItem(
+                    "queryStoredValue",
+                    JSON.stringify(filteredArray)
+                  );
+                }
+                this.setState({ selectedItem: null });
+              }}
+            >
+              Save changes
+            </Button>
+            <Button
+              style={{ marginBottom: 10 }}
+              onClick={() => this.setState({ selectedItem: null })}
+            >
+              {" "}
+              Cancel{" "}
+            </Button>
+          </>
+        ) : (
+          <Button style={{ marginBottom: 10 }} onClick={this.showModal}>
+            Save
+          </Button>
+        )}
+
         <Modal
           title="Basic Modal"
           visible={this.state.visible}
@@ -139,7 +181,7 @@ export default class QueryBuilder extends Component {
             const queryStoredValue = localStorage.getItem("queryStoredValue");
             const array = JSON.parse(queryStoredValue);
             if (queryStoredValue) {
-              console.log("test");
+              console.log("testModal");
               localStorage.setItem(
                 "queryStoredValue",
                 JSON.stringify([
@@ -168,13 +210,35 @@ export default class QueryBuilder extends Component {
             overlay={
               <Menu>
                 <Menu.Item
+                  onClick={() => {
+                    this.setState({
+                      tree: QbUtils.loadTree(elem, config),
+                      selectedItem: elem.name,
+                    });
+                  }}
                   key="edit"
                 >
                   Edit
                 </Menu.Item>
-                <Menu.Item 
-                 onClick={() => localStorage.removeItem("querystoredvalue")}
-                key="delete">Delete</Menu.Item>
+                <Menu.Item
+                  onClick={() => {
+                    const queryStoredValue = localStorage.getItem(
+                      "queryStoredValue"
+                    );
+                    const queryStoredArray = JSON.parse(queryStoredValue);
+                    const filteredArray = queryStoredArray.filter(
+                      (arrayelem) => arrayelem.name !== elem.name
+                    );
+                    localStorage.setItem(
+                      "queryStoredValue",
+                      JSON.stringify(filteredArray)
+                    );
+                    this.setState({ visible: false });
+                  }}
+                  key="delete"
+                >
+                  Delete
+                </Menu.Item>
                 <Menu.Item
                   onClick={() =>
                     this.setState({ tree: QbUtils.loadTree(elem, config) })
@@ -187,13 +251,7 @@ export default class QueryBuilder extends Component {
             }
             trigger={["contextMenu"]}
           >
-            <Button
-              style={{ marginRight: 10 }}
-              onClick={() =>
-                this.setState({ tree: QbUtils.loadTree(elem, config) })
-              }
-              key={elem.name}
-            >
+            <Button style={{ marginRight: 10 }} key={elem.name}>
               {elem.name}
             </Button>
           </Dropdown>
