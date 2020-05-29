@@ -1,7 +1,7 @@
 /* eslint-disable no-script-url,jsx-a11y/anchor-is-valid */
 import React from "react";
 import { Link } from "react-router-dom";
-import Dropdown from "react-bootstrap/Dropdown";
+import {Dropdown} from "react-bootstrap";
 import { connect } from "react-redux";
 import { toAbsoluteUrl } from "../../../_metronic";
 import HeaderDropdownToggle from "../content/CustomDropdowns/HeaderDropdownToggle";
@@ -69,13 +69,13 @@ class UserProfile extends React.Component {
             </div>
           </div>
           <div className="kt-notification">
-            <a className="kt-notification__item">
+            <a className="kt-notification__item" href="/myprofile">
               <div className="kt-notification__item-icon">
                 <i className="flaticon2-calendar-3 kt-font-success" />
               </div>
               <div className="kt-notification__item-details">
                 <div className="kt-notification__item-title kt-font-bold">
-                  My Profile
+                   My Profile
                 </div>
                 <div className="kt-notification__item-time">
                   Account settings and more

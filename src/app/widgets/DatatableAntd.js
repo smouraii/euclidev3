@@ -1,32 +1,28 @@
 import React from "react";
-import { Table, Input, Button, Icon, Checkbox,Space, DatePicker } from "antd";
+import { Table, Input, Button, Icon, Checkbox, Space, DatePicker } from "antd";
 import reqwest from "reqwest";
 import { withRouter } from "react-router-dom";
 import QueryBuilder from "./QueryBuilder";
 import Highlighter from "react-highlight-words";
-
-
 
 class Datatable extends React.Component {
   state = {
     data: [],
     pagination: {},
     loading: false,
-    searchText:"",
-    searchedColumn:""
+    searchText: "",
+    searchedColumn: "",
   };
-
-  
 
   componentDidMount() {
     this.fetch();
   }
 
-  handleTableChange = (pagination, filters, sorter, ) => {
-    const pager = { ...this.state.pagination };;
+  handleTableChange = (pagination, filters, sorter) => {
+    const pager = { ...this.state.pagination };
     pager.current = pagination.current;
     this.setState({
-      pagination: pager
+      pagination: pager,
     });
     // this.fetch({
     //   results: pagination.pageSize,
@@ -38,25 +34,24 @@ class Datatable extends React.Component {
   };
 
   fetch = (params = {}) => {
-    
     this.setState({ loading: true });
     reqwest({
       url: "https://randomuser.me/api",
       method: "get",
       data: {
         results: 10,
-        ...params
+        ...params,
       },
-      type: "json"
-    }).then(data => {
-      console.log(data)
-      const mapData = data.results.map(user=>{
-        return{
+      type: "json",
+    }).then((data) => {
+      console.log(data);
+      const mapData = data.results.map((user) => {
+        return {
           ...user,
-          name:`${user.name.first} ${user.name.last}`,
-          location:`${user.location.country} ${user.location.state}`
-        }
-      })
+          name: `${user.name.first} ${user.name.last}`,
+          location: `${user.location.country} ${user.location.state}`,
+        };
+      });
       const pagination = { ...this.state.pagination };
       // Read total count from server
       // pagination.total = data.totalCount;
@@ -64,30 +59,28 @@ class Datatable extends React.Component {
       this.setState({
         loading: false,
         data: mapData,
-        pagination
+        pagination,
       });
-    
     });
   };
 
-  getColumnSearchProps = dataIndex => ({
-    
+//Search Function for text Areas
+  getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
       setSelectedKeys,
       selectedKeys,
       confirm,
-      clearFilters
+      clearFilters,
     }) => (
-    
       <div style={{ padding: 8 }}>
-      {console.log(dataIndex)}
+        {console.log(dataIndex)}
         <Input
-          ref={node => {
+          ref={(node) => {
             this.searchInput = node;
           }}
           placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
-          onChange={e =>
+          onChange={(e) =>
             setSelectedKeys(e.target.value ? [e.target.value] : [])
           }
           onPressEnter={() =>
@@ -97,7 +90,9 @@ class Datatable extends React.Component {
         />
         <Button
           type="primary"
-          onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex.first)}
+          onClick={() =>
+            this.handleSearch(selectedKeys, confirm, dataIndex.first)
+          }
           size="small"
           style={{ width: 90, marginRight: 8 }}
         >
@@ -113,7 +108,7 @@ class Datatable extends React.Component {
         </Button>
       </div>
     ),
-    filterIcon: filtered => (
+    filterIcon: (filtered) => (
       <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
     ),
     onFilter: (value, record) =>
@@ -121,12 +116,12 @@ class Datatable extends React.Component {
         .toString()
         .toLowerCase()
         .includes(value.toLowerCase()),
-    onFilterDropdownVisibleChange: visible => {
+    onFilterDropdownVisibleChange: (visible) => {
       if (visible) {
         setTimeout(() => this.searchInput.select());
       }
     },
-    render: text =>
+    render: (text) =>
       this.state.searchedColumn === dataIndex ? (
         <Highlighter
           highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
@@ -136,17 +131,17 @@ class Datatable extends React.Component {
         />
       ) : (
         text
-      )
+      ),
   });
   handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     this.setState({
       searchText: selectedKeys[0],
-      searchedColumn: dataIndex
+      searchedColumn: dataIndex,
     });
   };
 
-  handleReset = clearFilters => {
+  handleReset = (clearFilters) => {
     clearFilters();
     this.setState({ searchText: "" });
   };
@@ -156,6 +151,7 @@ class Datatable extends React.Component {
     console.log(current, pageSizeOptions);
   };
 
+  //SearchFunction For Date
   getColumnSearchPropsDate = (dataIndex) => ({
     filterDropdown: ({
       setSelectedKeys,
@@ -194,7 +190,7 @@ class Datatable extends React.Component {
           onClick={handleClear}
           size="small"
         >
-         reset
+          reset
         </Button>
       </div>
     ),
@@ -227,13 +223,11 @@ class Datatable extends React.Component {
   render() {
     const columns = [
       {
-        title: "",
-        key: "action",
-        render: () => (
-          <span>
-            <Checkbox />
-          </span>
-        ),
+        title: "id",
+        dataIndex:"id",
+        key:"id",
+        render: (id) => <a href="#" >{`${id.name}`}</a>,
+        sorter: (a,b) => a.id.name - b.id.name,
       },
       {
         title: "Name",
@@ -241,7 +235,7 @@ class Datatable extends React.Component {
         key: "name",
         sorter: (a, b) => a.name.localeCompare(b.name),
         width: "20%",
-        ...this.getColumnSearchProps("name")
+        ...this.getColumnSearchProps("name"),
       },
       {
         title: "age",
@@ -249,9 +243,9 @@ class Datatable extends React.Component {
         key: "age",
         defaultSortOrder: "descend",
         //dob is date of birth from api
-        render: dob => `${dob.age}`,
+        render: (dob) => `${dob.age}`,
         //a b used to sort from big to small
-        sorter: (a, b) => a.dob.age - b.dob.age,    
+        sorter: (a, b) => a.dob.age - b.dob.age,
       },
       {
         title: "Date",
@@ -259,10 +253,10 @@ class Datatable extends React.Component {
         key: "date",
         defaultSortOrder: "descend",
         //dob is date of birth from api
-        render: dob => `${dob.date}`,
+        render: (dob) => `${dob.date}`,
         //a b used to sort from big to small
         sorter: (a, b) => a.dob.date - b.dob.date,
-        ...this.getColumnSearchPropsDate("date")
+        ...this.getColumnSearchPropsDate("date"),
       },
       {
         title: "Gender",
@@ -271,7 +265,7 @@ class Datatable extends React.Component {
         sorter: (a, b) => a.gender.length - b.gender.length,
         filters: [
           { text: "Male", value: "male" },
-          { text: "Female", value: "female" }
+          { text: "Female", value: "female" },
         ],
         onFilter: (value, record) => record.gender.indexOf(value) === 0,
       },
@@ -280,28 +274,31 @@ class Datatable extends React.Component {
         dataIndex: "email",
         key: "email",
         sorter: (a, b) => a.email.localeCompare(b.email),
-        ...this.getColumnSearchProps("email")
+        ...this.getColumnSearchProps("email"),
       },
       {
         title: "Location",
         dataIndex: "location",
         key: "location",
         sorter: (a, b) => a.location.localeCompare(b.location),
-        ...this.getColumnSearchProps("location")
-      }
+        ...this.getColumnSearchProps("location"),
+      },
     ];
 
     return (
       <>
-      
-        {this.props.match.path === "/folderlist" && (<> <div className="d-flex justify-content-end">
-        {/* <Search
+        {this.props.match.path === "/folderlist" && (
+          <>
+            {" "}
+            <div className="d-flex justify-content-end">
+              {/* <Search
       placeholder="input search text"
       onSearch={value => console.log(value)}
       style={{ width: 200 ,margin:20}}
     /> */}
-    </div>
-          <QueryBuilder data={this.state.data} /></>
+            </div>
+            <QueryBuilder data={this.state.data} />
+          </>
         )}
         {/* <Pagination
         pagination={this.state.pagination}
@@ -311,16 +308,15 @@ class Datatable extends React.Component {
 
     /> */}
         <Table
-        style={{backgroundColor:'white'}}
+          style={{ backgroundColor: "white" }}
           columns={columns}
-          rowKey={record => record.login.uuid}
+          rowKey={(record) => record.login.uuid}
           dataSource={this.state.data}
           pagination={this.state.pagination}
           loading={this.state.loading}
           onChange={this.handleTableChange}
-         
         />
-      
+
         {console.log(this)}
       </>
     );

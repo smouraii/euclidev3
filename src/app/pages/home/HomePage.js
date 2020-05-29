@@ -20,6 +20,7 @@ import SwitchComp from "../../widgets/SwitchComp";
 import WrappedLims from "./Lims";
 import WrappedDbconfiguration from "./DBConfiguration";
 import FormBuilderPage from "./FormBuilderPage.Js";
+import Myprofile from "./MyProfile";
 
 const GoogleMaterialPage = lazy(() =>
   import("./google-material/GoogleMaterialPage")
@@ -61,6 +62,7 @@ export default function HomePage() {
         <Route path="/errorlog" component={ErrorLog} />
         <Route path="/auditlog" component={AuditLog} /> 
         <Route path="/formbuilder" component={FormBuilderPage} />
+        <Route path="/myprofile" component={Myprofile} />
 
         <Redirect to="/error/error-v1" />
       </Switch>

@@ -57,20 +57,6 @@ export default class QueryBuilder extends Component {
     selectedItem: null,
   };
 
-  // localStorage.removeItem()
-
-  // menu = (elem) => {
-  //   return (
-  //     <Menu>
-  //       <Menu.Item  key="edit">
-  //         Edit
-  //       </Menu.Item>
-  //       <Menu.Item key="delete">Delete</Menu.Item>
-  //       <Menu.Item key="copy">Create a copy from this query</Menu.Item>
-  //     </Menu>
-  //   );
-  // };
-
   showModal = () => {
     this.setState({
       visible: true,
@@ -163,8 +149,7 @@ export default class QueryBuilder extends Component {
               style={{ marginBottom: 10 }}
               onClick={() => this.setState({ selectedItem: null })}
             >
-              {" "}
-              Cancel{" "}
+              Cancel
             </Button>
           </>
         ) : (
