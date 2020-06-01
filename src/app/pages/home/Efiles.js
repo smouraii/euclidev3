@@ -1,6 +1,5 @@
 import React from "react";
 import { Portlet, PortletBody } from "../../partials/content/Portlet";
-import Datatables from "../../widgets/DatatablePrimeReact";
 import ModalUpload from "../../widgets/ModalUpload";
 import ModalAddFloder from "../../widgets/ModalAddFolder";
 import ModalDelete from "../../widgets/ModalDelete";
