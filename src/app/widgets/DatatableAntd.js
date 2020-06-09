@@ -139,7 +139,7 @@ class Datatable extends React.Component {
       searchText: selectedKeys[0],
       searchedColumn: dataIndex,
     });
-  };
+  };e
 
   handleReset = (clearFilters) => {
     clearFilters();
@@ -163,7 +163,7 @@ class Datatable extends React.Component {
       placeholder,
       value,
       format,
-      handleSearch,
+      handleSearch, 
       handleClear,
     }) => (
       <div style={{ padding: 8 }}>

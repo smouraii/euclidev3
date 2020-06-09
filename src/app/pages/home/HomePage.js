@@ -7,7 +7,6 @@ import { LayoutSplashScreen } from "../../../_metronic";
 import FolderList from "./Folderlist";
 
 import NewRequest from "./NewRequest";
-import Efiles from "./Efiles";
 import MailServer from "./MailServer";
 import SecurityRoles from "./SecurityRoles";
 import UserConfiguration from "./UserConfiguration";
@@ -48,8 +47,6 @@ export default function HomePage() {
         {/* <Route path="/docs" component={DocsPage} /> */}
         <Route path="/folderlist" component={FolderList} />
         <Route path="/newrequest" component={NewRequest}/>
-        <Route path="/efiles" component={Efiles}/>
-        {/* this is a test */}
         <Route path="/lims" component={WrappedLims}/>
         <Route path="/switchComp" component={SwitchComp}/>
         <Route path="/DB-Configuration" component={WrappedDbconfiguration} />

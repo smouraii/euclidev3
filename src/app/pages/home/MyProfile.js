@@ -1,5 +1,15 @@
 import React, { useState } from "react";
-import { Tabs, Icon, Button, Input, Select, Form, DatePicker } from "antd";
+import {
+  Tabs,
+  Icon,
+  Button,
+  Input,
+  Select,
+  Form,
+  DatePicker,
+  Upload,
+  message,
+} from "antd";
 import {
   Portlet,
   PortletBody,
@@ -8,12 +18,48 @@ import {
 import { Label } from "reactstrap";
 import TextArea from "antd/lib/input/TextArea";
 import countryList from "react-select-country-list";
+import { TextField } from "@material-ui/core";
+import { Formik } from "formik";
+import { register } from "../../crud/auth.crud";
+import { FormattedMessage } from "react-intl";
+import PasswordValidator from "../../widgets/PasswordValidator";
+import WrappedPasswordValidator from "../../widgets/PasswordValidator";
 
-export default function Myprofile(props) {
-  const [selectValue, setSelectValue] = useState(null);
-  const { TabPane } = Tabs;
-  const { Option } = Select;
+function getBase64(img, callback) {
+  const reader = new FileReader();
+  reader.addEventListener("load", () => callback(reader.result));
+  reader.readAsDataURL(img);
+}
+
+function beforeUpload(file) {
+  const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+  if (!isJpgOrPng) {
+    message.error("You can only upload JPG/PNG file!");
+  }
+  const isLt2M = file.size / 1024 / 1024 < 2;
+  if (!isLt2M) {
+    message.error("Image must smaller than 2MB!");
+  }
+  return isJpgOrPng && isLt2M;
+}
+
+export default function Myprofile(props, form) {
   const countries = countryList().getData();
+
+  const [loading, setloading] = useState(false);
+  const [selectValue, setSelectValue] = useState(null);
+  const [country, setcountry] = useState(countries);
+  const [confirmDirty, setConfirmDirty] = useState(false);
+
+  const { getFieldDecorator } = form;
+
+  const { TabPane } = Tabs;
+
+  const { Option } = Select;
+
+  const { imageUrl } = loading;
+
+  const { intl } = props;
 
   function handleChange(value) {
     console.log(`selected ${value}`);
@@ -26,6 +72,40 @@ export default function Myprofile(props) {
   const changeHandler = (selectValue) => {
     setSelectValue({ selectValue });
   };
+
+  const onchangecountry = (country) => {
+    setcountry({ country });
+  };
+
+  const handleChangeUpload = (info) => {
+    if (info.file.status === "uploading") {
+      setloading(true);
+      return;
+    }
+    if (info.file.status === "done") {
+      // Get this url from response in real world.
+      getBase64(info.file.originFileObj, (imageUrl) =>
+        setloading(
+          {
+            imageUrl,
+          },
+          false
+        )
+      );
+    }
+  };
+
+  const onRemove = () => {
+    setloading(false, { imageurl: false });
+  };
+
+  const uploadButton = (
+    <div>
+      <Icon type={loading ? "loading" : "plus"} />
+      <div className="ant-upload-text">Upload</div>
+    </div>
+  );
+
   return (
     <>
       <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
@@ -148,22 +228,22 @@ export default function Myprofile(props) {
               <div class="form row">
                 <div class="col-md-12">
                   <div class="row">
-                    <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
+                    <Portlet className="kt-portlet--height-fluid kt-portlet">
                       <PortletHeader title="Billing Address" />
                       <PortletBody widthfluid={true}>
                         <div class="col-md-6">
                           <div class="form-group">
-                            {/* <div className="col-sm-12">
+                            <div className="col-sm-12">
                               <div className="inputContainer">
                                 <label htmlFor="country">country</label>
                                 <Select
-                                  options={countries}
+                                  option={setcountry}
                                   value={selectValue}
                                   onChange={changeHandler}
                                   placeholder="Choose a country"
                                 />
                               </div>
-                            </div> */}
+                            </div>
                             <div className="col-sm-12">
                               <div className="inputContainer">
                                 <label htmlFor="city">City</label>
@@ -209,36 +289,53 @@ export default function Myprofile(props) {
                         </div>
                       </PortletBody>
                     </Portlet>
-                    <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
-                      <PortletHeader title="BugReport synchronization" />
+                    <Portlet className="kt-portlet--height-fluid kt-portlet">
+                      <PortletHeader title="Shipping Address" />
                       <PortletBody widthfluid={true}>
-                        <div class="col-sm-12 col-md-12 col-lg-6">
-                          <table class="table table-hover table-bordered">
-                            <tbody>
-                              <tr>
-                                <td>issueReport customFields</td>
-                                <td>
-                                  <Button
-                                    class="btn default"
-                                    id="customFieldSync"
-                                  >
-                                    issueReport synchronize
-                                  </Button>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>issueReport categories</td>
-                                <td>
-                                  <Button
-                                    class="btn default"
-                                    id="categoriesSync"
-                                  >
-                                    issueReport synchronize
-                                  </Button>
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <div className="col-sm-12">
+                              <div className="inputContainer">
+                                <label htmlFor="city">City</label>
+                                <input
+                                  name="city"
+                                  class="form-control"
+                                  placeholder="City"
+                                />
+                              </div>
+                            </div>
+                            <div className="col-sm-12">
+                              <div className="inputContainer">
+                                <label htmlFor="postalCode">Postal Code</label>
+                                <input
+                                  name="postalCode"
+                                  class="form-control"
+                                  placeholder="Postal Code"
+                                />
+                              </div>
+                            </div>
+                            <div className="col-sm-12">
+                              <div className="inputContainer">
+                                <label htmlFor="POBOX">PO BOX</label>
+                                <input
+                                  name="POBOX"
+                                  class="form-control"
+                                  placeholder="PO BOX"
+                                />
+                              </div>
+                            </div>
+                            <div className="col-sm-12">
+                              <div className="inputContainer">
+                                <label htmlFor="Address">Address</label>
+                                <TextArea
+                                  name="Address"
+                                  class="form-control"
+                                  placeholder="Address"
+                                  rows={4}
+                                />
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </PortletBody>
                     </Portlet>
@@ -250,52 +347,45 @@ export default function Myprofile(props) {
               tab={
                 <span>
                   <Icon type="file-exclamation" />
-                  Error Log Configuration
+                  Change Profile Picture
                 </span>
               }
               key="3"
             >
-              <Form>
-                <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
-                  <PortletHeader title="Log Settings" />
-                  <PortletBody heightfluid={true}>
-                    <div className="col-sm-12 col-md-6 col-lg-6">
-                      <div className="inputContainer">
-                        <label htmlFor="fileName">File Name</label>
-                        <Input
-                          placeholder="File Name "
-                          name="fileName"
-                          onChange={handleChange}
+              <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
+                <PortletHeader title="Log Settings" />
+                <PortletBody heightfluid={true}>
+                  <div className="col-sm-12 col-md-6 col-lg-6">
+                    <Upload
+                      name="avatar"
+                      listType="picture-card"
+                      className="avatar-uploader"
+                      showUploadList={false}
+                      action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                      beforeUpload={beforeUpload}
+                      onChange={handleChangeUpload}
+                    >
+                      {imageUrl ? (
+                        <img
+                          src={imageUrl}
+                          alt="avatar"
+                          style={{ width: "100%" }}
                         />
+                      ) : (
+                        uploadButton
+                      )}
+                    </Upload>
+                    <div className="d-flex justify-content-start">
+                      <div style={{ margin: 5 }}>
+                        <Button type="primary"> Save </Button>
+                      </div>
+                      <div style={{ margin: 5 }}>
+                        <Button onClick={() => onRemove()}>cancel</Button>
                       </div>
                     </div>
-                    <div className="col-sm-12 col-md-6 col-lg-6">
-                      <div className="inputContainer">
-                        <label htmlFor="fileLocation">File Location</label>
-                        <Input
-                          placeholder="File Location"
-                          name="fileLocation"
-                          onChange={handleChange}
-                        />
-                      </div>
-                    </div>
-                    <div className="col-sm-12 col-md-6 col-lg-6">
-                      <label htmlFor="logtype">Log Type</label>
-                      <div>
-                        <Select
-                          defaultValue="dailyRolling"
-                          name="LogType"
-                          title="Log Type"
-                          onChange={handleChange}
-                        >
-                          <Option value="dailyRolling">DAILY ROLLING</Option>
-                          <Option value="rechSize">REACH SIZE</Option>
-                        </Select>
-                      </div>
-                    </div>
-                  </PortletBody>
-                </Portlet>
-              </Form>
+                  </div>
+                </PortletBody>
+              </Portlet>
             </TabPane>
             <TabPane
               tab={
@@ -306,9 +396,12 @@ export default function Myprofile(props) {
               }
               key="4"
             >
-              <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
-                <PortletBody heightfluid={true}></PortletBody>
-              </Portlet>
+            <Portlet>
+              <PortletBody>
+                <PortletHeader/>
+                <WrappedPasswordValidator/>
+              </PortletBody>
+            </Portlet>
             </TabPane>
           </Tabs>
         </PortletBody>

@@ -200,6 +200,7 @@ export default class QueryBuilder extends Component {
                       tree: QbUtils.loadTree(elem, config),
                       selectedItem: elem.name,
                     });
+                    console.log(elem, config)
                   }}
                   key="edit"
                 >
