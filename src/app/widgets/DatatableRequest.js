@@ -363,7 +363,7 @@ class EditableTable extends React.Component {
           style={this.tableStyle()}
           components={components}
           bordered
-          dataSource={this.state.data}
+          // dataSource={this.props.tableData}
           columns={columns}
           rowClassName="editable-row"
           pagination={{

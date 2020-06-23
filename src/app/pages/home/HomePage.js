@@ -4,7 +4,7 @@ import Builder from "./Builder";
 import Dashboard from "./Dashboard";
 import DocsPage from "./docs/DocsPage";
 import { LayoutSplashScreen } from "../../../_metronic";
-import FolderList from "./Folderlist";
+import FolderList from "./FolderList";
 
 import NewRequest from "./NewRequest";
 import MailServer from "./MailServer";
@@ -45,7 +45,7 @@ export default function HomePage() {
         <Route path="/google-material" component={GoogleMaterialPage} />
         <Route path="/react-bootstrap" component={ReactBootstrapPage} />
         {/* <Route path="/docs" component={DocsPage} /> */}
-        <Route path="/folderlist" component={FolderList} />
+        <Route path="/FolderList" component={FolderList} />
         <Route path="/newrequest" component={NewRequest}/>
         <Route path="/lims" component={WrappedLims}/>
         <Route path="/switchComp" component={SwitchComp}/>

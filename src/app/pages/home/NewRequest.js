@@ -5,13 +5,14 @@ import { Formik, Form } from "formik";
 import {
   Portlet,
   PortletBody,
-  PortletHeader
+  PortletHeader,
 } from "../../partials/content/Portlet";
 import EditableFormTable from "../../widgets/DatatableRequest";
 
 export default function NewRequest() {
   const [mockData, setMockData] = React.useState([]);
   const [targetKeys, setTargetKeys] = React.useState([]);
+  const [dataSamples, setDataSamples] = React.useState([]);
 
   useEffect(() => {
     getMock();
@@ -25,7 +26,6 @@ export default function NewRequest() {
         key: i.toString(),
         title: `test${i + 1}`,
         description: `description of test${i + 1}`,
-        
       };
       if (data.chosen) {
         targetKeys.push(data.key);
@@ -36,7 +36,7 @@ export default function NewRequest() {
     setTargetKeys(targetKeys);
   };
 
-  const handleTransfer = targetKeys => {
+  const handleTransfer = (targetKeys) => {
     setTargetKeys(targetKeys);
   };
 
@@ -74,7 +74,7 @@ export default function NewRequest() {
                         Status: "",
                         RequestDate: "",
                         Created: "",
-                        ...dataValues
+                        ...dataValues,
                       }}
                       onSubmit={(data, { setSubmitting }) => {
                         next();
@@ -89,7 +89,7 @@ export default function NewRequest() {
                         touched,
                         handleChange,
                         handleBlur,
-                        handleSubmit
+                        handleSubmit,
                       }) => (
                         <Portlet
                           className="kt-portlet--height-fluid kt-portlet--border-bottom-brand"
@@ -229,10 +229,10 @@ export default function NewRequest() {
                         products: "",
                         sampleCount: "",
                         shippingLocation: "",
-                        contact:"",
-                        quantity:"",
-                        quantityUnits:"",
-                        ...dataValues
+                        contact: "",
+                        quantity: "",
+                        quantityUnits: "",
+                        ...dataValues,
                       }}
                       onSubmit={(data, { setSubmitting }) => {
                         next();
@@ -248,181 +248,207 @@ export default function NewRequest() {
                         touched,
                         handleChange,
                         handleBlur,
-                        handleSubmit
+                        handleSubmit,
                       }) => (
                         <Form>
-                        <div className="row d-flex justify-content-end">
-                        <div className="col-sm-12 col-md-6 col-lg-6">
-                          <div className="row d-flex justify-content-center">
-                            <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
-                              <PortletBody>
-                                <div className="inputContainer">
-                                  <label htmlFor="description">
-                                    Description
-                                  </label>
-                                  <Input
-                                    name="description"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    value={values.description}
-                                    placeholder="Description"
-                                  />
-                                  {!touched.description &&
-                                    !errors.description && (
-                                      <span className="errorContainer">
-                                        {errors.description}
-                                      </span>
-                                    )}
-                                </div>
+                          <div className="row d-flex justify-content-end">
+                            <div className="col-sm-12 col-md-6 col-lg-6">
+                              <div className="row d-flex justify-content-center">
+                                <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
+                                  <PortletBody>
+                                    <div className="inputContainer">
+                                      <label htmlFor="description">
+                                        Description
+                                      </label>
+                                      <Input
+                                        name="description"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        value={values.description}
+                                        placeholder="Description"
+                                      />
+                                      {!touched.description &&
+                                        !errors.description && (
+                                          <span className="errorContainer">
+                                            {errors.description}
+                                          </span>
+                                        )}
+                                    </div>
 
-                                <div className="inputContainer">
-                                  <label htmlFor="sampleTemplate">Sample Template</label>
-                                  <Input
-                                    name="sampleTemplate"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    value={values.sampleTemplate}
-                                    placeholder="Sample Template"
-                                  />
-                                  {!touched.sampleTemplate && !errors.sampleTemplate && (
-                                    <span className="errorContainer">
-                                      {errors.sampleTemplate}
-                                    </span>
-                                  )}
-                                </div>
+                                    <div className="inputContainer">
+                                      <label htmlFor="sampleTemplate">
+                                        Sample Template
+                                      </label>
+                                      <Input
+                                        name="sampleTemplate"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        value={values.sampleTemplate}
+                                        placeholder="Sample Template"
+                                      />
+                                      {!touched.sampleTemplate &&
+                                        !errors.sampleTemplate && (
+                                          <span className="errorContainer">
+                                            {errors.sampleTemplate}
+                                          </span>
+                                        )}
+                                    </div>
 
-                                <div className="inputContainer">
-                                  <label htmlFor="products">Products</label>
-                                  <Input
-                                    name="products"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    value={values.products}
-                                    placeholder="Products"
-                                  />
-                                  {!touched.products && !errors.products && (
-                                    <span className="errorContainer">
-                                      {errors.products}
-                                    </span>
-                                  )}
-                                </div>
+                                    <div className="inputContainer">
+                                      <label htmlFor="products">Products</label>
+                                      <Input
+                                        name="products"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        value={values.products}
+                                        placeholder="Products"
+                                      />
+                                      {!touched.products &&
+                                        !errors.products && (
+                                          <span className="errorContainer">
+                                            {errors.products}
+                                          </span>
+                                        )}
+                                    </div>
 
-                                <div className="inputContainer">
-                                  <label htmlFor="sampleCount">Sample Count</label>
-                                  <Input
-                                    name="sampleCount"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    value={values.sampleCount}
-                                    placeholder="Sample Count"
-                                  />
-                                  {!touched.sampleCount && !errors.sampleCount && (
-                                    <span className="errorContainer">
-                                      {errors.sampleCount}
-                                    </span>
-                                  )}
-                                </div>
+                                    <div className="inputContainer">
+                                      <label htmlFor="sampleCount">
+                                        Sample Count
+                                      </label>
+                                      <Input
+                                        name="sampleCount"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        value={values.sampleCount}
+                                        placeholder="Sample Count"
+                                      />
+                                      {!touched.sampleCount &&
+                                        !errors.sampleCount && (
+                                          <span className="errorContainer">
+                                            {errors.sampleCount}
+                                          </span>
+                                        )}
+                                    </div>
 
-                                <div className="inputContainer">
-                                  <label htmlFor="shippingLocation">Shipping Location</label>
-                                  <Input
-                                    name="shippingLocation"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    value={values.shippingLocation}
-                                    placeholder="Shipping Location"
-                                  />
-                                  {!touched.shippingLocation && !errors.shippingLocation && (
-                                    <span className="errorContainer">
-                                      {errors.shippingLocation}
-                                    </span>
-                                  )}
-                                </div>
-                                <div className="inputContainer">
-                                  <label htmlFor="contact">Contact</label>
-                                  <Input
-                                    name="contact"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    value={values.contact}
-                                    placeholder="Contact"
-                                  />
-                                  {!touched.contact && !errors.contact && (
-                                    <span className="errorContainer">
-                                      {errors.contact}
-                                    </span>
-                                  )}
-                                </div>
-                                <div className="inputContainer">
-                                  <label htmlFor="quantity">Quantity</label>
-                                  <Input
-                                    name="quantity"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    value={values.quantity}
-                                    placeholder="Quantity"
-                                  />
-                                  {!touched.quantity && !errors.quantity && (
-                                    <span className="errorContainer">
-                                      {errors.quantity}
-                                    </span>
-                                  )}
-                                </div>
-                                <div className="inputContainer">
-                                  <label htmlFor="quantityUnits">Quantity Units</label>
-                                  <Input
-                                    name="quantityUnits"
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    value={values.quantityUnits}
-                                    placeholder="Quantity Units"
-                                  />
-                                  {!touched.quantityUnits && !errors.quantityUnits && (
-                                    <span className="errorContainer">
-                                      {errors.quantityUnits}
-                                    </span>
-                                  )}
-                                </div>
-                              </PortletBody>
-                            </Portlet>
-                          </div>
+                                    <div className="inputContainer">
+                                      <label htmlFor="shippingLocation">
+                                        Shipping Location
+                                      </label>
+                                      <Input
+                                        name="shippingLocation"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        value={values.shippingLocation}
+                                        placeholder="Shipping Location"
+                                      />
+                                      {!touched.shippingLocation &&
+                                        !errors.shippingLocation && (
+                                          <span className="errorContainer">
+                                            {errors.shippingLocation}
+                                          </span>
+                                        )}
+                                    </div>
+                                    <div className="inputContainer">
+                                      <label htmlFor="contact">Contact</label>
+                                      <Input
+                                        name="contact"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        value={values.contact}
+                                        placeholder="Contact"
+                                      />
+                                      {!touched.contact && !errors.contact && (
+                                        <span className="errorContainer">
+                                          {errors.contact}
+                                        </span>
+                                      )}
+                                    </div>
+                                    <div className="inputContainer">
+                                      <label htmlFor="quantity">Quantity</label>
+                                      <Input
+                                        name="quantity"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        value={values.quantity}
+                                        placeholder="Quantity"
+                                      />
+                                      {!touched.quantity &&
+                                        !errors.quantity && (
+                                          <span className="errorContainer">
+                                            {errors.quantity}
+                                          </span>
+                                        )}
+                                    </div>
+                                    <div className="inputContainer">
+                                      <label htmlFor="quantityUnits">
+                                        Quantity Units
+                                      </label>
+                                      <Input
+                                        name="quantityUnits"
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        value={values.quantityUnits}
+                                        placeholder="Quantity Units"
+                                      />
+                                      {!touched.quantityUnits &&
+                                        !errors.quantityUnits && (
+                                          <span className="errorContainer">
+                                            {errors.quantityUnits}
+                                          </span>
+                                        )}
+                                    </div>
+                                  </PortletBody>
+                                </Portlet>
+                              </div>
 
-                          <div className="col-md-12">
-                            <Portlet
-                              className="kt-portlet--height-fluid kt-portlet--border-bottom-brand"
-                              fluidHeight={true}
-                            >
-                              <PortletBody>
-                                <div className="row d-flex justify-content-center">
-                                  <Transfer
-                                    dataSource={mockData}
-                                    showSearch
-                                    listStyle={{
-                                      width: 250,
-                                      height: 300
-                                    }}
-                                    operations={["to right", "to left"]}
-                                    targetKeys={targetKeys}
-                                    onChange={handleTransfer}
-                                    render={item =>
-                                      `${item.title}`
-                                    }
-                                  />
-                                </div>
-                              </PortletBody>
-                            </Portlet>
-                          </div>
-                          </div>
-                          <div className="col-sm-12 col-md-6 col-lg-6">
-                          <Portlet
-                              className="kt-portlet--height-fluid kt-portlet--border-bottom-brand"
-                              fluidHeight={true}
-                            >
-                              <PortletBody>
-                                <EditableFormTable/>
-                              </PortletBody>
-                            </Portlet>
-                          </div>
+                              <div className="col-md-12">
+                                <Portlet
+                                  className="kt-portlet--height-fluid kt-portlet--border-bottom-brand"
+                                  fluidHeight={true}
+                                >
+                                  <PortletBody>
+                                    <div className="row d-flex justify-content-center">
+                                      <Transfer
+                                        dataSource={mockData}
+                                        showSearch
+                                        listStyle={{
+                                          width: 250,
+                                          height: 300,
+                                        }}
+                                        operations={["to right", "to left"]}
+                                        targetKeys={targetKeys}
+                                        onChange={handleTransfer}
+                                        render={(item) => `${item.title}`}
+                                      />
+                                      <Button>Save</Button>
+                                      {/*each time you click on save button
+                                  1-SetTableData([...tableData,values])
+                                  2-if(localStorage.getItem(valuesStored))
+                                   const parsedData = JSON.parse(localStorage.getItem('valuesStored'))
+                                  localStorage.setItem('valuesStored', JSON.stringify([...parsedData, values]))
+                                  else
+                                  localStorage.setItem(valuesStored,JSON.Stringify([values]))
+                                  3- change React.useEffect(() => { if(localStorage.getItem(valuesStored))
+                                  setTableData(JSON.parse(localStorage.getItem(valuesStored)))
+                                    }, [])
+                                  */}
+                                    </div>
+                                  </PortletBody>
+                                </Portlet>
+                              </div>
+                            </div>
+                            <div className="col-sm-12 col-md-6 col-lg-6">
+                              <Portlet
+                                className="kt-portlet--height-fluid kt-portlet--border-bottom-brand"
+                                fluidHeight={true}
+                              >
+                                <PortletBody>
+                                  <EditableFormTable 
+                                  // tableData={tableData}
+                                   />
+                                </PortletBody>
+                              </Portlet>
+                            </div>
                           </div>
                           <div>
                             <Button type="primary" htmlType="submit">
@@ -477,7 +503,7 @@ export default function NewRequest() {
                   className="kt-portlet--height-fluid kt-portlet--border-bottom-brand"
                   fluidHeight={true}
                 >
-                                  <PortletHeader title="Adding Sample/Analysis" />
+                  <PortletHeader title="Adding Sample/Analysis" />
 
                   <PortletBody>
                     <div className="row d-flex justify-content-center">
