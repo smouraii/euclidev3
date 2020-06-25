@@ -12,12 +12,16 @@ import EditableFormTable from "../../widgets/DatatableRequest";
 export default function NewRequest() {
   const [mockData, setMockData] = React.useState([]);
   const [targetKeys, setTargetKeys] = React.useState([]);
-  const [dataSamples, setDataSamples] = React.useState([]);
+  const [tableData, setTableData] = React.useState([]);
 
   useEffect(() => {
     getMock();
   }, []);
 
+  useEffect(() => {
+    if (localStorage.getItem("valuesStored"))
+      setTableData(JSON.parse(localStorage.getItem("valuesStored")));
+  }, []);
   const getMock = () => {
     const targetKeys = [];
     const mockData = [];
@@ -420,18 +424,34 @@ export default function NewRequest() {
                                         onChange={handleTransfer}
                                         render={(item) => `${item.title}`}
                                       />
-                                      <Button>Save</Button>
-                                      {/*each time you click on save button
-                                  1-SetTableData([...tableData,values])
-                                  2-if(localStorage.getItem(valuesStored))
-                                   const parsedData = JSON.parse(localStorage.getItem('valuesStored'))
-                                  localStorage.setItem('valuesStored', JSON.stringify([...parsedData, values]))
-                                  else
-                                  localStorage.setItem(valuesStored,JSON.Stringify([values]))
-                                  3- change React.useEffect(() => { if(localStorage.getItem(valuesStored))
-                                  setTableData(JSON.parse(localStorage.getItem(valuesStored)))
-                                    }, [])
-                                  */}
+                                      <Button
+                                        onClick={() => {
+                                          setTableData([...tableData, values,targetKeys]);
+                                          if (
+                                            localStorage.getItem("valuesStored")
+                                          ) {
+                                            const parsedData = JSON.parse(
+                                              localStorage.getItem(
+                                                "valuesStored"
+                                              )
+                                            );
+                                            localStorage.setItem(
+                                              "valuesStored",
+                                              JSON.stringify([
+                                                ...parsedData,
+                                                values, targetKeys
+                                              ])
+                                            );
+                                          } else {
+                                            localStorage.setItem(
+                                              "valuesStored",
+                                              JSON.stringify([values,targetKeys])
+                                            );
+                                          }
+                                        }}
+                                      >
+                                        Save
+                                      </Button>
                                     </div>
                                   </PortletBody>
                                 </Portlet>
@@ -443,9 +463,9 @@ export default function NewRequest() {
                                 fluidHeight={true}
                               >
                                 <PortletBody>
-                                  <EditableFormTable 
-                                  // tableData={tableData}
-                                   />
+                                  <EditableFormTable
+                                   tableData={tableData}
+                                  />
                                 </PortletBody>
                               </Portlet>
                             </div>

@@ -75,11 +75,11 @@ class EditableTable extends React.Component {
       },
       {
         title: "Product",
-        dataIndex: "product",
-        key: "product",
+        dataIndex: "products",
+        key: "products",
         editable: true,
-        sorter: (a, b) => a.product.localeCompare(b.product),
-        ...this.getColumnSearchProps("product"),
+        sorter: (a, b) => a.products.localeCompare(b.products),
+        ...this.getColumnSearchProps("products"),
       },
       {
         title: "Sample Template",
@@ -131,11 +131,11 @@ class EditableTable extends React.Component {
       },
       {
         title: "Work Item",
-        dataIndex: "workItem",
-        key: "workItem",
+        dataIndex: "targetKeys",
+        key: "targetKeys",
         editable: true,
-        sorter: (a, b) => a.workItem.localeCompare(b.workItem),
-        ...this.getColumnSearchProps("workItem"),
+        // sorter: (a, b) => a.targetKeys.localeCompare(b.targetKeys),
+        // ...this.getColumnSearchProps("targetKeys"),
       },
       {
         title: "operation",
@@ -363,7 +363,7 @@ class EditableTable extends React.Component {
           style={this.tableStyle()}
           components={components}
           bordered
-          // dataSource={this.props.tableData}
+          dataSource={this.props.tableData}
           columns={columns}
           rowClassName="editable-row"
           pagination={{
