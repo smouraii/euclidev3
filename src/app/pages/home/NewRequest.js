@@ -27,7 +27,7 @@ export default function NewRequest() {
     const mockData = [];
     for (let i = 0; i < 20; i++) {
       const data = {
-        key: i.toString(),
+        key: `test${i + 1}`,
         title: `test${i + 1}`,
         description: `description of test${i + 1}`,
       };
@@ -41,6 +41,7 @@ export default function NewRequest() {
   };
 
   const handleTransfer = (targetKeys) => {
+    console.log(targetKeys,"this is targetkeys");
     setTargetKeys(targetKeys);
   };
 
@@ -426,7 +427,7 @@ export default function NewRequest() {
                                       />
                                       <Button
                                         onClick={() => {
-                                          setTableData([...tableData, values,targetKeys]);
+                                          setTableData([...tableData, values,mockData]);
                                           if (
                                             localStorage.getItem("valuesStored")
                                           ) {
@@ -439,13 +440,13 @@ export default function NewRequest() {
                                               "valuesStored",
                                               JSON.stringify([
                                                 ...parsedData,
-                                                values, targetKeys
+                                                {...values,workItem:targetKeys}
                                               ])
                                             );
                                           } else {
                                             localStorage.setItem(
                                               "valuesStored",
-                                              JSON.stringify([values,targetKeys])
+                                              JSON.stringify([{...values,workItem:targetKeys}])
                                             );
                                           }
                                         }}

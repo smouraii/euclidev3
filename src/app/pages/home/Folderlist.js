@@ -5,7 +5,7 @@ import FullScreenButton from "../../widgets/FullscreenButton";
 import ModalAddFloder from "../../widgets/ModalAddFolder";
 import ModalUpload from "../../widgets/ModalUpload";
 import RefreshButton from "../../widgets/RefreshButton";
-import Datatable from "../../widgets/DatatableAntd";
+import Datatable from "../../widgets/DatatableFolderList";
 import { Button, Icon, Input } from "antd";
 import Highlighter from "react-highlight-words";
 

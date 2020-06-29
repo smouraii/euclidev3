@@ -41,53 +41,43 @@ export default class QuickActionsPanel extends React.Component {
               <h3 className="kt-head__title text-white">
                 User Quick Actions
                 <span className="kt-space-15" />
-                <button
-                  type="button"
-                  className="btn btn-success btn-sm btn-bold btn-font-md"
-                >
-                  23 tasks pending
-                </button>
               </h3>
             </div>
             {/* end: Head */}
 
             <div className={`kt-grid-nav kt-grid-nav--skin-${gridNavSkin}`}>
               <div className="kt-grid-nav__row">
-                <a className="kt-grid-nav__item">
+                <a className="kt-grid-nav__item" href="/User-Configuration">
                   <EuroIcon className="kt-svg-icon kt-svg-icon--success kt-svg-icon--lg" />
-                  <span className="kt-grid-nav__title">Accounting</span>
-                  <span className="kt-grid-nav__desc">eCommerce</span>
+                  <span className="kt-grid-nav__title">User Configuration</span>
                 </a>
 
-                <a className="kt-grid-nav__item">
+                <a className="kt-grid-nav__item" href="/newrequest">
                   <div className="d-flex align-items-center flex-column">
                     <span className="kt-grid-nav__icon">
                       <MailAttachmentIcon className="kt-svg-icon kt-svg-icon--success kt-svg-icon--lg" />
                     </span>
-                    <span className="kt-grid-nav__title">Administration</span>
-                    <span className="kt-grid-nav__desc">Console</span>
+                    <span className="kt-grid-nav__title">New Request</span>
                   </div>
                 </a>
               </div>
 
-              <div className="kt-grid-nav__row">
+              <div className="kt-grid-nav__row" href="/DB-Configuration">
                 <a className="kt-grid-nav__item">
                   <div className="d-flex align-items-center flex-column">
                     <span className="kt-grid-nav__icon">
                       <BoxNum2Icon className="kt-svg-icon kt-svg-icon--success kt-svg-icon--lg" />
                     </span>
-                    <span className="kt-grid-nav__title">Projects</span>
-                    <span className="kt-grid-nav__desc">Pending Tasks</span>
+                    <span className="kt-grid-nav__title">DataBase Configuration</span>
                   </div>
                 </a>
 
-                <a className="kt-grid-nav__item">
+                <a className="kt-grid-nav__item" href="/Security-Roles">
                   <div className="d-flex align-items-center flex-column">
                     <span className="kt-grid-nav__icon">
                       <GroupIcon className="kt-svg-icon kt-svg-icon--success kt-svg-icon--lg" />
                     </span>
-                    <span className="kt-grid-nav__title">Customers</span>
-                    <span className="kt-grid-nav__desc">Latest cases</span>
+                    <span className="kt-grid-nav__title">Security Roles</span>
                   </div>
                 </a>
               </div>

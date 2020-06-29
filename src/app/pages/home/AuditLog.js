@@ -2,7 +2,7 @@ import React from "react";
 import { Portlet, PortletBody } from "../../partials/content/Portlet";
 import ModalForm from "../../widgets/ModalForm";
 import RefreshButton from "../../widgets/RefreshButton";
-import Datatable from "../../widgets/DatatableAntd";
+import Datatable from "../../widgets/DatatableFolderList";
 import { Tabs, Icon } from "antd";
 import DatatableAuditLog from "../../widgets/DatatableAuditLog";
 import DatatableOnlineUser from "../../widgets/DatatableOnlineUser";

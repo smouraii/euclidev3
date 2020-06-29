@@ -9,6 +9,7 @@ import {
   Portlet,
   PortletHeader,
 } from "../partials/content/Portlet";
+
 import { Label } from "reactstrap";
 
 class Datatable extends React.Component {
@@ -64,6 +65,8 @@ class Datatable extends React.Component {
           ...user,
           name: `${user.name.first} ${user.name.last}`,
           location: `${user.location.country} ${user.location.state}`,
+          date:`${user.dob.date}`,
+          age:`${user.dob.age}`,
         };
       });
       const pagination = { ...this.state.pagination };
@@ -260,23 +263,22 @@ class Datatable extends React.Component {
         },
         {
           title: "age",
-          dataIndex: "dob",
+          dataIndex: "age",
           key: "age",
           defaultSortOrder: "descend",
           //dob is date of birth from api
-          render: (dob) => `${dob.age}`,
           //a b used to sort from big to small
-          sorter: (a, b) => a.dob.age - b.dob.age,
+          sorter: (a, b) => a.age - b.age,
+          ...this.getColumnSearchProps("age"),
         },
         {
           title: "Date",
-          dataIndex: "dob",
+          dataIndex: "date",
           key: "date",
           defaultSortOrder: "descend",
           //dob is date of birth from api
-          render: (dob) => `${dob.date}`,
           //a b used to sort from big to small
-          sorter: (a, b) => a.dob.date - b.dob.date,
+          sorter: (a, b) => a.date - b.date,
           ...this.getColumnSearchPropsDate("date"),
         },
         {
@@ -338,8 +340,8 @@ class Datatable extends React.Component {
           title: "id",
           dataIndex: "id",
           key: "id",
-          render: (id) => `${id.name}`,
-          sorter: (a, b) => a.id.name - b.id.name,
+          render: (id) => `${id.value}`,
+          sorter: (a, b) => a.id.value - b.id.value,
         },
         {
           title: "name",
@@ -351,13 +353,12 @@ class Datatable extends React.Component {
         },
         {
           title: "date",
-          dataIndex: "dob",
+          dataIndex: "date",
           key: "date",
           defaultSortOrder: "descend",
           //dob is date of birth from api
-          render: (dob) => `${dob.date}`,
           //a b used to sort from big to small
-          sorter: (a, b) => a.dob.date - b.dob.date,
+          sorter: (a, b) => a.date - b.date,
         },
         {
           title: "gender",
@@ -380,9 +381,10 @@ class Datatable extends React.Component {
       const columns2 = [
         {
           title: "name",
-          dataIndex: "name  ",
+          dataIndex: "name",
           key: "name",
           sorter: (a, b) => a.name.localeCompare(b.name),
+          width: "20%",
           ...this.getColumnSearchProps("name"),
         },
         {
@@ -404,8 +406,8 @@ class Datatable extends React.Component {
           title: "id",
           dataIndex: "id",
           key: "id",
-          sorter: (a, b) => a.id.value.localeCompare(b.id.value),
-          ...this.getColumnSearchProps("id"),
+          render: (id) => `${id.value}`,
+          sorter: (a, b) => a.id.value - b.id.value,
         },
         {
           title: "age",

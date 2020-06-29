@@ -1,6 +1,5 @@
 import React from "react";
 import { Portlet, PortletBody } from "../../partials/content/Portlet";
-import ModalForm from "../../widgets/ModalForm";
 import ModalChangeRole from "../../widgets/ModalChangeRole";
 import ModalActivate from "../../widgets/ModalActivate";
 import ModalDisableUser from "../../widgets/ModalDisableUser";
@@ -9,7 +8,8 @@ import ModalAllocateAddresses from "../../widgets/ModalAllocateAddresses";
 import ModalChangePassword from "../../widgets/ModalChangePassword";
 import RefreshButton from "../../widgets/RefreshButton";
 import FullscreenButton from "../../widgets/FullscreenButton";
-import Datatable from "../../widgets/DatatableAntd";
+import DatatableUserConfig from "../../widgets/DatatableUserConfiguration";
+import ModalAddUser from "../../widgets/ModalAddUser";
 
 export default function UserConfiguration() {
   const [isFull, setIsFull] = React.useState(false);
@@ -27,7 +27,7 @@ export default function UserConfiguration() {
         <div style={{ margin: 5 }}>
           <Portlet>
             <PortletBody fit={true}>
-              <ModalForm />
+              <ModalAddUser />
             </PortletBody>
           </Portlet>
         </div>
@@ -88,7 +88,7 @@ current= {<> */}
             setIsFull={setIsFull}
             current={
               <PortletBody fit={true}>
-                <Datatable />
+                <DatatableUserConfig />
               </PortletBody>
             }
           />

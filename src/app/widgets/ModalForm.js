@@ -1,17 +1,34 @@
 import React from "react";
-import { Modal, Button, Icon, Input } from "antd";
+import { Modal, Button, Icon, Input, Upload, message } from "antd";
 import { Formik, Form } from "formik";
 
+const props = {
+  name: "file",
+  action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
+  headers: {
+    authorization: "authorization-text",
+  },
+  onChange(info) {
+    if (info.file.status !== "uploading") {
+      console.log(info.file, info.fileList);
+    }
+    if (info.file.status === "done") {
+      message.success(`${info.file.name} file uploaded successfully`);
+    } else if (info.file.status === "error") {
+      message.error(`${info.file.name} file upload failed.`);
+    }
+  },
+};
 
 class ModalForm extends React.Component {
   state = {
     loading: false,
-    visible: false
+    visible: false,
   };
 
   showModal = () => {
     this.setState({
-      visible: true
+      visible: true,
     });
   };
 
@@ -49,7 +66,7 @@ class ModalForm extends React.Component {
               onClick={this.handleOk}
             >
               Submit
-            </Button>
+            </Button>,
           ]}
         >
           <Formik
@@ -59,7 +76,6 @@ class ModalForm extends React.Component {
               Products: "",
               Analysis: "",
               Comments: "",
-              
             }}
             onSubmit={(data, { setSubmitting }) => {
               setSubmitting(false);
@@ -73,7 +89,7 @@ class ModalForm extends React.Component {
               touched,
               handleChange,
               handleBlur,
-              handleSubmit
+              handleSubmit,
             }) => (
               <Form>
                 <div className="inputContainer">
@@ -86,10 +102,11 @@ class ModalForm extends React.Component {
                     placeholder="Reproductivity"
                   />
                   {!touched.Reproductivity && !errors.Reproductivity && (
-                    <span className="errorContainer">{errors.Reproductivity}</span>
+                    <span className="errorContainer">
+                      {errors.Reproductivity}
+                    </span>
                   )}
                 </div>
-
                 <div className="inputContainer">
                   <label htmlFor="Security">Security</label>
                   <Input
@@ -103,7 +120,6 @@ class ModalForm extends React.Component {
                     <span className="errorContainer">{errors.Security}</span>
                   )}
                 </div>
-
                 <div className="inputContainer">
                   <label htmlFor="Priority">Priority</label>
                   <Input
@@ -117,7 +133,6 @@ class ModalForm extends React.Component {
                     <span className="errorContainer">{errors.Priority}</span>
                   )}
                 </div>
-
                 <div className="inputContainer">
                   <label htmlFor="Summary">Summary</label>
                   <Input
@@ -131,7 +146,6 @@ class ModalForm extends React.Component {
                     <span className="errorContainer">{errors.Summary}</span>
                   )}
                 </div>
-
                 <div className="inputContainer">
                   <label htmlFor="Description">Description</label>
                   <Input
@@ -155,8 +169,19 @@ class ModalForm extends React.Component {
                     placeholder="Step To Reproduce"
                   />
                   {!touched.StepToReproduce && !errors.StepToReproduce && (
-                    <span className="errorContainer">{errors.StepToReproduce}</span>
+                    <span className="errorContainer">
+                      {errors.StepToReproduce}
+                    </span>
                   )}
+                </div>
+                <div className="inputContainer">
+                <label htmlFor="AttachFile">Attach file (Maximum size: 2,097k)</label>
+
+                <Upload {...props}>
+                  <Button>
+                    <Icon type="upload" /> Select file
+                  </Button>
+                </Upload>
                 </div>
               </Form>
             )}

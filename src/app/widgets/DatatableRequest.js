@@ -7,6 +7,7 @@ import {
   Form,
   Button,
   Icon,
+  Tag,
 } from "antd";
 import reqwest from "reqwest";
 import Highlighter from "react-highlight-words";
@@ -70,6 +71,8 @@ class EditableTable extends React.Component {
         dataIndex: "description",
         key: "description",
         editable: true,
+        fixed:'left',
+        width:150,
         sorter: (a, b) => a.description.localeCompare(b.description),
         ...this.getColumnSearchProps("description"),
       },
@@ -78,6 +81,7 @@ class EditableTable extends React.Component {
         dataIndex: "products",
         key: "products",
         editable: true,
+        width:150,
         sorter: (a, b) => a.products.localeCompare(b.products),
         ...this.getColumnSearchProps("products"),
       },
@@ -86,6 +90,7 @@ class EditableTable extends React.Component {
         dataIndex: "sampleTemplate",
         key: "sampleTemplate",
         editable: true,
+        width:150,
         sorter: (a, b) => a.sampleTemplate.localeCompare(b.sampleTemplate),
         ...this.getColumnSearchProps("sampleTemplate"),
       },
@@ -94,6 +99,7 @@ class EditableTable extends React.Component {
         dataIndex: "sampleCount",
         key: "sampleCount",
         editable: true,
+        width:100,
         sorter: (a, b) => a.sampleCount.localeCompare(b.sampleCount),
         ...this.getColumnSearchProps("sampleCount"),
       },
@@ -102,6 +108,7 @@ class EditableTable extends React.Component {
         dataIndex: "shippingLocation",
         key: "shippingLocation",
         editable: true,
+        width:150,
         sorter: (a, b) => a.shippingLocation.localeCompare(b.shippingLocation),
         ...this.getColumnSearchProps("shippingLocation"),
       },
@@ -110,6 +117,7 @@ class EditableTable extends React.Component {
         dataIndex: "contact",
         key: "contact",
         editable: true,
+        width:150,
         sorter: (a, b) => a.contact.localeCompare(b.contact),
         ...this.getColumnSearchProps("contact"),
       },
@@ -118,6 +126,7 @@ class EditableTable extends React.Component {
         dataIndex: "quantity",
         key: "quantity",
         editable: true,
+        width:100,
         sorter: (a, b) => a.quantity.localeCompare(b.quantity),
         ...this.getColumnSearchProps("quantity"),
       },
@@ -126,20 +135,33 @@ class EditableTable extends React.Component {
         dataIndex: "quantityUnits",
         key: "quantityUnits",
         editable: true,
+        width:100,
         sorter: (a, b) => a.quantityUnits.localeCompare(b.quantityUnits),
         ...this.getColumnSearchProps("quantityUnits"),
       },
       {
         title: "Work Item",
-        dataIndex: "targetKeys",
-        key: "targetKeys",
+        dataIndex: "workItem",
+        key: "workItem",
         editable: true,
-        // sorter: (a, b) => a.targetKeys.localeCompare(b.targetKeys),
-        // ...this.getColumnSearchProps("targetKeys"),
+        width:200,
+        render: (a) => (
+          <div>
+            {a.map((item) => (
+              <p key={item}>
+                {item}
+              </p>
+            ))}
+          </div>
+        ),
+        sorter: (a, b) => a.workItem.localeCompare(b.workItem),
+        ...this.getColumnSearchProps("workItem"),
       },
       {
         title: "operation",
         dataIndex: "operation",
+        fixed:'right',
+        width:150,
         render: (text, record) => {
           const { editingKey } = this.state;
           const editable = this.isEditing(record);
@@ -366,6 +388,7 @@ class EditableTable extends React.Component {
           dataSource={this.props.tableData}
           columns={columns}
           rowClassName="editable-row"
+          scroll={{ x: 1500}}
           pagination={{
             onChange: this.cancel,
           }}
@@ -375,5 +398,5 @@ class EditableTable extends React.Component {
   }
 }
 
-const   EditableFormTable = Form.create()(EditableTable);
+const EditableFormTable = Form.create()(EditableTable);
 export default EditableFormTable;

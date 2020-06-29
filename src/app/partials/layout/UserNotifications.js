@@ -112,9 +112,9 @@ export default class UserNotifications extends React.Component {
               style={{ backgroundImage: this.backGroundStyle() }}
             >
               <h3 className="kt-head__title">
-                User Notifications{' '} {' '}
+                User Notifications
                 <span className={this.userNotificationsButtonCssClassList()}>
-                  23 new
+                  0 new
                 </span>
               </h3>
 
@@ -136,11 +136,6 @@ export default class UserNotifications extends React.Component {
                       Events
                     </Nav.Link>
                   </Nav.Item>
-                  <Nav.Item>
-                    <Nav.Link eventKey="Logs" className="nav-link show">
-                      Logs
-                    </Nav.Link>
-                  </Nav.Item>
                 </Nav>
 
                 <Tab.Content>
@@ -159,162 +154,7 @@ export default class UserNotifications extends React.Component {
                           data-height="300"
                           data-mobile-height="200"
                         >
-                          <a className="kt-notification__item">
-                            <div className="kt-notification__item-icon">
-                              <i className="flaticon2-line-chart kt-font-success" />
-                            </div>
-                            <div className="kt-notification__item-details">
-                              <div className="kt-notification__item-title">
-                                New order has been received
-                              </div>
-                              <div className="kt-notification__item-time">
-                                2 hrs ago
-                              </div>
-                            </div>
-                          </a>
-                          <a className="kt-notification__item">
-                            <div className="kt-notification__item-icon">
-                              <i className="flaticon2-box-1 kt-font-brand" />
-                            </div>
-                            <div className="kt-notification__item-details">
-                              <div className="kt-notification__item-title">
-                                New customer is registered
-                              </div>
-                              <div className="kt-notification__item-time">
-                                3 hrs ago
-                              </div>
-                            </div>
-                          </a>
-                          <a className="kt-notification__item">
-                            <div className="kt-notification__item-icon">
-                              <i className="flaticon2-chart2 kt-font-danger" />
-                            </div>
-                            <div className="kt-notification__item-details">
-                              <div className="kt-notification__item-title">
-                                Application has been approved
-                              </div>
-                              <div className="kt-notification__item-time">
-                                3 hrs ago
-                              </div>
-                            </div>
-                          </a>
-                          <a className="kt-notification__item">
-                            <div className="kt-notification__item-icon">
-                              <i className="flaticon2-image-file kt-font-warning" />
-                            </div>
-                            <div className="kt-notification__item-details">
-                              <div className="kt-notification__item-title">
-                                New file has been uploaded
-                              </div>
-                              <div className="kt-notification__item-time">
-                                5 hrs ago
-                              </div>
-                            </div>
-                          </a>
-                          <a className="kt-notification__item">
-                            <div className="kt-notification__item-icon">
-                              <i className="flaticon2-bar-chart kt-font-info" />
-                            </div>
-                            <div className="kt-notification__item-details">
-                              <div className="kt-notification__item-title">
-                                New user feedback received
-                              </div>
-                              <div className="kt-notification__item-time">
-                                8 hrs ago
-                              </div>
-                            </div>
-                          </a>
-                          <a className="kt-notification__item">
-                            <div className="kt-notification__item-icon">
-                              <i className="flaticon2-pie-chart-2 kt-font-success" />
-                            </div>
-                            <div className="kt-notification__item-details">
-                              <div className="kt-notification__item-title">
-                                System reboot has been successfully completed
-                              </div>
-                              <div className="kt-notification__item-time">
-                                12 hrs ago
-                              </div>
-                            </div>
-                          </a>
-                          <a className="kt-notification__item">
-                            <div className="kt-notification__item-icon">
-                              <i className="flaticon2-favourite kt-font-danger" />
-                            </div>
-                            <div className="kt-notification__item-details">
-                              <div className="kt-notification__item-title">
-                                New order has been placed
-                              </div>
-                              <div className="kt-notification__item-time">
-                                15 hrs ago
-                              </div>
-                            </div>
-                          </a>
-                          <a className="kt-notification__item kt-notification__item--read">
-                            <div className="kt-notification__item-icon">
-                              <i className="flaticon2-safe kt-font-primary" />
-                            </div>
-                            <div className="kt-notification__item-details">
-                              <div className="kt-notification__item-title">
-                                Company meeting canceled
-                              </div>
-                              <div className="kt-notification__item-time">
-                                19 hrs ago
-                              </div>
-                            </div>
-                          </a>
-                          <a className="kt-notification__item">
-                            <div className="kt-notification__item-icon">
-                              <i className="flaticon2-psd kt-font-success" />
-                            </div>
-                            <div className="kt-notification__item-details">
-                              <div className="kt-notification__item-title">
-                                New report has been received
-                              </div>
-                              <div className="kt-notification__item-time">
-                                23 hrs ago
-                              </div>
-                            </div>
-                          </a>
-                          <a className="kt-notification__item">
-                            <div className="kt-notification__item-icon">
-                              <i className="flaticon-download-1 kt-font-danger" />
-                            </div>
-                            <div className="kt-notification__item-details">
-                              <div className="kt-notification__item-title">
-                                Finance report has been generated
-                              </div>
-                              <div className="kt-notification__item-time">
-                                25 hrs ago
-                              </div>
-                            </div>
-                          </a>
-                          <a className="kt-notification__item">
-                            <div className="kt-notification__item-icon">
-                              <i className="flaticon-security kt-font-warning" />
-                            </div>
-                            <div className="kt-notification__item-details">
-                              <div className="kt-notification__item-title">
-                                New customer comment recieved
-                              </div>
-                              <div className="kt-notification__item-time">
-                                2 days ago
-                              </div>
-                            </div>
-                          </a>
-                          <a className="kt-notification__item">
-                            <div className="kt-notification__item-icon">
-                              <i className="flaticon2-pie-chart kt-font-success" />
-                            </div>
-                            <div className="kt-notification__item-details">
-                              <div className="kt-notification__item-title">
-                                New customer is registered
-                              </div>
-                              <div className="kt-notification__item-time">
-                                3 days ago
-                              </div>
-                            </div>
-                          </a>
+                         No new Alerts.
                         </div>
                       </div>
                     </PerfectScrollbar>
@@ -334,20 +174,12 @@ export default class UserNotifications extends React.Component {
                           data-height="300"
                           data-mobile-height="200"
                         >
-                          <a className="kt-notification__item">
-                            <div className="kt-notification__item-icon">
-                              <i className="flaticon2-psd kt-font-success" />
-                            </div>
                             <div className="kt-notification__item-details">
                               <div className="kt-notification__item-title">
-                                New report has been received
-                              </div>
-                              <div className="kt-notification__item-time">
-                                23 hrs ago
+                                No new Events.
                               </div>
                             </div>
-                          </a>
-                          <a className="kt-notification__item">
+                         {/* <a className="kt-notification__item">
                             <div className="kt-notification__item-icon">
                               <i className="flaticon-download-1 kt-font-danger" />
                             </div>
@@ -515,24 +347,10 @@ export default class UserNotifications extends React.Component {
                                 3 days ago
                               </div>
                             </div>
-                          </a>
+                          </a> */}
                         </div>
                       </div>
                     </PerfectScrollbar>
-                  </Tab.Pane>
-                  <Tab.Pane eventKey="Logs">
-                    <div
-                      className="kt-grid kt-grid--ver"
-                      style={{ minHeight: "200px" }}
-                    >
-                      <div className="kt-grid kt-grid--hor kt-grid__item kt-grid__item--fluid kt-grid__item--middle">
-                        <div className="kt-grid__item kt-grid__item--middle kt-align-center">
-                          All caught up!
-                          <br />
-                          No new notifications.
-                        </div>
-                      </div>
-                    </div>
                   </Tab.Pane>
                 </Tab.Content>
               </Tab.Container>

@@ -34,11 +34,11 @@ export default class Topbar extends React.Component {
           gridNavSkin="light"
         />
 
-        <MyCart
+        {/* <MyCart
           iconType=""
           useSVG="true"
           bgImage={toAbsoluteUrl("/media/misc/bg-1.jpg")}
-        />
+        /> */}
 
         {/* <QuickPanelToggler /> */}
 

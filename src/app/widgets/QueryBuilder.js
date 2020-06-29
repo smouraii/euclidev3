@@ -103,7 +103,7 @@ export default class QueryBuilder extends Component {
 
   renderResult = ({ tree, tree: immutableTree, config }) => (
     <div className="query-builder-result" style={{ padding: "10px" }}>
-      <div>
+      {/* <div>
         SQL where:{" "}
         <pre>{JSON.stringify(QbUtils.sqlFormat(immutableTree, config))}</pre>
       </div>
@@ -112,7 +112,7 @@ export default class QueryBuilder extends Component {
         <pre>
           {JSON.stringify(QbUtils.jsonLogicFormat(immutableTree, config))}
         </pre>
-      </div>
+      </div> */}
 
       <div>
         {this.state.selectedItem ? (
