@@ -1,7 +1,7 @@
 /* eslint-disable no-script-url,jsx-a11y/anchor-is-valid */
 import React from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import Dropdown from "react-bootstrap/Dropdown";
+import {Dropdown} from "react-bootstrap/";
 
 const QuickActionsDropdownToggle = React.forwardRef((props, ref) => {
   return (
