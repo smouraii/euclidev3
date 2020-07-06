@@ -7,7 +7,7 @@ import {
   PortletBody,
   PortletHeader,
 } from "../../partials/content/Portlet";
-import EditableFormTable from "../../widgets/DatatableRequest";
+import DatatableRequest from "../../widgets/DatatableRequest";
 
 export default function NewRequest() {
   const [mockData, setMockData] = React.useState([]);
@@ -19,8 +19,10 @@ export default function NewRequest() {
   }, []);
 
   useEffect(() => {
+    setTimeout(function () {
     if (localStorage.getItem("valuesStored"))
       setTableData(JSON.parse(localStorage.getItem("valuesStored")));
+    }, 5000);
   }, []);
   const getMock = () => {
     const targetKeys = [];
@@ -256,7 +258,7 @@ export default function NewRequest() {
                         handleSubmit,
                       }) => (
                         <Form>
-                          <div className="row d-flex justify-content-end">
+                          <div className="row d-flex justify-content-between">
                             <div className="col-sm-12 col-md-6 col-lg-6">
                               <div className="row d-flex justify-content-center">
                                 <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
@@ -405,14 +407,14 @@ export default function NewRequest() {
                                   </PortletBody>
                                 </Portlet>
                               </div>
+                              </div>
 
-                              <div className="col-md-12">
-                                <Portlet
-                                  className="kt-portlet--height-fluid kt-portlet--border-bottom-brand"
-                                  fluidHeight={true}
-                                >
-                                  <PortletBody>
-                                    <div className="row d-flex justify-content-center">
+                            <div className="col-sm-6 col-md-6 col-lg-6">
+                              <Portlet
+                                className="kt-portlet--height-fluid kt-portlet--border-bottom-brand"
+                                fluidHeight={true}
+                              >
+                                  <div className="row d-flex justify-content-center">
                                       <Transfer
                                         dataSource={mockData}
                                         showSearch
@@ -454,21 +456,19 @@ export default function NewRequest() {
                                         Save
                                       </Button>
                                     </div>
+                              </Portlet>
+                            </div>
+                            <div className="col-md-12">
+                                <Portlet
+                                  className="kt-portlet--height-fluid kt-portlet--border-bottom-brand"
+                                  fluidHeight={true}
+                                >
+                                  <PortletBody>
+                                  <DatatableRequest
+                                   tableData={tableData}
+                                  />                                  
                                   </PortletBody>
                                 </Portlet>
-                              </div>
-                            </div>
-                            <div className="col-sm-12 col-md-6 col-lg-6">
-                              <Portlet
-                                className="kt-portlet--height-fluid kt-portlet--border-bottom-brand"
-                                fluidHeight={true}
-                              >
-                                <PortletBody>
-                                  <EditableFormTable
-                                   tableData={tableData}
-                                  />
-                                </PortletBody>
-                              </Portlet>
                             </div>
                           </div>
                           <div>
@@ -479,6 +479,7 @@ export default function NewRequest() {
                         </Form>
                       )}
                     </Formik>
+
                   </div>
                 </div>
               </>

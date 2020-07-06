@@ -70,9 +70,6 @@ class EditableTable extends React.Component {
         title: "Description",
         dataIndex: "description",
         key: "description",
-        editable: true,
-        fixed:'left',
-        width:150,
         sorter: (a, b) => a.description.localeCompare(b.description),
         ...this.getColumnSearchProps("description"),
       },
@@ -80,8 +77,6 @@ class EditableTable extends React.Component {
         title: "Product",
         dataIndex: "products",
         key: "products",
-        editable: true,
-        width:150,
         sorter: (a, b) => a.products.localeCompare(b.products),
         ...this.getColumnSearchProps("products"),
       },
@@ -89,8 +84,6 @@ class EditableTable extends React.Component {
         title: "Sample Template",
         dataIndex: "sampleTemplate",
         key: "sampleTemplate",
-        editable: true,
-        width:150,
         sorter: (a, b) => a.sampleTemplate.localeCompare(b.sampleTemplate),
         ...this.getColumnSearchProps("sampleTemplate"),
       },
@@ -98,8 +91,6 @@ class EditableTable extends React.Component {
         title: "Sample Count",
         dataIndex: "sampleCount",
         key: "sampleCount",
-        editable: true,
-        width:100,
         sorter: (a, b) => a.sampleCount.localeCompare(b.sampleCount),
         ...this.getColumnSearchProps("sampleCount"),
       },
@@ -107,8 +98,6 @@ class EditableTable extends React.Component {
         title: "Shipping Location",
         dataIndex: "shippingLocation",
         key: "shippingLocation",
-        editable: true,
-        width:150,
         sorter: (a, b) => a.shippingLocation.localeCompare(b.shippingLocation),
         ...this.getColumnSearchProps("shippingLocation"),
       },
@@ -116,8 +105,6 @@ class EditableTable extends React.Component {
         title: "Contact",
         dataIndex: "contact",
         key: "contact",
-        editable: true,
-        width:150,
         sorter: (a, b) => a.contact.localeCompare(b.contact),
         ...this.getColumnSearchProps("contact"),
       },
@@ -125,8 +112,6 @@ class EditableTable extends React.Component {
         title: "Quantity",
         dataIndex: "quantity",
         key: "quantity",
-        editable: true,
-        width:100,
         sorter: (a, b) => a.quantity.localeCompare(b.quantity),
         ...this.getColumnSearchProps("quantity"),
       },
@@ -134,8 +119,6 @@ class EditableTable extends React.Component {
         title: "Quantity Units",
         dataIndex: "quantityUnits",
         key: "quantityUnits",
-        editable: true,
-        width:100,
         sorter: (a, b) => a.quantityUnits.localeCompare(b.quantityUnits),
         ...this.getColumnSearchProps("quantityUnits"),
       },
@@ -143,8 +126,6 @@ class EditableTable extends React.Component {
         title: "Work Item",
         dataIndex: "workItem",
         key: "workItem",
-        editable: true,
-        width:200,
         render: (a) => (
           <div>
             {a.map((item) => (
@@ -156,43 +137,6 @@ class EditableTable extends React.Component {
         ),
         sorter: (a, b) => a.workItem.localeCompare(b.workItem),
         ...this.getColumnSearchProps("workItem"),
-      },
-      {
-        title: "operation",
-        dataIndex: "operation",
-        fixed:'right',
-        width:150,
-        render: (text, record) => {
-          const { editingKey } = this.state;
-          const editable = this.isEditing(record);
-          return editable ? (
-            <span>
-              <EditableContext.Consumer>
-                {(form) => (
-                  <a
-                    onClick={() => this.save(form, record.key)}
-                    style={{ marginRight: 8 }}
-                  >
-                    Save
-                  </a>
-                )}
-              </EditableContext.Consumer>
-              <Popconfirm
-                title="Sure to cancel?"
-                onConfirm={() => this.cancel(record.key)}
-              >
-                <a>Cancel</a>
-              </Popconfirm>
-            </span>
-          ) : (
-            <a
-              disabled={editingKey !== ""}
-              onClick={() => this.edit(record.key)}
-            >
-              Edit
-            </a>
-          );
-        },
       },
     ];
   }
@@ -388,7 +332,6 @@ class EditableTable extends React.Component {
           dataSource={this.props.tableData}
           columns={columns}
           rowClassName="editable-row"
-          scroll={{ x: 1500}}
           pagination={{
             onChange: this.cancel,
           }}
@@ -398,5 +341,5 @@ class EditableTable extends React.Component {
   }
 }
 
-const EditableFormTable = Form.create()(EditableTable);
-export default EditableFormTable;
+const DatatableRequest = Form.create()(EditableTable);
+export default DatatableRequest;

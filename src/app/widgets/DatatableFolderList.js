@@ -1,4 +1,4 @@
-import React from "react";
+  import React from "react";
 import { Table, Input, Button, Icon, Checkbox, Space, DatePicker } from "antd";
 import reqwest from "reqwest";
 import { withRouter } from "react-router-dom";
@@ -11,6 +11,7 @@ import {
 } from "../partials/content/Portlet";
 
 import { Label } from "reactstrap";
+import ModalAttachementList from "./ModalAttachement";
 
 class Datatable extends React.Component {
   state = {
@@ -306,6 +307,15 @@ class Datatable extends React.Component {
           sorter: (a, b) => a.location.localeCompare(b.location),
           ...this.getColumnSearchProps("location"),
         },
+        {
+          title: "id",
+          dataIndex: "id",
+          key: "id",
+          render: (id, val) => (
+            <ModalAttachementList/>
+          ),
+          sorter: (a, b) => a.id.value - b.id.value,
+        }
       ];
 
       return (
