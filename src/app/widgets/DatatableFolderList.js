@@ -52,7 +52,7 @@ class Datatable extends React.Component {
   fetch = (params = {}) => {
     this.setState({ loading: true });
     reqwest({
-      url: "https://randomuser.me/api",
+      url: "",
       method: "get",
       data: {
         results: 10,
@@ -61,23 +61,23 @@ class Datatable extends React.Component {
       type: "json",
     }).then((data) => {
       console.log(data);
-      const mapData = data.results.map((user) => {
-        return {
-          ...user,
-          name: `${user.name.first} ${user.name.last}`,
-          location: `${user.location.country} ${user.location.state}`,
-          date:`${user.dob.date}`,
-          age:`${user.dob.age}`,
-        };
-      });
+      // const mapData = data.results.map((user) => {
+      //   return {
+      //     ...user,
+      //     name: `${user.name.first} ${user.name.last}`,
+      //     location: `${user.location.country} ${user.location.state}`,
+      //     date:`${user.dob.date}`,
+      //     age:`${user.dob.age}`,
+      //   };
+      // });
       const pagination = { ...this.state.pagination };
       // Read total count from server
       // pagination.total = data.totalCount;
       pagination.total = 200;
       this.setState({
         loading: false,
-        data: mapData,
-        pagination,
+        data: pagination,
+        // mapData,
       });
     });
   };
@@ -243,7 +243,7 @@ class Datatable extends React.Component {
     if (this.state.userInfo === null) {
       const columns = [
         {
-          title: "id",
+          title: "Id",
           dataIndex: "id",
           key: "id",
           render: (id, val) => (
@@ -255,62 +255,62 @@ class Datatable extends React.Component {
           sorter: (a, b) => a.id.value - b.id.value,
         },
         {
-          title: "Name",
-          dataIndex: "name",
-          key: "name",
-          sorter: (a, b) => a.name.localeCompare(b.name),
+          title: "Request id",
+          dataIndex: "s_requestid",
+          key: "s_requestid",
+          sorter: (a, b) => a.s_requestid.localeCompare(b.s_requestid),
           width: "20%",
-          ...this.getColumnSearchProps("name"),
+          ...this.getColumnSearchProps("s_requestid"),
         },
         {
-          title: "age",
-          dataIndex: "age",
-          key: "age",
+          title: "Creation Date",
+          dataIndex: "createdt",
+          key: "createdt",
           defaultSortOrder: "descend",
           //dob is date of birth from api
           //a b used to sort from big to small
-          sorter: (a, b) => a.age - b.age,
-          ...this.getColumnSearchProps("age"),
+          sorter: (a, b) => a.createdt - b.createdt,
+          ...this.getColumnSearchPropsDate("createdt"),
         },
         {
-          title: "Date",
-          dataIndex: "date",
-          key: "date",
-          defaultSortOrder: "descend",
-          //dob is date of birth from api
-          //a b used to sort from big to small
-          sorter: (a, b) => a.date - b.date,
-          ...this.getColumnSearchPropsDate("date"),
-        },
-        {
-          title: "Gender",
-          dataIndex: "gender",
-          key: "gender",
-          sorter: (a, b) => a.gender.length - b.gender.length,
+          title: "Request status",
+          dataIndex: "requeststatus",
+          key: "requeststatus",
+          sorter: (a, b) => a.requeststatus.length - b.requeststatus.length,
           filters: [
-            { text: "Male", value: "male" },
-            { text: "Female", value: "female" },
+            { text: "Draft", value: "draft" },
+            { text: "Open", value: "open" },
           ],
-          onFilter: (value, record) => record.gender.indexOf(value) === 0,
+          onFilter: (value, record) => record.requeststatus.indexOf(value) === 0,
         },
         {
-          title: "Email",
-          dataIndex: "email",
-          key: "email",
-          sorter: (a, b) => a.email.localeCompare(b.email),
-          ...this.getColumnSearchProps("email"),
+          title: "Request description",
+          dataIndex: "requestdesc",
+          key: "requestdesc",
+          defaultSortOrder: "descend",
+          //dob is date of birth from api
+          //a b used to sort from big to small
+          sorter: (a, b) => a.requestdesc - b.requestdesc,
+          ...this.getColumnSearchProps("requestdesc"),
         },
         {
-          title: "Location",
-          dataIndex: "location",
-          key: "location",
-          sorter: (a, b) => a.location.localeCompare(b.location),
-          ...this.getColumnSearchProps("location"),
+          title: "Address description",
+          dataIndex: "addressdesc",
+          key: "addressdesc",
+          sorter: (a, b) => a.addressdesc.localeCompare(b.addressdesc),
+          ...this.getColumnSearchProps("addressdesc"),
         },
         {
-          title: "id",
-          dataIndex: "id",
-          key: "id",
+          title: "Address Type",
+          dataIndex: "addresstype",
+          key: "addresstype",
+          sorter: (a, b) => a.addresstype.localeCompare(b.addresstype),
+          ...this.getColumnSearchProps("addresstype"),
+        },
+        {
+          title: "Attachment",
+          dataIndex: "attachment",
+          key: "attachment",
           render: (id, val) => (
             <ModalAttachementList/>
           ),
@@ -347,83 +347,89 @@ class Datatable extends React.Component {
       const data = [];
       const columns1 = [
         {
-          title: "id",
+          title: "Id",
           dataIndex: "id",
           key: "id",
           render: (id) => `${id.value}`,
           sorter: (a, b) => a.id.value - b.id.value,
         },
         {
-          title: "name",
-          dataIndex: "name",
-          key: "name",
-          sorter: (a, b) => a.name.localeCompare(b.name),
+          title: "s_Request id",
+          dataIndex: "s_requestid",
+          key: "s_requestid",
+          sorter: (a, b) => a.s_requestid.localeCompare(b.s_requestid),
           width: "20%",
-          ...this.getColumnSearchProps("name"),
+          ...this.getColumnSearchProps("s_requestid"),
         },
         {
-          title: "date",
-          dataIndex: "date",
-          key: "date",
+          title: "Created date",
+          dataIndex: "createdt",
+          key: "createdt",
           defaultSortOrder: "descend",
-          //dob is date of birth from api
           //a b used to sort from big to small
-          sorter: (a, b) => a.date - b.date,
+          sorter: (a, b) => a.createdt - b.createdt,
         },
         {
-          title: "gender",
-          dataIndex: "gender",
-          key: "gender",
+          title: "Request status",
+          dataIndex: "requeststatus",
+          key: "requeststatus",
         },
         {
-          title: "Email",
-          dataIndex: "email",
-          key: "email",
-          ...this.getColumnSearchProps("email"),
+          title: "Request Description",
+          dataIndex: "requestdesc",
+          key: "requestdesc",
+          ...this.getColumnSearchProps("requestdesc"),
         },
         {
-          title: "location",
-          dataIndex: "location",
-          key: "location",
-          ...this.getColumnSearchProps("location"),
+          title: "Address desc",
+          dataIndex: "addressdesc",
+          key: "addressdesc",
+          ...this.getColumnSearchProps("addressdesc"),
         },
       ];
       const columns2 = [
         {
-          title: "name",
-          dataIndex: "name",
-          key: "name",
-          sorter: (a, b) => a.name.localeCompare(b.name),
+          title: "Sample",
+          dataIndex: "sample",
+          key: "sample",
+          sorter: (a, b) => a.sample.localeCompare(b.sample),
           width: "20%",
-          ...this.getColumnSearchProps("name"),
+          ...this.getColumnSearchProps("sample"),
         },
         {
-          title: "location",
-          dataIndex: "location",
-          key: "location",
-          sorter: (a, b) => a.location.localeCompare(b.location),
+          title: "Description",
+          dataIndex: "description",
+          key: "description",
+          sorter: (a, b) => a.description.localeCompare(b.description),
         },
         {
-          title: "gender",
-          dataIndex: "gender",
-          key: "	gender",
-          sorter: (a, b) => a.gender.localeCompare(b.gender),
-          ...this.getColumnSearchProps("	gender"),
+          title: "Status",
+          dataIndex: "status",
+          key: "	status",
+          sorter: (a, b) => a.status.localeCompare(b.status),
+          ...this.getColumnSearchProps("	status"),
+        },
+        {
+          title: "Request ID Evo",
+          dataIndex: "requestidevo",
+          key: "	requestidevo",
+          sorter: (a, b) => a.requestidevo.localeCompare(b.requestidevo),
+          ...this.getColumnSearchProps("	requestidevo"),
         },
       ];
       const columns3 = [
         {
-          title: "id",
-          dataIndex: "id",
-          key: "id",
-          render: (id) => `${id.value}`,
-          sorter: (a, b) => a.id.value - b.id.value,
+          title: "Sample",
+          dataIndex: "sample",
+          key: "sample",
+          render: (sample) => `${sample.value}`,
+          sorter: (a, b) => a.sample.value - b.sample.value,
         },
         {
-          title: "age",
-          dataIndex: "age",
-          key: "age",
-          sorter: (a, b) => a.age.localeCompare(b.age),
+          title: "Test",
+          dataIndex: "test",
+          key: "test",
+          sorter: (a, b) => a.test.localeCompare(b.test),
         },
       ];
 
@@ -460,8 +466,8 @@ class Datatable extends React.Component {
                 </PortletBody>
               </Portlet>
               <Portlet>
-                <PortletHeader title="Results" />
                 <PortletBody fit={true}>
+                <PortletHeader title="Results" />
                   <Table
                     style={{ backgroundColor: "white" }}
                     columns={columns3}

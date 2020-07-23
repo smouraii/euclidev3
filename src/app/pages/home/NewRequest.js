@@ -8,20 +8,22 @@ import {
   PortletHeader,
 } from "../../partials/content/Portlet";
 import DatatableRequest from "../../widgets/DatatableRequest";
+import { curryRight } from "lodash";
 
 export default function NewRequest() {
   const [mockData, setMockData] = React.useState([]);
   const [targetKeys, setTargetKeys] = React.useState([]);
   const [tableData, setTableData] = React.useState([]);
+  const [rerender, setRerender] = React.useState(null);
 
   useEffect(() => {
     getMock();
   }, []);
 
   useEffect(() => {
-    setTimeout(function () {
-    if (localStorage.getItem("valuesStored"))
-      setTableData(JSON.parse(localStorage.getItem("valuesStored")));
+    setTimeout(function() {
+      if (localStorage.getItem("valuesStored"))
+        setTableData(JSON.parse(localStorage.getItem("valuesStored")));
     }, 5000);
   }, []);
   const getMock = () => {
@@ -43,7 +45,7 @@ export default function NewRequest() {
   };
 
   const handleTransfer = (targetKeys) => {
-    console.log(targetKeys,"this is targetkeys");
+    console.log(targetKeys, "this is targetkeys");
     setTargetKeys(targetKeys);
   };
 
@@ -407,68 +409,72 @@ export default function NewRequest() {
                                   </PortletBody>
                                 </Portlet>
                               </div>
-                              </div>
+                            </div>
 
                             <div className="col-sm-6 col-md-6 col-lg-6">
                               <Portlet
                                 className="kt-portlet--height-fluid kt-portlet--border-bottom-brand"
                                 fluidHeight={true}
                               >
-                                  <div className="row d-flex justify-content-center">
-                                      <Transfer
-                                        dataSource={mockData}
-                                        showSearch
-                                        listStyle={{
-                                          width: 250,
-                                          height: 300,
-                                        }}
-                                        operations={["to right", "to left"]}
-                                        targetKeys={targetKeys}
-                                        onChange={handleTransfer}
-                                        render={(item) => `${item.title}`}
-                                      />
-                                      <Button
-                                        onClick={() => {
-                                          setTableData([...tableData, values,mockData]);
-                                          if (
-                                            localStorage.getItem("valuesStored")
-                                          ) {
-                                            const parsedData = JSON.parse(
-                                              localStorage.getItem(
-                                                "valuesStored"
-                                              )
-                                            );
-                                            localStorage.setItem(
-                                              "valuesStored",
-                                              JSON.stringify([
-                                                ...parsedData,
-                                                {...values,workItem:targetKeys}
-                                              ])
-                                            );
-                                          } else {
-                                            localStorage.setItem(
-                                              "valuesStored",
-                                              JSON.stringify([{...values,workItem:targetKeys}])
-                                            );
-                                          }
-                                        }}
-                                      >
-                                        Save
-                                      </Button>
-                                    </div>
+                                <div className="row d-flex justify-content-center">
+                                  <Transfer
+                                    dataSource={mockData}
+                                    showSearch
+                                    listStyle={{
+                                      width: 250,
+                                      height: 300,
+                                    }}
+                                    targetKeys={targetKeys}
+                                    onChange={handleTransfer}
+                                    render={(item) => `${item.title}`}
+                                    
+                                  />
+                                  <div className="d-flex justify-content-end">
+                                  <Button
+                                    onClick={() => {
+                                      setTableData([
+                                        ...tableData,
+                                        values,
+                                        mockData,
+                                      ]);
+                                      if (
+                                        localStorage.getItem("valuesStored")
+                                      ) {
+                                        const parsedData = JSON.parse(
+                                          localStorage.getItem("valuesStored")
+                                        );
+                                        localStorage.setItem(
+                                          "valuesStored",
+                                          JSON.stringify([
+                                            ...parsedData,
+                                            { ...values, workItem: targetKeys },
+                                          ])
+                                        );
+                                      } else {
+                                        localStorage.setItem(
+                                          "valuesStored",
+                                          JSON.stringify([
+                                            { ...values, workItem: targetKeys },
+                                          ])
+                                        );
+                                      }
+                                    }}
+                                  >
+                                    Save
+                                  </Button>
+                                  </div>
+                                </div>
                               </Portlet>
                             </div>
                             <div className="col-md-12">
-                                <Portlet
-                                  className="kt-portlet--height-fluid kt-portlet--border-bottom-brand"
-                                  fluidHeight={true}
-                                >
-                                  <PortletBody>
-                                  <DatatableRequest
-                                   tableData={tableData}
-                                  />                                  
-                                  </PortletBody>
-                                </Portlet>
+                              <Portlet
+                                className="kt-portlet--height-fluid kt-portlet--border-bottom-brand"
+                                fluidHeight={true}
+                              >
+                                <PortletBody>
+                                  <DatatableRequest tableData={tableData} />
+                                </PortletBody>
+                              </Portlet>
                             </div>
                           </div>
                           <div>
@@ -479,7 +485,6 @@ export default function NewRequest() {
                         </Form>
                       )}
                     </Formik>
-
                   </div>
                 </div>
               </>
