@@ -5,8 +5,6 @@ import Dashboard from "./Dashboard";
 import DocsPage from "./docs/DocsPage";
 import { LayoutSplashScreen } from "../../../_metronic";
 import FolderList from "./FolderList";
-
-import NewRequest from "./NewRequest";
 import MailServer from "./MailServer";
 import SecurityRoles from "./SecurityRoles";
 import UserConfiguration from "./UserConfiguration";
@@ -20,6 +18,8 @@ import WrappedLims from "./Lims";
 import WrappedDbconfiguration from "./DBConfiguration";
 import FormBuilderPage from "./FormBuilderPage.Js";
 import Myprofile from "./MyProfile";
+import App from "../../widgets/Steps";
+import StepsNewRequest from "../../widgets/Steps";
 
 const GoogleMaterialPage = lazy(() =>
   import("./google-material/GoogleMaterialPage")
@@ -46,7 +46,7 @@ export default function HomePage() {
         <Route path="/react-bootstrap" component={ReactBootstrapPage} />
         {/* <Route path="/docs" component={DocsPage} /> */}
         <Route path="/FolderList" component={FolderList} />
-        <Route path="/newrequest" component={NewRequest}/>
+        <Route path="/newrequest" component={StepsNewRequest}/>
         <Route path="/lims" component={WrappedLims}/>
         <Route path="/switchComp" component={SwitchComp}/>
         <Route path="/DB-Configuration" component={WrappedDbconfiguration} />
