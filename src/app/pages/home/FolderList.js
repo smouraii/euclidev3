@@ -10,19 +10,19 @@ import { Button, Icon, Input } from "antd";
 import Highlighter from "react-highlight-words";
 
 export default function FolderList() {
-  const [selectedUser, setSelectedUser] = useState(null);
-  fetch = (params = {}) => {
-    console.log("params:", params);
-    this.setState({ loading: true });
-    reqwest({
-      url: "https://randomuser.me/api",
-      method: "get",
-      data: {
-        results: 30,
-        ...params,
-      },
-    });
-  };
+  // const [selectedUser, setSelectedUser] = useState(null);
+  // fetch = (params = {}) => {
+  //   console.log("params:", params);
+  //   this.setState({ loading: true });
+  //   reqwest({
+  //     url: "https://randomuser.me/api",
+  //     method: "get",
+  //     data: {
+  //       results: 30,
+  //       ...params,
+  //     },
+  //   });
+  // };
   //Search Function for text Areas
   //   const getColumnSearchProps = (dataIndex) => ({
   //     filterDropdown: ({

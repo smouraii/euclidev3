@@ -106,13 +106,13 @@ export default class QueryBuilder extends Component {
       {/* <div>
         SQL where:{" "}
         <pre>{JSON.stringify(QbUtils.sqlFormat(immutableTree, config))}</pre>
-      </div>
+      </div>*/}
       <div>
         JsonLogic:{" "}
         <pre>
           {JSON.stringify(QbUtils.jsonLogicFormat(immutableTree, config))}
         </pre>
-      </div> */}
+      </div> 
 
       <div>
         {this.state.selectedItem ? (

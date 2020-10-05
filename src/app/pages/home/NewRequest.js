@@ -9,65 +9,78 @@ import * as Yup from "yup";
 import { Button } from "antd";
 import useSWR from "swr";
 import Api from "../home/data/Api.json";
+import { Portlet, PortletBody } from "../../partials/content/Portlet";
 
 export default function NewRequest(props) {
     const [fieldsNamesObject, setFieldsNameObject] = React.useState(null);
     const [validationObject, setValidationObject] = React.useState(null);
     const fieldsNames = props.step.fields.map((field) => field.sdccolumnid);
   
-    const renderFields = (formik) => {
-      return props.step.fields.map((field) => {
-        switch (field.columntype) {
-          case "input":
-            return (
-              <FInput
-                key={field.sdccolumnid}
-                name={field.sdccolumnid}
-                label={field.columntitle}
-                readonly={field.readonly}
-                hidden={field.hidden}
-                instructionalText={field.columnInstructionalText}
-              />
-            );
-          case "select":
-            return (
-              <FSelect
-                name={field.sdccolumnid}
-                label={field.columntitle}
-                readonly={field.readonly}
-                hidden={field.hidden}
-                instructionalText={field.columnInstructionalText}
-                display={field.selectproperties.display}
-              />
-            );
-          case "date":
-            return (
-              <FDate
-                key={field.sdccolumnid}
-                name={field.sdccolumnid}
-                label={field.columntitle}
-                readonly={field.readonly}
-                hidden={field.hidden}
-                instructionalText={field.columnInstructionalText}
-              />
-            );
-          case "numeric":
-            return (
-              <FNumeric
-                key={field.sdccolumnid}
-                name={field.sdccolumnid}
-                label={field.columntitle}
-                readonly={field.readonly}
-                hidden={field.hidden}
-                instructionalText={field.columnInstructionalText}
-                formik={formik}
-              />
-            );
-          default:
-            return null;
-        }
-      });
-    };
+      const renderFields = (formik) => {
+        return props.step.fields.map((field) => {
+          switch (field.columntype) {
+            case "input":
+              return (
+                <FInput
+                  key={field.sdccolumnid}
+                  name={field.sdccolumnid}
+                  label={field.columntitle}
+                  readonly={field.readonly}
+                  hidden={field.hidden}
+                  instructionalText={field.columnInstructionalText}
+                />
+              );
+            case "select":
+              return (
+                <FSelect
+                  name={field.sdccolumnid}
+                  label={field.columntitle}
+                  readonly={field.readonly}
+                  hidden={field.hidden}
+                  instructionalText={field.columnInstructionalText}
+                  display={field.selectproperties.display}
+                />
+              );
+              case "auto":
+                return (
+                  <FAuto
+                    name={field.sdccolumnid}
+                    label={field.columntitle}
+                    readonly={field.readonly}
+                    hidden={field.hidden}
+                    instructionalText={field.columnInstructionalText}
+                    display={field.autoproperties.values.refvaluedesc}
+                  />
+                );
+            case "date":
+              return (
+                <FDate
+                  key={field.sdccolumnid}
+                  name={field.sdccolumnid}
+                  label={field.columntitle}
+                  readonly={field.readonly}
+                  hidden={field.hidden}
+                  instructionalText={field.columnInstructionalText}
+                />
+              );
+            case "numeric":
+              return (
+                <FNumeric
+                  key={field.sdccolumnid}
+                  name={field.sdccolumnid}
+                  label={field.columntitle}
+                  readonly={field.readonly}
+                  hidden={field.hidden}
+                  instructionalText={field.columnInstructionalText}
+                  formik={formik}
+                />
+              );
+            default:
+              return null;
+          }
+        });
+      };
+    
   
     // input, select, auto, numeric, date
   
@@ -124,7 +137,11 @@ export default function NewRequest(props) {
       <>
         {props.hidden ||
           (fieldsNamesObject && (
-            <div>
+            <div className="row d-flex justify-content-center">
+                            <div className="col-sm-12 col-md-6 col-lg-6">
+                              <div className="row d-flex justify-content-center">
+                                <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
+
               <Formik
                 initialValues={fieldsNamesObject}
                 validationSchema={Yup.object(validationObject)}
@@ -151,6 +168,9 @@ export default function NewRequest(props) {
                   </Form>
                 )}
               </Formik>
+              </Portlet>
+            </div>
+            </div>
             </div>
           ))}
       </>

@@ -1,8 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import { ResponsivePieCanvas } from "@nivo/pie";
+import useSWR from "swr";
 
-const MyResponsivePie = ({ data }) => (
-  <div style={{ height: 500,minWidth:450 }}>
+export default function MyResponsivePie({data}) {
+  // const fetcher = (...args) => fetch(...args).then((res) => res.json());
+
+  // const { data, error } = useSWR(
+  //   "https://run.mocky.io/v3/49335da3-1de5-40b9-83f5-464140dff9be",
+  //   fetcher
+  //   // `http://localhost:8088/EuclideV2/api/getSelectOptions?dc=com.euclide.sdc.RequestStatus&display=${props.display}`
+  // );
+  // React.useEffect(() => {
+  //   // console.log("props", props);
+  //   // redaxios
+  //   //   .get(
+  //   //     `http://localhost:8088/EuclideV2/api/getSelectOptions?dc=com.euclide.sdc.RequestStatus&display=${display}`
+  //   //   )
+  //   //   .then((res) => setData(res.data));
+  //   console.log("data", data);
+  //   console.log("error", error);
+  // }, [data, error]);
+
+  return (
+    <div style={{ height: 500,minWidth:450 }}>
     <ResponsivePieCanvas
       data={data}
       margin={{ top: 40, right: 200, bottom: 40, left: 80 }}
@@ -125,5 +145,4 @@ const MyResponsivePie = ({ data }) => (
     />
   </div>
 );
-
-export default MyResponsivePie;
+}
