@@ -235,8 +235,8 @@ export default function Datatable() {
       ...getColumnSearchProps(column.data),
       sorter: (a, b) =>
         a instanceof String || null
-          ? a.column.data.value.localeCompare(b.column.data.value)
-          : a.column.data.value - b.column.data.value,
+          ? a.userInfo.localeCompare(b.userInfo)
+          : a.userInfo - b.userInfo,
       render: (id, val) =>
         index === 0 && !userInfo ? (
           <Button type="link" onClick={() => handleChangeId(val)}>

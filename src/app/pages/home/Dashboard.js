@@ -1,10 +1,10 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import {
   Portlet,
   PortletBody,
   PortletHeader,
-  PortletHeaderToolbar
+  PortletHeaderToolbar,
 } from "../../partials/content/Portlet";
 import { metronic } from "../../../_metronic";
 import QuickStatsChart from "../../widgets/QuickStatsChart";
@@ -23,57 +23,44 @@ import LatestUpdates from "../../widgets/LatestUpdates";
 import BestSellers from "../../widgets/BestSellers";
 import RecentActivities from "../../widgets/RecentActivities";
 import PortletHeaderDropdown from "../../partials/content/CustomDropdowns/PortletHeaderDropdown";
+import redaxios from "redaxios";
 
 export default function Dashboard() {
-  const { brandColor, dangerColor, successColor, primaryColor } = useSelector(
-    state => ({
-      brandColor: metronic.builder.selectors.getConfig(
-        state,
-        "colors.state.brand"
-      ),
-      dangerColor: metronic.builder.selectors.getConfig(
-        state,
-        "colors.state.danger"
-      ),
-      successColor: metronic.builder.selectors.getConfig(
-        state,
-        "colors.state.success"
-      ),
-      primaryColor: metronic.builder.selectors.getConfig(
-        state,
-        "colors.state.primary"
-      )
-    })
-  );
+  const [data, setData] = useState(null);
+  const [dataSource, setDataSource] = useState([]);
 
-  const chartOptions = useMemo(
-    () => ({
-      chart1: {
-        data: [10, 14, 18, 11, 9, 12, 14, 17, 18, 14],
-        color: brandColor,
-        border: 3
-      },
+    
+  React.useEffect(() => {
+    redaxios
+      .get("https://run.mocky.io/v3/a9305026-5281-4d60-8d7f-3b06f6b28988")
+      .then((res) => setData(res.data));
+  }, []);
 
-      chart2: {
-        data: [11, 12, 18, 13, 11, 12, 15, 13, 19, 15],
-        color: dangerColor,
-        border: 3
-      },
-
-      chart3: {
-        data: [12, 12, 18, 11, 15, 12, 13, 16, 11, 18],
-        color: successColor,
-        border: 3
-      },
-
-      chart4: {
-        data: [11, 9, 13, 18, 13, 15, 14, 13, 18, 15],
-        color: primaryColor,
-        border: 3
-      }
-    }),
-    [brandColor, dangerColor, primaryColor, successColor]
-  );
+  React.useEffect(() => {
+    if (!data) return;
+    const mapData = data.data.map((datarow) => ({
+      range: datarow.range,
+      Accepted: datarow.Accepted,
+      Cancelled: datarow.Cancelled,
+      Complete: datarow.Complete,
+      Completed: datarow.Completed,
+      Denied: datarow.Denied,
+      Draft: datarow.Draft,
+      Initial: datarow.Initial,
+      OnHold: datarow.OnHold,
+      Open: datarow.Open,
+      PendingAcceptance: datarow.PendingAcceptance,
+      Received: datarow.Received,
+      Rejected: datarow.Rejected,
+      Released: datarow.Released,
+      Reported: datarow.Reported,
+      Reviewed: datarow.Reviewed,
+      Template: datarow.Template,
+      FavoriteTemplate: datarow.FavoriteTemplate
+    }));
+    setDataSource(mapData);
+    console.log("mapData", mapData);
+  }, [data]);
 
   return (
     <>
@@ -85,148 +72,100 @@ export default function Dashboard() {
                 <div className="kt-widget1">
                   <div className="kt-widget1__item ng-star-inserted">
                     <div className="kt-widget1__info">
-                      <h3 className="kt-widget1__title">Total Requests Submitted</h3>
-                      <span className="kt-widget1__desc">Submitted thru Euclide</span>
+                      <h3 className="kt-widget1__title">
+                        Total Requests Submitted
+                      </h3>
+                      <span className="kt-widget1__desc">
+                        Submitted thru Euclide
+                      </span>
                     </div>
-                    <span className="kt-widget1__number kt-font-danger">450</span>
+                    <span className="kt-widget1__number kt-font-danger">
+                      450
+                    </span>
                   </div>
                 </div>
               </Portlet>
             </div>
             <div className="col-sm-12 col-md-12 col-lg-4">
-            <Portlet className="kt-portlet--height-fluid">
-              <div className="kt-widget1">
-                <div className="kt-widget1__item ng-star-inserted">
-                  <div className="kt-widget1__info">
-                    <h3 className="kt-widget1__title">Requests In Proccessing</h3>
-                    <span className="kt-widget1__desc">Multiple Status</span>
+              <Portlet className="kt-portlet--height-fluid">
+                <div className="kt-widget1">
+                  <div className="kt-widget1__item ng-star-inserted">
+                    <div className="kt-widget1__info">
+                      <h3 className="kt-widget1__title">
+                        Requests In Proccessing
+                      </h3>
+                      <span className="kt-widget1__desc">Multiple Status</span>
+                    </div>
+                    <span className="kt-widget1__number kt-font-warning">
+                      150
+                    </span>
                   </div>
-                  <span className="kt-widget1__number kt-font-warning">150</span>
                 </div>
-              </div>
               </Portlet>
             </div>
             <div className="col-sm-12 col-md-12 col-lg-4">
-            <Portlet className="kt-portlet--height-fluid">
-              <div className="kt-widget1">
-                <div className="kt-widget1__item ng-star-inserted">
-                  <div className="kt-widget1__info">
-                    <h3 className="kt-widget1__title">Requests Completed</h3>
-                    <span className="kt-widget1__desc">Lifetime Requests Completed</span>
+              <Portlet className="kt-portlet--height-fluid">
+                <div className="kt-widget1">
+                  <div className="kt-widget1__item ng-star-inserted">
+                    <div className="kt-widget1__info">
+                      <h3 className="kt-widget1__title">Requests Completed</h3>
+                      <span className="kt-widget1__desc">
+                        Lifetime Requests Completed
+                      </span>
+                    </div>
+                    <span className="kt-widget1__number kt-font-success">
+                      300
+                    </span>
                   </div>
-                  <span className="kt-widget1__number kt-font-success">300</span>
                 </div>
-              </div>
               </Portlet>
             </div>
           </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          {/* <div className="row row-full-height">
-            <div className="col-sm-12 col-md-12 col-lg-4">
-              <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-dark">
-                <PortletHeader
-                  title="Total Requests Submitted" />
-                  <PortletBody fluid={true}>
-                  <div className="kt-widget26">
-                    <div className="kt-widget26__content">
-                      <span className="kt-widget26__number kt-font-danger">{450}</span>
-                    </div>
-                  </div>
-                  </PortletBody>
-              </Portlet>
-            </div>
-            <div className="col-sm-12 col-md-12 col-lg-4">
-              <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-dark">
-                <PortletHeader
-                  title="Requests In Proccessing" />
-                  <PortletBody fluid={true}>
-                  <div className="kt-widget26">
-                    <div className="kt-widget26__content">
-                      <span className="kt-widget26__number kt-font-warning">{150}</span>
-                    </div>
-                  </div>
-                  </PortletBody>
-              </Portlet>
-            </div>
-            <div className="col-sm-12 col-md-12 col-lg-4">
-              <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-dark">
-                <PortletHeader
-                  title="Requests Completed" />
-                  <PortletBody fluid={true}>
-                  <div className="kt-widget26">
-                    <div className="kt-widget26__content">
-                      <span className="kt-widget26__number kt-font-success" >{350}</span>
-                    </div>
-                  </div>
-                  </PortletBody>
-              </Portlet>
-            </div>
-          </div> */}
         </div>
-
-
 
         <div className="col-xl-12">
           <div className="row row-full-height">
             <div className="col-sm-12 col-md-12 col-lg-6">
-              <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-dark" fluidHeight={true}>
+              <Portlet
+                className="kt-portlet--height-fluid kt-portlet--border-bottom-dark"
+                fluidHeight={true}
+              >
                 <PortletHeader
                   title="Request per State per Month"
-                // toolbar={
-                //   <PortletHeaderToolbar>
-                //     <PortletHeaderDropdown />
-                //   </PortletHeaderToolbar>
-                // }
+                  // toolbar={
+                  //   <PortletHeaderToolbar>
+                  //     <PortletHeaderDropdown />
+                  //   </PortletHeaderToolbar>
+                  // }
                 />
 
                 <PortletBody>
-                  <MyResponsiveBar
-                    data={barData}
-                  />
-                </PortletBody>
+                {dataSource.length ? <MyResponsiveBar data={dataSource} /> : "zbeyeb"}           
+                 </PortletBody>
               </Portlet>
             </div>
             <div className="col-sm-12 col-md-12 col-lg-6">
-              <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-dark" fluidHeight={true}>
+              <Portlet
+                className="kt-portlet--height-fluid kt-portlet--border-bottom-dark"
+                fluidHeight={true}
+              >
                 <PortletHeader
                   title="Sample per Request"
-                // toolbar={
-                //   <PortletHeaderToolbar>
-                //     <PortletHeaderDropdown />
-                //   </PortletHeaderToolbar>
-                // }
+                  // toolbar={
+                  //   <PortletHeaderToolbar>
+                  //     <PortletHeaderDropdown />
+                  //   </PortletHeaderToolbar>
+                  // }
                 />
 
                 <PortletBody>
-                  <MyResponsivePie
-                    data={pieData}
-                  />
+                  <MyResponsivePie data={pieData} />
                 </PortletBody>
               </Portlet>
             </div>
           </div>
         </div>
-
       </div>
-
     </>
   );
 }
