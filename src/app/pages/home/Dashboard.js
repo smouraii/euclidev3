@@ -28,6 +28,8 @@ import redaxios from "redaxios";
 export default function Dashboard() {
   const [data, setData] = useState(null);
   const [dataSource, setDataSource] = useState([]);
+  // const [dataPie, setDataPie] = useState(null);
+  // const [dataSourcePie, setDataSourcePie] = useState([]);
 
     
   React.useEffect(() => {
@@ -35,6 +37,12 @@ export default function Dashboard() {
       .get("https://run.mocky.io/v3/a9305026-5281-4d60-8d7f-3b06f6b28988")
       .then((res) => setData(res.data));
   }, []);
+
+  // React.useEffect(() => {
+  //   redaxios
+  //     .get("https://run.mocky.io/v3/a9305026-5281-4d60-8d7f-3b06f6b28988")
+  //     .then((res) => setData(res.dataPie));
+  // }, []);
 
   React.useEffect(() => {
     if (!data) return;
@@ -76,7 +84,7 @@ export default function Dashboard() {
                         Total Requests Submitted
                       </h3>
                       <span className="kt-widget1__desc">
-                        Submitted thru Euclide
+                        Submitted through Euclide
                       </span>
                     </div>
                     <span className="kt-widget1__number kt-font-danger">
