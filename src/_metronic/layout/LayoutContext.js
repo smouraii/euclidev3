@@ -82,7 +82,6 @@ function init({ pathname, menuConfig }) {
   const currentPage = pathname.slice(1 /* Remove leading slash. */);
   let breadcrumbs = [];
   const pageConfig =
-      findPageConfig(currentPage, menuConfig.aside.items, breadcrumbs) ||
       findPageConfig(currentPage, menuConfig.header.items, breadcrumbs);
 
   breadcrumbs.reverse();
