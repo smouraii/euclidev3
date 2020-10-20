@@ -1,27 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import { Field, ErrorMessage } from "formik";
 import { Select } from "antd";
 import useSWR from "swr";
+import redaxios from "redaxios";
+import queryString from "query-string";
+import { withRouter } from "react-router-dom";
 
-export default function FAuto(props) {
-  const fetcher = (...args) => fetch(...args).then((res) => res.json());
+ function FAuto(props) {
+  const [data,setData]=useState([]);
 
-  const { data, error } = useSWR(
-    "https://run.mocky.io/v3/49335da3-1de5-40b9-83f5-464140dff9be",
-    fetcher
-    // `http://localhost:8088/EuclideV2/api/getSelectOptions?dc=com.euclide.sdc.RequestStatus&display=${props.display}`
-  );
   React.useEffect(() => {
-    // console.log("props", props);
-    // redaxios
-    //   .get(
-    //     `http://localhost:8088/EuclideV2/api/getSelectOptions?dc=com.euclide.sdc.RequestStatus&display=${display}`
-    //   )
-    //   .then((res) => setData(res.data));
-
-    console.log("data", data);
-    console.log("error", error);
-  }, [data, error]);
+    console.log("props", props);
+    redaxios
+    .get("https://run.mocky.io/v3/49335da3-1de5-40b9-83f5-464140dff9be")
+      // .get(`http://localhost:8088/EuclideV2/api/getSelectOptions?dc=com.euclide.sdc.RequestStatus&display=${display}`)
+      .then((res) => setData(res.data));
+      const parsed = queryString.parse(props.location.search);
+      console.log(parsed);
+  }, []);
 
   return (
     <>
@@ -38,8 +34,6 @@ export default function FAuto(props) {
           >
             {data.map((elem) => (
               <Select.Option key={elem.id} value={elem.name}>
-                {/* maybe n7tto hna */}
-                {/* maybe n7tto hna */}
                 {elem.name}
               </Select.Option>
             ))}
@@ -54,3 +48,4 @@ export default function FAuto(props) {
               </>
   );
 }
+export default withRouter(FAuto);

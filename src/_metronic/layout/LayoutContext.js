@@ -81,8 +81,7 @@ function findPageConfig(currentPage, items, breadcrumbs) {
 function init({ pathname, menuConfig }) {
   const currentPage = pathname.slice(1 /* Remove leading slash. */);
   let breadcrumbs = [];
-  const pageConfig =
-      findPageConfig(currentPage, menuConfig.header.items, breadcrumbs);
+  const pageConfig = findPageConfig(currentPage, menuConfig.header.items, breadcrumbs);
 
   breadcrumbs.reverse();
   const state = { subheader: { title: "", breadcrumb: [], description: "" }, splashScreen: { refs: {} } };

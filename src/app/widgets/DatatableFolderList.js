@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Table, Input, Button, Icon, DatePicker } from "antd";
 import reqwest from "reqwest";
-import { withRouter } from "react-router-dom";
+import { useLocation, withRouter } from "react-router-dom";
 import QueryBuilder from "./QueryBuilder";
 import Highlighter from "react-highlight-words";
 import {
@@ -11,8 +11,9 @@ import {
 } from "../partials/content/Portlet";
 import ModalAttachementList from "./ModalAttachement";
 import redaxios from "redaxios";
+import queryString from "query-string";
 
-export default function Datatable() {
+ function Datatable(props) {
   const [columnsApi, setColumnsApi] = useState([]);
   const [columnsData, setColumsData] = useState(null);
   const [data, setData] = useState(null);
@@ -23,10 +24,16 @@ export default function Datatable() {
   const [searchedColumn, setSearchColumn] = useState("");
   const [userInfo, setUserInfo] = useState(null);
 
+
+
   React.useEffect(() => {
     redaxios
+    // .get("http://localhost:8080/EuclideV2/api/getPageList?pageListid=${parsed.pagelistid}&fluxId=${parsed.fluxId}")
       .get("https://run.mocky.io/v3/86b418dc-085b-415d-8c2d-bee469ac5b82")
       .then((res) => setColumsData(res.data));
+      const parsed = queryString.parse(props.location.search);
+      console.log(parsed);
+      console.log("props",props);
   }, []);
 
   React.useEffect(() => {
@@ -308,3 +315,5 @@ export default function Datatable() {
   );
  
 }
+
+export default withRouter(Datatable);

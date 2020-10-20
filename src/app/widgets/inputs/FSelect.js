@@ -1,27 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { Field, ErrorMessage } from "formik";
 import { Select } from "antd";
 import redaxios from "redaxios";
 import useSWR from "swr";
 
 export default function FSelect(props) {
-  const fetcher = (...args) => fetch(...args).then((res) => res.json());
-
-  const { data, error } = useSWR(
-    "https://run.mocky.io/v3/49335da3-1de5-40b9-83f5-464140dff9be",
-    fetcher
-    // `http://localhost:8088/EuclideV2/api/getSelectOptions?dc=com.euclide.sdc.RequestStatus&display=${props.display}`
-  );
+const [data, setData] = useState([])
   React.useEffect(() => {
-    // console.log("props", props);
-    // redaxios
-    //   .get(
-    //     `http://localhost:8088/EuclideV2/api/getSelectOptions?dc=com.euclide.sdc.RequestStatus&display=${display}`
-    //   )
-    //   .then((res) => setData(res.data));
+    console.log("props", props);
+    redaxios
+    .get( "https://run.mocky.io/v3/49335da3-1de5-40b9-83f5-464140dff9be")
+      // .get(`http://localhost:8088/EuclideV2/api/getSelectOptions?dc=com.euclide.sdc.RequestStatus&display=${display}`)
+      .then((res) => setData(res.data));
     console.log("data", data);
-    console.log("error", error);
-  }, [data, error]);
+  }, []);
 
   return (
     <>

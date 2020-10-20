@@ -3,6 +3,8 @@ import redaxios from "redaxios";
 
 export default function MenuGenerator() {
   const [data, setData] = useState([]);
+  const [dataSource, setDataSource] = useState([]);
+
 
   useEffect(() => {
     redaxios
@@ -11,6 +13,7 @@ export default function MenuGenerator() {
   }, []);
 
   useEffect(() => {
+    if (!data) return;
     const mapData = data.data.map((datarow) => ({
       title: datarow.fluxname,
       root: true,
@@ -28,5 +31,6 @@ export default function MenuGenerator() {
         }
       ],
     }));
+    setDataSource(mapData);
   }, [data]);
 }
