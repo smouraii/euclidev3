@@ -47,7 +47,7 @@ function Layout({
             .concat(
               datarow.fluxwizard.map((flux) => ({
                 title: flux.name,
-                page: flux.id,
+                page: `newrequest?pagelistid=${flux.id}&fluxId=${datarow.fluxid}`,
               }))
             ),
         }));

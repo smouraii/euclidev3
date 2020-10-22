@@ -12,8 +12,8 @@ import { withRouter } from "react-router-dom";
   React.useEffect(() => {
     console.log("props", props);
     redaxios
+      // .get("http://localhost:8080/EuclideV2/api/getSelectOptions?dc=com.euclide.sdc.${parsed.pagelistid}&display=${display}")
     .get("https://run.mocky.io/v3/49335da3-1de5-40b9-83f5-464140dff9be")
-      // .get(`http://localhost:8088/EuclideV2/api/getSelectOptions?dc=com.euclide.sdc.RequestStatus&display=${display}`)
       .then((res) => setData(res.data));
       const parsed = queryString.parse(props.location.search);
       console.log(parsed);
