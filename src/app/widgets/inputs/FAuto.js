@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Field, ErrorMessage } from "formik";
 import { Select } from "antd";
-import useSWR from "swr";
 import redaxios from "redaxios";
 import queryString from "query-string";
 import { withRouter } from "react-router-dom";
@@ -11,12 +10,12 @@ import { withRouter } from "react-router-dom";
 
   React.useEffect(() => {
     console.log("props", props);
+    const parsed = queryString.parse(props.location.search);
+    console.log(parsed);
     redaxios
-      // .get("http://localhost:8080/EuclideV2/api/getSelectOptions?dc=com.euclide.sdc.${parsed.pagelistid}&display=${display}")
+      // .get(`http://localhost:8080/EuclideV2/api/getSelectOptions?dc=com.euclide.sdc.${parsed.pagelistid}&display=${props.steps.fields.selectproperties.display}`)
     .get("https://run.mocky.io/v3/49335da3-1de5-40b9-83f5-464140dff9be")
       .then((res) => setData(res.data));
-      const parsed = queryString.parse(props.location.search);
-      console.log(parsed);
   }, []);
 
   return (

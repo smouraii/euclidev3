@@ -9,23 +9,23 @@
           page: "dashboard",
           translate: "MENU.DASHBOARD"
         },
-        {
-          title: "LIMS",
-          root: true,
-          alignment: "left",
-          toggle: "click",
-          page: "google-material",
-          submenu: [
-            {
-              title: "New Request",
-              page: "newrequest",
-            },
-            {
-              title: "Folder List",
-              page: "folderlist",
-            },
-          ]
-        },
+        // {
+        //   title: "LIMS",
+        //   root: true,
+        //   alignment: "left",
+        //   toggle: "click",
+        //   page: "google-material",
+        //   submenu: [
+        //     {
+        //       title: "New Request",
+        //       page: "newrequest",
+        //     },
+        //     {
+        //       title: "Folder List",
+        //       page: "folderlist",
+        //     },
+        //   ]
+        // },
         // {
         //   title: "eFiles",
         //   root: true,

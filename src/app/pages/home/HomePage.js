@@ -35,6 +35,7 @@ export default function HomePage() {
         {
           /* Redirect from root URL to /dashboard. */
           <Redirect exact from="/" to="/dashboard" />
+          /* <Redirect exact from="/401" to="/auth/login" /> */
         }
         <Route path="/builder" component={Builder} />
         <Route path="/dashboard" component={Dashboard} />

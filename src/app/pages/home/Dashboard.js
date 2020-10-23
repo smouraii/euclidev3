@@ -30,20 +30,69 @@ export default function Dashboard() {
   const [dataSource, setDataSource] = useState([]);
   // const [dataPie, setDataPie] = useState(null);
   // const [dataSourcePie, setDataSourcePie] = useState([]);
+  // const [dataRequest, setDataRequest] = useState([])
 
-    
+    //API GET HISTOGRAMME (BARCHART)
   React.useEffect(() => {
     redaxios
       .get("https://run.mocky.io/v3/a9305026-5281-4d60-8d7f-3b06f6b28988")
       .then((res) => setData(res.data));
   }, []);
 
+  // API GET PIECHART
   // React.useEffect(() => {
   //   redaxios
   //     .get("https://run.mocky.io/v3/a9305026-5281-4d60-8d7f-3b06f6b28988")
-  //     .then((res) => setData(res.dataPie));
+  //     .then((res) => setDataPie(res.data));
   // }, []);
 
+  //API REQUESTS TOTAL
+    // React.useEffect(() => {
+  //   redaxios
+  //     .get("URL")
+  //     .then((res) => setDataRequest(res.data));
+  // }, []);
+
+  //map for Requests
+  // React.useEffect(()=>{
+  //   if(!dataRequest) return;
+  //   const mapRequestData = dataRequest.map((datarow)=>(
+  //       {
+  //           "status": "OnHold",
+  //           "creationDate": "15-10-2020 00:00:00"
+  //       },
+  //       {
+  //           "status": "OnHold",
+  //           "creationDate": "15-10-2020 00:00:00"
+  //       },
+  //       {
+  //           "status": "Open",
+  //           "creationDate": "15-10-2020 05:49:00"
+  //       },
+  //       {
+  //           "status": "Draft",
+  //           "creationDate": "24-09-2020 00:00:00"
+  //       },
+  //       {
+  //           "status": "Open",
+  //           "creationDate": "23-04-2020 10:35:00"
+  //       }
+  //   ))
+  // })
+
+  //map for PieChart
+  // React.useEffect(()=>{
+  //   if(!dataSource) return;
+  //   const mapPieData = dataPie.map((datarow)=>(    {
+  //     "id": datarow.id,
+  //     "label": datarow.label,
+  //     "value":datarow.value,
+  //     "color": datarow.color
+  //   }))
+  // });
+
+
+  //map for Histogramme
   React.useEffect(() => {
     if (!data) return;
     const mapData = data.data.map((datarow) => ({
@@ -88,7 +137,8 @@ export default function Dashboard() {
                       </span>
                     </div>
                     <span className="kt-widget1__number kt-font-danger">
-                      450
+                      450 
+                      {/* {data.request} */}
                     </span>
                   </div>
                 </div>

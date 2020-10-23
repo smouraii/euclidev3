@@ -51,77 +51,83 @@ function Layout({
               }))
             ),
         }));
-        const extraMenuItems = [ {
-          title: "Euclide",
-          root: true,
-          alignment: "left",
-          toggle: "click",
-          page: "builder",
-          submenu: [
-            {
-              title: "Lims",
-              icon: "flaticon2-expand",
-              page: "Lims"
-            },
-            {
-              title: "Mail Server",
-              icon: "flaticon2-envelope",
-              page: "MailServer"
-            },
-            {
-              title: "DB Configuration",
-              icon: "flaticon-coins",
-              page: "DB-Configuration"
-            },
-            {
-              title: "Security Roles",
-              icon: "flaticon-lock",
-              page: "Security-Roles"
-            },
-            {
-              title: "Users Configuration",
-              icon: "flaticon-users",
-              page: "User-Configuration"
-            },
-            {
-              title: "Audit Configuration",
-              icon: "flaticon-visible",
-              page: "Audit-Configuration"
-            },
-            {
-              title: "eFiles Configuration",
-              icon: "flaticon-upload",
-              page: "eFiles-Configuration"
-            }
-          ]
-        },
-        {
-          title: "Issue Admin",
-          root: true,
-          alignment: "left",
-          toggle: "click",
-          page: "builder",
-          submenu: [
-            {
-              title: "Bug report",
-              page: "BugReport"
-            },
-            {
-              title: "Error Log",
-              page: "ErrorLog"
-            },
-            {
-              title: "Audit Log",
-              page: "AuditLog"
-            },
-          ]
-        },]
+        const extraMenuItems = [
+          {
+            title: "Euclide",
+            root: true,
+            alignment: "left",
+            toggle: "click",
+            page: "builder",
+            submenu: [
+              {
+                title: "Lims",
+                icon: "flaticon2-expand",
+                page: "Lims",
+              },
+              {
+                title: "Mail Server",
+                icon: "flaticon2-envelope",
+                page: "MailServer",
+              },
+              {
+                title: "DB Configuration",
+                icon: "flaticon-coins",
+                page: "DB-Configuration",
+              },
+              {
+                title: "Security Roles",
+                icon: "flaticon-lock",
+                page: "Security-Roles",
+              },
+              {
+                title: "Users Configuration",
+                icon: "flaticon-users",
+                page: "User-Configuration",
+              },
+              {
+                title: "Audit Configuration",
+                icon: "flaticon-visible",
+                page: "Audit-Configuration",
+              },
+              {
+                title: "eFiles Configuration",
+                icon: "flaticon-upload",
+                page: "eFiles-Configuration",
+              },
+            ],
+          },
+          {
+            title: "Issue Admin",
+            root: true,
+            alignment: "left",
+            toggle: "click",
+            page: "builder",
+            submenu: [
+              {
+                title: "Bug report",
+                page: "BugReport",
+              },
+              {
+                title: "Error Log",
+                page: "ErrorLog",
+              },
+              {
+                title: "Audit Log",
+                page: "AuditLog",
+              },
+            ],
+          },
+        ];
         setcustomMenuConfig({
-          ...MenuConfig, header:{...MenuConfig.header,items:[...MenuConfig.header.items,...mapData,...extraMenuItems]}
+          ...MenuConfig,
+          header: {
+            ...MenuConfig.header,
+            items: [...MenuConfig.header.items, ...mapData, ...extraMenuItems],
+          },
         });
       });
   }, []);
-console.log(MenuConfig)
+  console.log(MenuConfig);
   htmlClassService.setConfig(layoutConfig);
   // scroll to top after location changes
   window.scrollTo(0, 0);
@@ -131,7 +137,7 @@ console.log(MenuConfig)
     " "
   );
   return !customMenuConfig ? (
-    <div>hhhhhhhhh</div>
+    <div>ERROR Layout</div>
   ) : selfLayout !== "blank" ? (
     <LayoutInitializer
       styles={[]}

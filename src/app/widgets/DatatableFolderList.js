@@ -26,19 +26,23 @@ import queryString from "query-string";
 
 
 
+
+  // API for Columns generation
   React.useEffect(() => {
+    const parsed = queryString.parse(props.location.search);
     redaxios
-    // .get("http://localhost:8080/EuclideV2/api/getPageList?pageListid=${parsed.pagelistid}&fluxId=${parsed.fluxId}")
+    // .get(`http://localhost:8080/EuclideV2/api/getPageList?pageListid=${parsed.pagelistid}&fluxId=${parsed.fluxId}`)
       .get("https://run.mocky.io/v3/86b418dc-085b-415d-8c2d-bee469ac5b82")
       .then((res) => setColumsData(res.data));
-      const parsed = queryString.parse(props.location.search);
       console.log(parsed);
       console.log("props",props);
   }, []);
 
+
+  //API for Data in Datatable
   React.useEffect(() => {
     redaxios
-      .get("https://run.mocky.io/v3/0c67f526-ea93-4e06-b4e4-71f4da3c5917")
+      .get("https://run.mocky.io/v3/12b1c471-7531-48bc-8654-e7e3d4016a99")
       .then((res) => setData(res.data));
   }, []);
 
@@ -57,18 +61,18 @@ import queryString from "query-string";
     setPagination(pager);
   };
 
-  React.useEffect(() => {
-    redaxios
-      .get("https://run.mocky.io/v3/86b418dc-085b-415d-8c2d-bee469ac5b82")
-      .then((res) => setColumsData(res.data));
-  }, []);
+  // React.useEffect(() => {
+  //   redaxios
+  //     .get("https://run.mocky.io/v3/86b418dc-085b-415d-8c2d-bee469ac5b82")
+  //     .then((res) => setColumsData(res.data));
+  // }, []);
 
-  React.useEffect(() => {
-    setLoading(true);
-    redaxios
-      .get("https://run.mocky.io/v3/0c67f526-ea93-4e06-b4e4-71f4da3c5917")
-      .then((res) => setData(res.data));
-  }, []);
+  // React.useEffect(() => {
+  //   setLoading(true);
+  //   redaxios
+  //     .get("https://run.mocky.io/v3/0c67f526-ea93-4e06-b4e4-71f4da3c5917")
+  //     .then((res) => setData(res.data));
+  // }, []);
   const searchInput = useRef(null);
 
   //Search Function for text Areas
@@ -148,74 +152,75 @@ import queryString from "query-string";
   };
 
   //SearchFunction For Date
-  const getColumnSearchPropsDate = (dataIndex) => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-      autoFocus,
-      handleChange,
-      placeholder,
-      value,
-      format,
-      handleSearch,
-      handleClear,
-    }) => (
-      <div style={{ padding: 8 }}>
-        <DatePicker.RangePicker
-          autoFocus={autoFocus}
-          onChange={handleChange}
-          placeholder={placeholder}
-          value={value}
-          format={format}
-          style={{ marginBottom: 8 }}
-        />
-        <Button
-          type="primary"
-          role="search"
-          onClick={handleSearch}
-          style={{ width: 90 }}
-          size="small"
-        >
-          search
-        </Button>
-        <Button
-          role="reset"
-          style={{ width: 90 }}
-          onClick={handleClear}
-          size="small"
-        >
-          reset
-        </Button>
-      </div>
-    ),
-    filterIcon: (filtered) => (
-      <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
-    ),
-    onFilter: (value, record) =>
-      record[dataIndex]
-        .toString()
-        .toLowerCase()
-        .includes(value.toLowerCase()),
-    onFilterDropdownVisibleChange: (visible) => {
-      if (visible) {
-        setTimeout(() => searchInput.current.select());
-      }
-    },
-    render: (text) =>
-      searchedColumn === dataIndex ? (
-        <Highlighter
-          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
-          searchWords={[searchText]}
-          autoEscape
-          textToHighlight={text.toString()}
-        />
-      ) : (
-        text
-      ),
-  });
+  // const getColumnSearchPropsDate = (dataIndex) => ({
+  //   filterDropdown: ({
+  //     setSelectedKeys,
+  //     selectedKeys,
+  //     confirm,
+  //     clearFilters,
+  //     autoFocus,
+  //     handleChange,
+  //     placeholder,
+  //     value,
+  //     format,
+  //     handleSearch,
+  //     handleClear,
+  //   }) => (
+  //     <div style={{ padding: 8 }}>
+  //       <DatePicker.RangePicker
+  //         autoFocus={autoFocus}
+  //         onChange={handleChange}
+  //         placeholder={placeholder}
+  //         value={value}
+  //         format={format}
+  //         style={{ marginBottom: 8 }}
+  //       />
+  //       <Button
+  //         type="primary"
+  //         role="search"
+  //         onClick={handleSearch}
+  //         style={{ width: 90 }}
+  //         size="small"
+  //       >
+  //         search
+  //       </Button>
+  //       <Button
+  //         role="reset"
+  //         style={{ width: 90 }}
+  //         onClick={handleClear}
+  //         size="small"
+  //       >
+  //         reset
+  //       </Button>
+  //     </div>
+  //   ),
+  //   filterIcon: (filtered) => (
+  //     <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
+  //   ),
+  //   onFilter: (value, record) =>
+  //     record[dataIndex]
+  //       .toString()
+  //       .toLowerCase()
+  //       .includes(value.toLowerCase()),
+  //   onFilterDropdownVisibleChange: (visible) => {
+  //     if (visible) {
+  //       setTimeout(() => searchInput.current.select());
+  //     }
+  //   },
+  //   render: (text) =>
+  //     searchedColumn === dataIndex ? (
+  //       <Highlighter
+  //         highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
+  //         searchWords={[searchText]}
+  //         autoEscape
+  //         textToHighlight={text.toString()}
+  //       />
+  //     ) : (
+  //       text
+  //     ),
+  // });
 
+  //map data in columns
   React.useEffect(() => {
     if (!data) return;
     const mapData = data.data.map((datarow) => ({
@@ -233,6 +238,7 @@ import queryString from "query-string";
     setDataSource(mapData);
   }, [data]);
 
+  //map columns for generating columns and search and sort and redirect to details
   React.useEffect(() => {
     if (!columnsData) return;
     const mapColumns = columnsData.columns.map((column, index) => ({
