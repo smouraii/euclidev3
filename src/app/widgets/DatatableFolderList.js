@@ -23,7 +23,14 @@ import queryString from "query-string";
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchColumn] = useState("");
   const [userInfo, setUserInfo] = useState(null);
-
+  const [columnsResultsApi, setColumnsResultsApi] = useState([]);
+  const [columnsData1, setColumsData1] = useState(null);
+  const [data1, setData1] = useState(null);
+  const [dataSource1, setDataSource1] = useState(null);  
+  const [columnsApi1, setColumnsApi1] = useState([]);
+  const [columnsData2, setColumsData2] = useState(null);
+  const [data2, setData2] = useState(null);
+  const [dataSource2, setDataSource2] = useState(null);
 
 
 
@@ -219,6 +226,12 @@ import queryString from "query-string";
   //       text
   //     ),
   // });
+  const columnAttachement = [{
+    title:"Attachement",
+    dataindex:"test",
+    key:"test",
+  }
+  ]
 
   //map data in columns
   React.useEffect(() => {
@@ -234,6 +247,7 @@ import queryString from "query-string";
       requesttext: datarow.requesttext,
       s_requestid: datarow.s_requestid,
       templateflag: datarow.templateflag,
+      attachments:datarow.attachments,
     }));
     setDataSource(mapData);
   }, [data]);
@@ -257,9 +271,10 @@ import queryString from "query-string";
           </Button>
         ) : (
           id
-        )
+        ),
     }));
     setColumnsApi(mapColumns);
+    console.log("userinfo",userInfo)
     console.log("mapColumns", mapColumns);
   }, [columnsData, userInfo]);
 

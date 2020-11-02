@@ -198,7 +198,7 @@ export default function Dashboard() {
                 />
 
                 <PortletBody>
-                {dataSource.length ? <MyResponsiveBar data={dataSource} /> : "zbeyeb"}           
+                {dataSource.length ? <MyResponsiveBar data={dataSource} /> : "error"}           
                  </PortletBody>
               </Portlet>
             </div>
