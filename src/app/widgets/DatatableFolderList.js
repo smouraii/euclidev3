@@ -12,25 +12,30 @@ import {
 import ModalAttachementList from "./ModalAttachement";
 import redaxios from "redaxios";
 import queryString from "query-string";
+import AttachementList from "./AttachementList";
 
  function Datatable(props) {
   const [columnsApi, setColumnsApi] = useState([]);
   const [columnsData, setColumsData] = useState(null);
   const [data, setData] = useState(null);
   const [dataSource, setDataSource] = useState(null);
+
   const [pagination, setPagination] = useState({});
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchColumn] = useState("");
   const [userInfo, setUserInfo] = useState(null);
+
+  const [columnsSampleApi, setColumnsSampleApi] = useState([]);
+  const [dataSample, setDataSample] = useState(null);
+  const [dataSourceSample, setDataSourceSample] = useState(null);
+  const [columnsDataSample, setColumnsDataSample] = useState(null);
+
   const [columnsResultsApi, setColumnsResultsApi] = useState([]);
-  const [columnsData1, setColumsData1] = useState(null);
-  const [data1, setData1] = useState(null);
-  const [dataSource1, setDataSource1] = useState(null);  
-  const [columnsApi1, setColumnsApi1] = useState([]);
-  const [columnsData2, setColumsData2] = useState(null);
-  const [data2, setData2] = useState(null);
-  const [dataSource2, setDataSource2] = useState(null);
+  const [dataResults, setDataResults] = useState(null);
+  const [dataSourceResults, setDataSourceResults] = useState(null);  
+  const [columnsDataResults, setColumnsDataResults] = useState(null);
+
 
 
 
@@ -68,11 +73,11 @@ import queryString from "query-string";
     setPagination(pager);
   };
 
-  // React.useEffect(() => {
-  //   redaxios
-  //     .get("https://run.mocky.io/v3/86b418dc-085b-415d-8c2d-bee469ac5b82")
-  //     .then((res) => setColumsData(res.data));
-  // }, []);
+  React.useEffect(() => {
+    redaxios
+      .get("https://run.mocky.io/v3/2e2cda70-42f6-4790-be2b-83f92dbe5019")
+      .then((res) => setDataSample(res.data));
+  }, []);
 
   // React.useEffect(() => {
   //   setLoading(true);
@@ -231,7 +236,7 @@ import queryString from "query-string";
     dataindex:"test",
     key:"test",
   }
-  ]
+  ];
 
   //map data in columns
   React.useEffect(() => {
@@ -249,8 +254,31 @@ import queryString from "query-string";
       templateflag: datarow.templateflag,
       attachments:datarow.attachments,
     }));
+    console.log("mapData",mapData);
     setDataSource(mapData);
   }, [data]);
+
+  React.useEffect(() => {
+    if (!dataSample) return;
+    const mapDataSample = dataSample.map((datarow) => ({
+      id:datarow.id,
+      iseditable:datarow.iseditable,
+      msg:datarow.msg,
+      createdt: datarow.createdt,
+      dataset: datarow.dataset,
+      enteredtext: datarow.enteredtext,
+      enteredunits: datarow.enteredunits,
+      keyid1: datarow.keyid1,
+      moddt: datarow.moddt,
+      paramlistid: datarow.paramlistid,
+      paramlistversionid: datarow.paramlistversionid,
+      replicateid: datarow.replicateid,
+      sdcid: datarow.sdcid,
+      variantid: datarow.variantid
+    }));
+    console.log("mapDataSample",mapDataSample);
+    setDataSourceSample(mapDataSample);
+  }, [dataSample]);
 
   //map columns for generating columns and search and sort and redirect to details
   React.useEffect(() => {
@@ -278,7 +306,44 @@ import queryString from "query-string";
     console.log("mapColumns", mapColumns);
   }, [columnsData, userInfo]);
 
- 
+
+  
+  // React.useEffect(() => {
+  //   if (!columnsData) return;
+  //   const mapColumnsSample = columnsData.pagedetails.map((column, index) => ({
+  //     title: column.pagedetailscolumns.title,
+  //     dataIndex: column.pagedetailscolumns.data,
+  //     key: column.pagedetailscolumns.name,
+  //     ...getColumnSearchProps(column.data),
+  //     sorter: (a, b) =>
+  //       a instanceof String || null
+  //         ? a.userInfo.localeCompare(b.userInfo)
+  //         : a.userInfo - b.userInfo,
+  //   }));
+  //   setColumnsSampleApi(mapColumnsSample);
+  //   console.log("userinfoSample",userInfo)
+  //   console.log("mapColumnsSample", mapColumnsSample);
+  // }, [columnsData, userInfo]);
+
+
+
+  React.useEffect(() => {
+    if (!columnsData) return;
+    const mapColumns = columnsData.pagedetails.map((column, index) => ({
+
+      title: column.datasetcolumns.title,
+      dataIndex: column.datasetcolumns.data,
+      key: column.datasetcolumns.name,
+      ...getColumnSearchProps(column.data),
+      sorter: (a, b) =>
+        a instanceof String || null
+          ? a.userInfo.localeCompare(b.userInfo)
+          : a.userInfo - b.userInfo,
+    }));
+    setColumnsResultsApi(mapColumns);
+    console.log("userinfo",userInfo)
+    console.log("mapColumns", mapColumns);
+  }, [columnsData, userInfo]);
 
   return (
     <>
@@ -307,7 +372,7 @@ import queryString from "query-string";
                 <PortletHeader title="Sample" />
                 <Table
                   style={{ backgroundColor: "white" }}
-                  columns={columnsApi}
+                  columns={columnsSampleApi}
                   dataSource={[userInfo]}
                   // pagination={pagination}
                   onChange={handleTableChange}
@@ -319,7 +384,7 @@ import queryString from "query-string";
               <PortletHeader title="Results" />
                 <Table
                   style={{ backgroundColor: "white" }}
-                  columns={columnsApi}
+                  columns={columnsResultsApi}
                   dataSource={[userInfo]}
                   // pagination={pagination}
                   onChange={handleTableChange}

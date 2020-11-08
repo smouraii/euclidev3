@@ -10,6 +10,7 @@ import { Button } from "antd";
 import useSWR from "swr";
 import Api from "../home/data/Api.json";
 import { Portlet, PortletBody } from "../../partials/content/Portlet";
+import DatatableRequest from "../../widgets/DatatableRequest";
 
 export default function NewRequest(props) {
     const [fieldsNamesObject, setFieldsNameObject] = React.useState(null);
@@ -141,7 +142,6 @@ export default function NewRequest(props) {
                             <div className="col-sm-12 col-md-6 col-lg-6">
                               <div className="row d-flex justify-content-center">
                                 <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
-
               <Formik
                 initialValues={fieldsNamesObject}
                 validationSchema={Yup.object(validationObject)}
@@ -154,6 +154,14 @@ export default function NewRequest(props) {
                 {(formikProps) => (
                   <Form>
                     {renderFields(formikProps)}
+                    {props.current > 0 && props.current < 2 &&(
+                      <>
+                      <Button  type="primary">
+                      Add
+                    </Button>
+                      <DatatableRequest/>
+                      </>
+                    )}
                     {props.current > 0 && (
                       <Button
                         type="secondary"
@@ -164,8 +172,10 @@ export default function NewRequest(props) {
                     )}
                     <Button htmlType="submit" type="primary">
                       Next
-                    </Button>
+                    </Button> 
+                   
                   </Form>
+                
                 )}
               </Formik>
               </Portlet>

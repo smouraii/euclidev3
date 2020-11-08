@@ -16,7 +16,7 @@ export default function StepsNewRequest() {
   //   console.log("data", data);
   //   console.log("error", error);
   // }, [data, error]);
-
+  const { Step } = Steps; 
   const steps = Api.steps.map((step) => ({
     title: step.title,
     comp: (
@@ -25,7 +25,7 @@ export default function StepsNewRequest() {
         current={current}
         key={step.id}
         step={step}
-        stepsLength={Api.steps.length}
+        stepsLength={Api.steps.length + 1}
       />
     )
   }));
@@ -38,6 +38,7 @@ export default function StepsNewRequest() {
         {steps.map((item) => (
           <Steps.Step key={item.title} title={item.title} />
         ))}
+        <Step title="confirmation"/>
       </Steps>
       {steps[current].comp}
       </PortletBody>
