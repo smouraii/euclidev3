@@ -58,6 +58,8 @@ import AttachementList from "./AttachementList";
       .then((res) => setData(res.data));
   }, []);
 
+  console.log("Data",data)
+
   React.useEffect(() => {
     if (!userInfo) return;
     console.log(userInfo, "userinfo");
@@ -73,18 +75,27 @@ import AttachementList from "./AttachementList";
     setPagination(pager);
   };
 
+  // React.useEffect(() => {
+  //   redaxios
+  //     .get("https://run.mocky.io/v3/2e2cda70-42f6-4790-be2b-83f92dbe5019")
+  //     .then((res) => setDataSample(res.data));
+  // }, []);
+  // console.log("SampleData",dataSample)
+
   React.useEffect(() => {
     redaxios
       .get("https://run.mocky.io/v3/2e2cda70-42f6-4790-be2b-83f92dbe5019")
       .then((res) => setDataSample(res.data));
   }, []);
+  console.log("SampleData",dataSample)
 
-  // React.useEffect(() => {
-  //   setLoading(true);
-  //   redaxios
-  //     .get("https://run.mocky.io/v3/0c67f526-ea93-4e06-b4e4-71f4da3c5917")
-  //     .then((res) => setData(res.data));
-  // }, []);
+
+  React.useEffect(() => {
+    redaxios
+      .get("https://run.mocky.io/v3/0c67f526-ea93-4e06-b4e4-71f4da3c5917")
+      .then((res) => setDataResults(res.data));
+  }, []);
+  console.log("DataResults", dataResults)
   const searchInput = useRef(null);
 
   //Search Function for text Areas
@@ -254,8 +265,8 @@ import AttachementList from "./AttachementList";
       templateflag: datarow.templateflag,
       attachments:datarow.attachments,
     }));
-    console.log("mapData",mapData);
     setDataSource(mapData);
+    console.log("mapData",mapData);
   }, [data]);
 
   React.useEffect(() => {
@@ -276,8 +287,8 @@ import AttachementList from "./AttachementList";
       sdcid: datarow.sdcid,
       variantid: datarow.variantid
     }));
-    console.log("mapDataSample",mapDataSample);
     setDataSourceSample(mapDataSample);
+    console.log("mapDataSample",mapDataSample);
   }, [dataSample]);
 
   //map columns for generating columns and search and sort and redirect to details
@@ -287,6 +298,7 @@ import AttachementList from "./AttachementList";
       title: column.title,
       dataIndex: column.data,
       key: column.name,
+      ...columnAttachement,
       ...getColumnSearchProps(column.data),
       sorter: (a, b) =>
         a instanceof String || null
@@ -308,41 +320,40 @@ import AttachementList from "./AttachementList";
 
 
   
-  // React.useEffect(() => {
-  //   if (!columnsData) return;
-  //   const mapColumnsSample = columnsData.pagedetails.map((column, index) => ({
-  //     title: column.pagedetailscolumns.title,
-  //     dataIndex: column.pagedetailscolumns.data,
-  //     key: column.pagedetailscolumns.name,
-  //     ...getColumnSearchProps(column.data),
-  //     sorter: (a, b) =>
-  //       a instanceof String || null
-  //         ? a.userInfo.localeCompare(b.userInfo)
-  //         : a.userInfo - b.userInfo,
-  //   }));
-  //   setColumnsSampleApi(mapColumnsSample);
-  //   console.log("userinfoSample",userInfo)
-  //   console.log("mapColumnsSample", mapColumnsSample);
-  // }, [columnsData, userInfo]);
-
-
-
   React.useEffect(() => {
     if (!columnsData) return;
-    const mapColumns = columnsData.pagedetails.map((column, index) => ({
-
-      title: column.datasetcolumns.title,
-      dataIndex: column.datasetcolumns.data,
-      key: column.datasetcolumns.name,
+    const mapColumnsSample = columnsData.pagedetails[0].pagedetailscolumns.map((column, index) => ({
+      title: column.title,
+      dataIndex: column.data,
+      key: column.name,
       ...getColumnSearchProps(column.data),
       sorter: (a, b) =>
         a instanceof String || null
           ? a.userInfo.localeCompare(b.userInfo)
           : a.userInfo - b.userInfo,
     }));
-    setColumnsResultsApi(mapColumns);
+    setColumnsSampleApi(mapColumnsSample);
+    console.log("userinfoSample",userInfo)
+    console.log("mapColumnsSample", mapColumnsSample);
+  }, [columnsData, userInfo]);
+
+
+
+  React.useEffect(() => {
+    if (!columnsData) return;
+    const mapColumnsResults = columnsData.pagedetails[0].datasetcolumns.map((column, index) => ({
+      title: column.title,
+      dataIndex: column.name,
+      key: column.data,
+      ...getColumnSearchProps(column.data),
+      sorter: (a, b) =>
+        a instanceof String || null
+          ? a.userInfo.localeCompare(b.userInfo)
+          : a.userInfo - b.userInfo,
+    }));
+    setColumnsResultsApi(mapColumnsResults);
     console.log("userinfo",userInfo)
-    console.log("mapColumns", mapColumns);
+    console.log("mapColumns", mapColumnsResults);
   }, [columnsData, userInfo]);
 
   return (
@@ -375,7 +386,7 @@ import AttachementList from "./AttachementList";
                   columns={columnsSampleApi}
                   dataSource={[userInfo]}
                   // pagination={pagination}
-                  onChange={handleTableChange}
+               
                 />
               </PortletBody>
             </Portlet>
@@ -385,7 +396,7 @@ import AttachementList from "./AttachementList";
                 <Table
                   style={{ backgroundColor: "white" }}
                   columns={columnsResultsApi}
-                  dataSource={[userInfo]}
+                  dataSource={dataSourceSample}
                   // pagination={pagination}
                   onChange={handleTableChange}
                 />
