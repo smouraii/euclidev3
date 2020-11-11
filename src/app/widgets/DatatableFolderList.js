@@ -54,7 +54,7 @@ import AttachementList from "./AttachementList";
   //API for Data in Datatable
   React.useEffect(() => {
     redaxios
-      .get("https://run.mocky.io/v3/12b1c471-7531-48bc-8654-e7e3d4016a99")
+      .get("https://run.mocky.io/v3/df4b1557-42e8-4d14-ac6f-82ad208f34ef")
       .then((res) => setData(res.data));
   }, []);
 
@@ -67,6 +67,26 @@ import AttachementList from "./AttachementList";
 
   const handleChangeId = (val) => {
     setUserInfo(val);
+  };
+
+  const showModal = () => {
+    this.setState({
+      visible: true,
+    });
+  };
+
+  const handleOk = e => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  };
+
+  const handleCancel = e => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
   };
 
   const handleTableChange = (pagination, filters, sorter) => {
@@ -246,6 +266,9 @@ import AttachementList from "./AttachementList";
     title:"Attachement",
     dataindex:"test",
     key:"test",
+    render: (id, val) =>(
+         <ModalAttachementList/>
+          )
   }
   ];
 
@@ -298,7 +321,6 @@ import AttachementList from "./AttachementList";
       title: column.title,
       dataIndex: column.data,
       key: column.name,
-      ...columnAttachement,
       ...getColumnSearchProps(column.data),
       sorter: (a, b) =>
         a instanceof String || null
@@ -361,7 +383,7 @@ import AttachementList from "./AttachementList";
       <QueryBuilder data={data} />
      {!userInfo&& <Table
         style={{ backgroundColor: "white" }}
-        columns={columnsApi}
+        columns={[...columnsApi,...columnAttachement]}
         dataSource={dataSource}
       />}
       {userInfo &&  <div className="row row-no-padding row-col-separator-x1">

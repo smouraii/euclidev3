@@ -4,6 +4,7 @@ import { List, Avatar, Button, Skeleton } from 'antd';
 import reqwest from 'reqwest';
 
 const count = 3;
+//add Attachement API here instead of the fakeDataURL
 const fakeDataUrl = `https://randomuser.me/api/?results=${count}&inc=name,gender,email,nat&noinfo`;
 
 export default class AttachementList     extends React.Component {

@@ -31,7 +31,7 @@ class ModalAttachementList extends React.Component {
     return (
       <div>
         <Button type="ghost" onClick={this.showModal}>
-          <Icon type="cloud-download" />
+          <Icon type="file" />
         </Button>
         <Modal
           visible={visible}
