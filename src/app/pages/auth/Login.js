@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Formik } from "formik";
 import { connect } from "react-redux";
@@ -7,12 +7,14 @@ import { TextField } from "@material-ui/core";
 import clsx from "clsx";
 import * as auth from "../../store/ducks/auth.duck";
 import { login } from "../../crud/auth.crud";
+import redaxios from "redaxios";
 
 function Login(props) {
+  const [data, setData] = useState(null);
   const { intl } = props;
   const [loading, setLoading] = useState(false);
   const [loadingButtonStyle, setLoadingButtonStyle] = useState({
-    paddingRight: "2.5rem"
+    paddingRight: "2.5rem",
   });
 
   const enableLoading = () => {
@@ -24,6 +26,16 @@ function Login(props) {
     setLoading(false);
     setLoadingButtonStyle({ paddingRight: "2.5rem" });
   };
+
+  React.useEffect(() => {
+    redaxios
+      .post(
+        "http://localhost:8080/EuclideV2/j_spring_security_check",
+        { j_username: "super.admin", j_password: "sa" },
+        { header: { "content-type": "application/x-www-form-urlencoded" } }
+      )
+      .then((res) => console.log("auth", res));
+  }, []);
 
   return (
     <>
@@ -49,33 +61,45 @@ function Login(props) {
           <Formik
             initialValues={{
               email: "admin@demo.com",
-              password: "demo"
+              password: "demo",
             }}
-            validate={values => {
+            validate={(values) => {
               const errors = {};
 
               if (!values.email) {
                 // https://github.com/formatjs/react-intl/blob/master/docs/API.md#injection-api
                 errors.email = intl.formatMessage({
-                  id: "AUTH.VALIDATION.REQUIRED_FIELD"
+                  id: "AUTH.VALIDATION.REQUIRED_FIELD",
                 });
               } else if (
                 !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
               ) {
                 errors.email = intl.formatMessage({
-                  id: "AUTH.VALIDATION.INVALID_FIELD"
+                  id: "AUTH.VALIDATION.INVALID_FIELD",
                 });
               }
 
               if (!values.password) {
                 errors.password = intl.formatMessage({
-                  id: "AUTH.VALIDATION.REQUIRED_FIELD"
+                  id: "AUTH.VALIDATION.REQUIRED_FIELD",
                 });
               }
 
               return errors;
             }}
             onSubmit={(values, { setStatus, setSubmitting }) => {
+              redaxios
+                .post(
+                  "http://localhost:8080/EuclideV2/j_spring_security_check",
+                  { j_username: values.email, j_password: values.password },
+                  {
+                    headers: {
+                      "content-type": "application/x-www-form-urlencoded",
+                    },
+                  }
+                )
+                .then((res) => console.log("response", res))
+                .catch((error) => console.log("error",error));
               enableLoading();
               setTimeout(() => {
                 login(values.email, values.password)
@@ -88,7 +112,7 @@ function Login(props) {
                     setSubmitting(false);
                     setStatus(
                       intl.formatMessage({
-                        id: "AUTH.VALIDATION.INVALID_LOGIN"
+                        id: "AUTH.VALIDATION.INVALID_LOGIN",
                       })
                     );
                   });
@@ -103,7 +127,7 @@ function Login(props) {
               handleChange,
               handleBlur,
               handleSubmit,
-              isSubmitting
+              isSubmitting,
             }) => (
               <form
                 noValidate={true}
@@ -168,7 +192,7 @@ function Login(props) {
                     disabled={isSubmitting}
                     className={`btn btn-primary btn-elevate kt-login__btn-primary ${clsx(
                       {
-                        "kt-spinner kt-spinner--right kt-spinner--md kt-spinner--light": loading
+                        "kt-spinner kt-spinner--right kt-spinner--md kt-spinner--light": loading,
                       }
                     )}`}
                     style={loadingButtonStyle}
@@ -179,8 +203,6 @@ function Login(props) {
               </form>
             )}
           </Formik>
-
-
         </div>
       </div>
     </>
@@ -188,9 +210,4 @@ function Login(props) {
 }
 
 //Replace it with Context API
-export default injectIntl(
-  connect(
-    null,
-    auth.actions
-  )(Login)
-);
+export default injectIntl(connect(null, auth.actions)(Login));

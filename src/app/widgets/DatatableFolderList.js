@@ -54,7 +54,7 @@ import AttachementList from "./AttachementList";
   //API for Data in Datatable
   React.useEffect(() => {
     redaxios
-      .get("https://run.mocky.io/v3/df4b1557-42e8-4d14-ac6f-82ad208f34ef")
+      .get("https://run.mocky.io/v3/d5be868e-8209-40b6-a1be-be19ae4c778d")
       .then((res) => setData(res.data));
   }, []);
 
@@ -104,7 +104,7 @@ import AttachementList from "./AttachementList";
 
   React.useEffect(() => {
     redaxios
-      .get("https://run.mocky.io/v3/2e2cda70-42f6-4790-be2b-83f92dbe5019")
+      .get("https://run.mocky.io/v3/f1c80d87-5475-4e44-9edf-fd2bb00b809d")
       .then((res) => setDataSample(res.data));
   }, []);
   console.log("SampleData",dataSample)
@@ -294,21 +294,12 @@ import AttachementList from "./AttachementList";
 
   React.useEffect(() => {
     if (!dataSample) return;
-    const mapDataSample = dataSample.map((datarow) => ({
+    const mapDataSample = dataSample.data.map((datarow) => ({
       id:datarow.id,
-      iseditable:datarow.iseditable,
-      msg:datarow.msg,
-      createdt: datarow.createdt,
-      dataset: datarow.dataset,
-      enteredtext: datarow.enteredtext,
-      enteredunits: datarow.enteredunits,
-      keyid1: datarow.keyid1,
-      moddt: datarow.moddt,
-      paramlistid: datarow.paramlistid,
-      paramlistversionid: datarow.paramlistversionid,
-      replicateid: datarow.replicateid,
-      sdcid: datarow.sdcid,
-      variantid: datarow.variantid
+      "s_sampleid": datarow.s_sampleid,
+      "sampledesc": datarow.sampledesc,
+      "samplestatus": datarow.samplestatus,
+      "templateflag": datarow.templateflag
     }));
     setDataSourceSample(mapDataSample);
     console.log("mapDataSample",mapDataSample);
@@ -406,7 +397,7 @@ import AttachementList from "./AttachementList";
                 <Table
                   style={{ backgroundColor: "white" }}
                   columns={columnsSampleApi}
-                  dataSource={[userInfo]}
+                  dataSource={dataSourceSample}
                   // pagination={pagination}
                
                 />
