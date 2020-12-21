@@ -8,14 +8,18 @@ import clsx from "clsx";
 import * as auth from "../../store/ducks/auth.duck";
 import { login } from "../../crud/auth.crud";
 import redaxios from "redaxios";
+import qs from "qs";
+import Cookies from 'js-cookie';
 
 function Login(props) {
   const [data, setData] = useState(null);
+  const [JSESSIONID,setJSESSIONID]=useState(Cookies.get('JSESSIONID'))
   const { intl } = props;
   const [loading, setLoading] = useState(false);
   const [loadingButtonStyle, setLoadingButtonStyle] = useState({
     paddingRight: "2.5rem",
   });
+
 
   const enableLoading = () => {
     setLoading(true);
@@ -27,15 +31,37 @@ function Login(props) {
     setLoadingButtonStyle({ paddingRight: "2.5rem" });
   };
 
-  React.useEffect(() => {
-    redaxios
-      .post(
-        "http://localhost:8080/EuclideV2/j_spring_security_check",
-        { j_username: "super.admin", j_password: "sa" },
-        { header: { "content-type": "application/x-www-form-urlencoded" } }
-      )
-      .then((res) => console.log("auth", res));
-  }, []);
+
+  // const authAPI = () => {
+  //   redaxios
+  //     .post(
+  //       "http://localhost:8080/EuclideV2/j_spring_security_check",
+  //       qs.stringify({
+  //         j_username: "super.admin",
+  //         j_password: "sa",
+  //         _spring_security_remember_me: "true",
+  //       }),
+  //       {
+  //         headers: {
+  //           "X-Requested-With": "XMLHttpRequest",
+  //           "content-type": "application/x-www-form-urlencoded,charset=utf-8",
+  //         },
+  //       },
+  //       { withCredentials: true }
+  //     )
+  //     .then((res) => console.log("response", res))
+  //     .catch((error) => console.log("error", error));
+  // };
+
+  // React.useEffect(() => {
+  //   redaxios
+  //     .post(
+  //       "http://localhost:8080/EuclideV2/j_spring_security_check",
+  //       { j_username: "super.admin", j_password: "sa" },
+  //       { header: { "content-type": "application/x-www-form-urlencoded" } }
+  //     )
+  //     .then((res) => console.log("auth", res));
+  // }, []);
 
   return (
     <>
@@ -58,10 +84,12 @@ function Login(props) {
             </h3>
           </div>
 
+          {/* <button onClick={authAPI}>test</button> */}
+
           <Formik
             initialValues={{
-              email: "admin@demo.com",
-              password: "demo",
+              email: "super.admin",
+              password: "sa",
             }}
             validate={(values) => {
               const errors = {};
@@ -71,12 +99,12 @@ function Login(props) {
                 errors.email = intl.formatMessage({
                   id: "AUTH.VALIDATION.REQUIRED_FIELD",
                 });
-              } else if (
-                !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-              ) {
-                errors.email = intl.formatMessage({
-                  id: "AUTH.VALIDATION.INVALID_FIELD",
-                });
+                // } else if (
+                //   !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
+                // ) {
+                //   errors.email = intl.formatMessage({
+                //     id: "AUTH.VALIDATION.INVALID_FIELD",
+                //   });
               }
 
               if (!values.password) {
@@ -91,15 +119,25 @@ function Login(props) {
               redaxios
                 .post(
                   "http://localhost:8080/EuclideV2/j_spring_security_check",
-                  { j_username: values.email, j_password: values.password },
+                qs.stringify({
+                    j_username: values.email,
+                    j_password: values.password,
+                    _spring_security_remember_me: false})
+                 ,
                   {
                     headers: {
-                      "content-type": "application/x-www-form-urlencoded",
+                      "content-type":
+                        "application/x-www-form-urlencoded",
+                      "X-Requested-With": "XMLHttpRequest",
                     },
-                  }
+                    withCredentials:true
+                  },git
+                  
                 )
-                .then((res) => console.log("response", res))
-                .catch((error) => console.log("error",error));
+                .then((res) => console.log("response", res,"JSESSIONID",JSESSIONID))
+                .catch((error) => console.log("error", error)
+                );
+
               enableLoading();
               setTimeout(() => {
                 login(values.email, values.password)
