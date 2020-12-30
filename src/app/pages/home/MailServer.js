@@ -16,6 +16,7 @@ import {
   PortletHeader
 } from "../../partials/content/Portlet";
 import InputComp from "../../widgets/InputComp";
+import redaxios from "redaxios";
 
 const { Option } = Select;
 const AutoCompleteOption = AutoComplete.Option;
@@ -38,10 +39,37 @@ class MailServer extends React.Component {
     autoCompleteResult: []
   };
 
+  mailServerSave = (values) => {
+    redaxios.post(
+      "http://localhost:8080/EuclideV2/saveMailConfig",({
+        host: values.MailServer,
+        port: values.Port,
+        smtpAuth: values.SmtpAuth,
+        smtpStarttls: values.SmtpEnable,
+        smtpSocketFactoryPort: values.SocketFactortyPort,
+        smtpSocketFactoryFallback: values.SocketFactoryFallbackgit,
+        mailpassword: values.password,
+        smtpSocketFactoryClass: values.socketFatoryClass,
+        id: values.username,
+      }),
+      {
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        withCredentials: true,
+      }
+    )
+    .then((res) => console.log("reponse",res))
+    .catch((error) => console.log("error", error));
+    console.log("Mailserver");
+  };
+
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
+        this.mailServerSave(values);
         console.log("Received values of form: ", values);
       }
     });
@@ -155,9 +183,6 @@ class MailServer extends React.Component {
                         </div>
                       </PortletBody>
                     </Portlet>
-                  </Form>
-
-                  <Form {...formItemLayout} onSubmit={this.handleSubmit}>
                     <Portlet
                       className="kt-portlet--height-fluid kt-portlet--border-bottom-brand"
                       fluidHeight={true}
@@ -175,7 +200,7 @@ class MailServer extends React.Component {
                                 ]
                               })(
                                 <Select
-                                  defaultValue="No"
+                                  initialValue="No"
                                   onChange={onChange}
                                   onFocus={onFocus}
                                   onBlur={onBlur}
@@ -201,7 +226,7 @@ class MailServer extends React.Component {
 
                           <div className="col-md-6">
                             <Form.Item label="mail.smtp.socketFactory.fallback">
-                              {getFieldDecorator("SocketFactoryFallbackgit ", {
+                              {getFieldDecorator("SocketFactoryFallbackgit", {
                                 rules: [
                                   {
                                     required: true
@@ -209,7 +234,7 @@ class MailServer extends React.Component {
                                 ]
                               })(
                                 <Select
-                                  defaultValue="No"
+                                  initialValue="No"
                                   onChange={onChange}
                                   onFocus={onFocus}
                                   onBlur={onBlur}
@@ -231,7 +256,7 @@ class MailServer extends React.Component {
                                 ]
                               })(
                                 <Select
-                                  defaultValue="No"
+                                  initialValue="No"
                                   onChange={onChange}
                                   onFocus={onFocus}
                                   onBlur={onBlur}

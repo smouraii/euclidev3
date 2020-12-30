@@ -26,11 +26,12 @@ class Lims extends React.Component {
   limsSave = (values) => {
   redaxios.post(
     "http://localhost:8080/EuclideV2/saveSysLims",({
-      limsDatabase: values.limsDatabase,
-      password: values.password,
-      restServiceUrl: values.restServiceUrl,
-      username: values.username,
-      nodeID:"",
+      restdatabaseId: values.limsDatabase,
+      restpassword: values.password,
+      restUrl: values.restServiceUrl,
+      restuser: values.username,
+      nodeid:"",
+      startCddc:"",
     }),
     {
       headers: {
