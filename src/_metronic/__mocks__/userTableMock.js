@@ -83,7 +83,7 @@ export default [
     id: 4,
     username: "super.admin",
     password: "sa",
-    email: "super.admin@gmail.com",
+    email: "super.admin",
     accessToken: "access-token-8f3ae836da744329a6f93bf20594b5cc",
     refreshToken: "access-token-f8c137a2c98743f48b643e71161d90aa",
     roles: [1], // Administrator

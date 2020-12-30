@@ -12,6 +12,7 @@ import {
 import { Portlet, PortletBody } from "../../partials/content/Portlet";
 import SwitchComp from "../../widgets/SwitchComp";
 import InputComp from "../../widgets/InputComp";
+import redaxios from "redaxios";
 
 const { Option } = Select;
 const AutoCompleteOption = AutoComplete.Option;
@@ -22,10 +23,34 @@ class Lims extends React.Component {
     autoCompleteResult: []
   };
 
+  limsSave = (values) => {
+  redaxios.post(
+    "http://localhost:8080/EuclideV2/saveSysLims",({
+      limsDatabase: values.limsDatabase,
+      password: values.password,
+      restServiceUrl: values.restServiceUrl,
+      username: values.username,
+      nodeID:"",
+    }),
+    {
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+        "X-Requested-With": "XMLHttpRequest",
+      },
+      withCredentials: true,
+    }
+  )
+  .then((res) => console.log("reponse",res))
+  .catch((error) => console.log("error", error));
+  console.log("test");
+};
+
+
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
+        this.limsSave(values);
         console.log("Received values of form: ", values);
       }
     });

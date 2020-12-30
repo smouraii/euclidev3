@@ -9,17 +9,54 @@ import * as auth from "../../store/ducks/auth.duck";
 import { login } from "../../crud/auth.crud";
 import redaxios from "redaxios";
 import qs from "qs";
-import Cookies from 'js-cookie';
 
 function Login(props) {
   const [data, setData] = useState(null);
-  const [JSESSIONID,setJSESSIONID]=useState(Cookies.get('JSESSIONID'))
+  // const [JSESSIONID,setJSESSIONID]=useState(null);
+  const [isAuth, setIsAuth] = useState(null);
   const { intl } = props;
   const [loading, setLoading] = useState(false);
   const [loadingButtonStyle, setLoadingButtonStyle] = useState({
     paddingRight: "2.5rem",
   });
 
+  //   const readCookie =()=>{
+  //     setJSESSIONID(Cookies.get("JSESSIONID"))
+  //     console.log(JSESSIONID)
+  //   }
+  //   React.useEffect(() => {
+  // readCookie();
+  //   }, [])
+  const authenticate = (values) => {
+    redaxios
+      .post(
+        "http://localhost:8080/EuclideV2/j_spring_security_check",
+        qs.stringify({
+          j_username: values.username,
+          j_password: values.password,
+          _spring_security_remember_me: false,
+        }),
+        {
+          headers: {
+            "content-type": "application/x-www-form-urlencoded",
+            "X-Requested-With": "XMLHttpRequest",
+          },
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        if (res.data.success && res.data.success === true)
+          setIsAuth(res.data.success);
+        else {
+          setIsAuth(true);
+        }
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  useEffect(() => {
+    console.log("auth", isAuth);
+  }, [isAuth]);
 
   const enableLoading = () => {
     setLoading(true);
@@ -30,38 +67,6 @@ function Login(props) {
     setLoading(false);
     setLoadingButtonStyle({ paddingRight: "2.5rem" });
   };
-
-
-  // const authAPI = () => {
-  //   redaxios
-  //     .post(
-  //       "http://localhost:8080/EuclideV2/j_spring_security_check",
-  //       qs.stringify({
-  //         j_username: "super.admin",
-  //         j_password: "sa",
-  //         _spring_security_remember_me: "true",
-  //       }),
-  //       {
-  //         headers: {
-  //           "X-Requested-With": "XMLHttpRequest",
-  //           "content-type": "application/x-www-form-urlencoded,charset=utf-8",
-  //         },
-  //       },
-  //       { withCredentials: true }
-  //     )
-  //     .then((res) => console.log("response", res))
-  //     .catch((error) => console.log("error", error));
-  // };
-
-  // React.useEffect(() => {
-  //   redaxios
-  //     .post(
-  //       "http://localhost:8080/EuclideV2/j_spring_security_check",
-  //       { j_username: "super.admin", j_password: "sa" },
-  //       { header: { "content-type": "application/x-www-form-urlencoded" } }
-  //     )
-  //     .then((res) => console.log("auth", res));
-  // }, []);
 
   return (
     <>
@@ -84,19 +89,17 @@ function Login(props) {
             </h3>
           </div>
 
-          {/* <button onClick={authAPI}>test</button> */}
-
           <Formik
             initialValues={{
-              email: "super.admin",
-              password: "sa",
+              username: "",
+              password: "",
             }}
             validate={(values) => {
               const errors = {};
 
-              if (!values.email) {
+              if (!values.username) {
                 // https://github.com/formatjs/react-intl/blob/master/docs/API.md#injection-api
-                errors.email = intl.formatMessage({
+                errors.username = intl.formatMessage({
                   id: "AUTH.VALIDATION.REQUIRED_FIELD",
                 });
                 // } else if (
@@ -116,31 +119,10 @@ function Login(props) {
               return errors;
             }}
             onSubmit={(values, { setStatus, setSubmitting }) => {
-              redaxios
-                .post(
-                  "http://localhost:8080/EuclideV2/j_spring_security_check",
-                qs.stringify({
-                    j_username: values.email,
-                    j_password: values.password,
-                    _spring_security_remember_me: false})
-                 ,
-                  {
-                    headers: {
-                      "content-type":
-                        "application/x-www-form-urlencoded",
-                      "X-Requested-With": "XMLHttpRequest",
-                    },
-                    withCredentials:true
-                  },git
-                  
-                )
-                .then((res) => console.log("response", res,"JSESSIONID",JSESSIONID))
-                .catch((error) => console.log("error", error)
-                );
-
+             authenticate(values);
               enableLoading();
               setTimeout(() => {
-                login(values.email, values.password)
+                login(values.username, values.password)
                   .then(({ data: { accessToken } }) => {
                     disableLoading();
                     props.login(accessToken);
@@ -155,6 +137,21 @@ function Login(props) {
                     );
                   });
               }, 1000);
+            //     if( isAuth == true){
+            //      (({ data: { accessToken } }) => {
+            //         disableLoading();
+            //         props.login(accessToken);
+            //       }),
+            //       else if (isAuth == false) {
+            //         disableLoading();
+            //         setSubmitting(false);
+            //         setStatus(
+            //           intl.formatMessage({
+            //             id: "AUTH.VALIDATION.INVALID_LOGIN",
+            //           })
+            //         );
+            //       };
+            //   }, 1000);
             }}
           >
             {({
@@ -188,16 +185,16 @@ function Login(props) {
 
                 <div className="form-group">
                   <TextField
-                    type="email"
+                    type="username"
                     label="Username"
                     margin="normal"
                     className="kt-width-full"
-                    name="email"
+                    name="username"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    value={values.email}
-                    helperText={touched.email && errors.email}
-                    error={Boolean(touched.email && errors.email)}
+                    value={values.username}
+                    helperText={touched.username && errors.username}
+                    error={Boolean(touched.username && errors.username)}
                   />
                 </div>
 

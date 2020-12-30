@@ -86,11 +86,11 @@ function Registration(props) {
               });
             } else if (values.password !== values.confirmPassword) {
               errors.confirmPassword =
-                "Password and Confirm Password didn't match.";
+                "Passwords didn't match.";
             }
 
             if (!values.acceptTerms) {
-              errors.acceptTerms = "Accept Terms";
+              errors.acceptTerms = "Please Accept Terms";
             }
 
             return errors;
