@@ -3,12 +3,34 @@ import { Modal, Button, Icon, Input, Alert } from "antd";
 import { Formik, Form } from "formik";
 import Search from "antd/lib/input/Search";
 import SwitchCompAllocate from "./SwitchCompAllocate";
+import redaxios from "redaxios";
 
 
 class ModalAddUser extends React.Component {
   state = {
     loading: false,
     visible: false
+  };
+  addUserAPI = (data) => {
+    redaxios.post(
+      "http://localhost:8080/EuclideV2/saveMailConfig",({
+        name:data.name,
+        surname:data.surname,
+        email:data.email,
+        select_all:data.select_all,
+        adress_selected:["",""]
+      }),
+      {
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        withCredentials: true,
+      }
+    )
+    .then((res) => console.log("reponse",res))
+    .catch((error) => console.log("error", error));
+    console.log("addUserAPI");
   };
 
   showModal = () => {
@@ -37,7 +59,7 @@ class ModalAddUser extends React.Component {
         </Button>
         <Modal
           visible={visible}
-          title="Submit a issue report"
+          title="Add a User"
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           footer={[
@@ -64,6 +86,7 @@ class ModalAddUser extends React.Component {
               
             }}
             onSubmit={(data, { setSubmitting }) => {
+              this.addUserAPI(data);
               setSubmitting(false);
             }}
           >
