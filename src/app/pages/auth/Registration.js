@@ -8,11 +8,29 @@ import * as auth from "../../store/ducks/auth.duck";
 import { register } from "../../crud/auth.crud";
 import Select from 'react-select'
 import countryList from 'react-select-country-list'
+import redaxios from "redaxios";
 
 function Registration(props) {
   const { intl } = props;
   const countries = countryList().getData();
-  
+
+  // registerAPI = (value) => {
+  //   redaxios.post(
+  //     "http://localhost:8080/EuclideV2/saveMailConfig",({
+  //       //arguments
+  //     }),
+  //     {
+  //       headers: {
+  //         "content-type": "application/x-www-form-urlencoded",
+  //         "X-Requested-With": "XMLHttpRequest",
+  //       },
+  //       withCredentials: true,
+  //     }
+  //   )
+  //   .then((res) => console.log("reponse",res))
+  //   .catch((error) => console.log("error", error));
+  //   console.log("addUserAPI");
+  // };
 
   return (
     <div className="kt-login__body">
@@ -105,6 +123,7 @@ function Registration(props) {
               values.username,
               values.password
             )
+            //registerAPI();
               .then(({ data: { accessToken } }) => {
                 props.register(accessToken);
               })
