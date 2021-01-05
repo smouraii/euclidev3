@@ -32,6 +32,7 @@ export default function StepsNewRequest() {
 
   return (
     <div>
+    {/* add step save (send a request with save API)  */}
                 <Portlet>
             <PortletBody heightfluid={true}>
       <Steps style={{margin:5}} current={current}>

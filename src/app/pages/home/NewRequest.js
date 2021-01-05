@@ -124,6 +124,13 @@ export default function NewRequest(props) {
                 ? Yup.date("Must be a date").required("Mandatory Field")
                 : Yup.date("Must be a date"),
             };
+            // case "select":
+            //   return{
+            //     name: field.sdccolumnid,
+            //     validation: field.mandatory
+            //     ? Yup.FSelect("Must choose a value").required("Mandatory Field")
+            //      : Yup.FSelect("")
+            //   }
 
           default:
             return null;

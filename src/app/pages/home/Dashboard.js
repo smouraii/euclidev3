@@ -28,6 +28,7 @@ import redaxios from "redaxios";
 export default function Dashboard() {
   const [data, setData] = useState(null);
   const [dataSource, setDataSource] = useState([]);
+  const [title,setTitle]= useState(null);
   // const [dataPie, setDataPie] = useState(null);
   // const [dataSourcePie, setDataSourcePie] = useState([]);
   // const [dataRequest, setDataRequest] = useState([])
@@ -90,7 +91,7 @@ export default function Dashboard() {
   //     "color": datarow.color
   //   }))
   // });
-
+//
 
   //map for Histogramme
   React.useEffect(() => {
@@ -122,64 +123,64 @@ export default function Dashboard() {
   return (
     <>
       <div className="row d-flex justify-content-center">
-        <div className="col-xl-12">
-          <div className="row row-full-height">
-            <div className="col-sm-12 col-md-12 col-lg-4">
-              <Portlet className="kt-portlet--height-fluid">
-                <div className="kt-widget1">
-                  <div className="kt-widget1__item ng-star-inserted">
-                    <div className="kt-widget1__info">
-                      <h3 className="kt-widget1__title">
-                        Total Requests Submitted
-                      </h3>
-                      <span className="kt-widget1__desc">
-                        Submitted through Euclide
+          {/* <div className="col-xl-12">
+            <div className="row row-full-height">
+              <div className="col-sm-12 col-md-12 col-lg-4">
+                <Portlet className="kt-portlet--height-fluid">
+                  <div className="kt-widget1">
+                    <div className="kt-widget1__item ng-star-inserted">
+                      <div className="kt-widget1__info">
+                        <h3 className="kt-widget1__title">
+                          Total Requests Submitted
+                        </h3>
+                        <span className="kt-widget1__desc">
+                          Submitted through Euclide
+                        </span>
+                      </div>
+                      <span className="kt-widget1__number kt-font-danger">
+                        450 
+                        {/* {data.request} 
                       </span>
                     </div>
-                    <span className="kt-widget1__number kt-font-danger">
-                      450 
-                      {/* {data.request} */}
-                    </span>
                   </div>
-                </div>
-              </Portlet>
-            </div>
-            <div className="col-sm-12 col-md-12 col-lg-4">
-              <Portlet className="kt-portlet--height-fluid">
-                <div className="kt-widget1">
-                  <div className="kt-widget1__item ng-star-inserted">
-                    <div className="kt-widget1__info">
-                      <h3 className="kt-widget1__title">
-                        Requests In Proccessing
-                      </h3>
-                      <span className="kt-widget1__desc">Multiple Status</span>
-                    </div>
-                    <span className="kt-widget1__number kt-font-warning">
-                      150
-                    </span>
-                  </div>
-                </div>
-              </Portlet>
-            </div>
-            <div className="col-sm-12 col-md-12 col-lg-4">
-              <Portlet className="kt-portlet--height-fluid">
-                <div className="kt-widget1">
-                  <div className="kt-widget1__item ng-star-inserted">
-                    <div className="kt-widget1__info">
-                      <h3 className="kt-widget1__title">Requests Completed</h3>
-                      <span className="kt-widget1__desc">
-                        Lifetime Requests Completed
+                </Portlet>
+              </div>
+              <div className="col-sm-12 col-md-12 col-lg-4">
+                <Portlet className="kt-portlet--height-fluid">
+                  <div className="kt-widget1">
+                    <div className="kt-widget1__item ng-star-inserted">
+                      <div className="kt-widget1__info">
+                        <h3 className="kt-widget1__title">
+                          Requests In Proccessing
+                        </h3>
+                        <span className="kt-widget1__desc">Multiple Status</span>
+                      </div>
+                      <span className="kt-widget1__number kt-font-warning">
+                        150
                       </span>
                     </div>
-                    <span className="kt-widget1__number kt-font-success">
-                      300
-                    </span>
                   </div>
-                </div>
-              </Portlet>
+                </Portlet>
+              </div>
+              <div className="col-sm-12 col-md-12 col-lg-4">
+                <Portlet className="kt-portlet--height-fluid">
+                  <div className="kt-widget1">
+                    <div className="kt-widget1__item ng-star-inserted">
+                      <div className="kt-widget1__info">
+                        <h3 className="kt-widget1__title">Requests Completed</h3>
+                        <span className="kt-widget1__desc">
+                          Lifetime Requests Completed
+                        </span>
+                      </div>
+                      <span className="kt-widget1__number kt-font-success">
+                        300
+                      </span>
+                    </div>
+                  </div>
+                </Portlet>
+              </div>
             </div>
-          </div>
-        </div>
+          </div> */}
 
         <div className="col-xl-12">
           <div className="row row-full-height">
@@ -189,7 +190,7 @@ export default function Dashboard() {
                 fluidHeight={true}
               >
                 <PortletHeader
-                  title="Request per State per Month"
+                  // title={data.title}
                   // toolbar={
                   //   <PortletHeaderToolbar>
                   //     <PortletHeaderDropdown />

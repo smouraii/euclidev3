@@ -6,7 +6,24 @@ import {
   Utils as QbUtils,
 } from "react-awesome-query-builder";
 import { Modal, Button, Input, Menu, Dropdown } from "antd";
+import redaxios from "redaxios";
 
+
+
+//Modify type to object object
+  // // API for Columns generation
+  // React.useEffect(() => {
+  //   const parsed = queryString.parse(props.location.search);
+  //   redaxios
+  //   // .get(`http://localhost:8080/EuclideV2/api/getPageList?pageListid=${parsed.pagelistid}&fluxId=${parsed.fluxId}`)
+  //     .get("https://run.mocky.io/v3/86b418dc-085b-415d-8c2d-bee469ac5b82")
+  //     .then((res) => setColumsData(res.data));
+  //     console.log(parsed);
+  //     console.log("props",props);
+  // }, []);
+
+
+//ADD COLUMN ID + NA IF DATA IS NULL or Unindefined
 // You need to provide your own config. See below 'Config format'
 const config = {
   ...BasicConfig,
@@ -56,6 +73,14 @@ export default class QueryBuilder extends Component {
     visible: false,
     selectedItem: null,
   };
+
+  // add a componentDidMount to Map Data for QueryBuilder
+// componentDidMount
+// console.log('componentDidMount() lifecycle');
+
+// // Trigger update
+// this.setState({ foo: !this.state.foo });
+// }
 
   showModal = () => {
     this.setState({
@@ -152,10 +177,14 @@ export default class QueryBuilder extends Component {
               Cancel
             </Button>
           </>
-        ) : (
+        ) : (<div>
           <Button style={{ marginBottom: 10 }} onClick={this.showModal}>
             Save
           </Button>
+          <Button style={{ marginBottom: 10 }} >
+            Lancer la requete
+          </Button>
+          </div>
         )}
 
         <Modal

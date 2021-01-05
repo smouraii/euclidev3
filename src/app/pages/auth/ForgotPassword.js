@@ -6,9 +6,29 @@ import { Link, Redirect } from "react-router-dom";
 import { FormattedMessage, injectIntl } from "react-intl";
 import * as auth from "../../store/ducks/auth.duck";
 import { requestPassword } from "../../crud/auth.crud";
+import redaxios from "redaxios";
 
 class ForgotPassword extends Component {
   state = { isRequested: false };
+
+  forgotPasswordAPI = (value) => {
+    redaxios.post(
+      "http://localhost:8080/EuclideV2/forgotPassword",({
+        email:value.email
+      }),
+      {
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        withCredentials: true,
+      }
+    )
+    .then((res) => console.log("reponse",res))
+    .catch((error) => console.log("error", error));
+    console.log("addUserAPI");
+  };
+
 
   render() {
     const { intl } = this.props;
@@ -48,6 +68,7 @@ class ForgotPassword extends Component {
                     return errors;
                   }}
                   onSubmit={(values, { setStatus, setSubmitting }) => {
+                    this.forgotPasswordAPI();
                     requestPassword(values.email)
                         .then(() => {
                           this.setState({ isRequested: true });
