@@ -1,7 +1,6 @@
 import React from "react";
 import { Modal, Button, Icon, Input, Alert } from "antd";
 import { Formik, Form } from "formik";
-import SwitchComp from "./SwitchComp";
 import SwitchCompAllocate from "./SwitchCompAllocate";
 
 const { TextArea } = Input;

@@ -30,7 +30,7 @@ function Login(props) {
   const authenticate = (values) => {
     redaxios
       .post(
-        "http://localhost:8080/EuclideV2/j_spring_security_check",
+        process.env.REACT_APP_HOST + "/EuclideV2/j_spring_security_check",
         qs.stringify({
           j_username: values.username,
           j_password: values.password,

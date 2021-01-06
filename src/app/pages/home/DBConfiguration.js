@@ -10,7 +10,6 @@ import {
   AutoComplete,
 } from "antd";
 import { Portlet, PortletBody } from "../../partials/content/Portlet";
-import SwitchComp from "../../widgets/SwitchComp";
 import InputComp from "../../widgets/InputComp";
 
 const { Option } = Select;

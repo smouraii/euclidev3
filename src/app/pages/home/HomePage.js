@@ -13,7 +13,6 @@ import EfilesConfiguration from "./EfilesConfiguration";
 import BugReport from "./BugReport";
 import ErrorLog from "./ErrorLog";
 import AuditLog from "./AuditLog";
-import SwitchComp from "../../widgets/SwitchComp";
 import WrappedLims from "./Lims";
 import WrappedDbconfiguration from "./DBConfiguration";
 import FormBuilderPage from "./FormBuilderPage.Js";
@@ -49,7 +48,6 @@ export default function HomePage() {
         <Route path="/FolderList" component={FolderList} />
         <Route path="/newrequest" component={StepsNewRequest}/>
         <Route path="/lims" component={WrappedLims}/>
-        <Route path="/switchComp" component={SwitchComp}/>
         <Route path="/DB-Configuration" component={WrappedDbconfiguration} />
         <Route path="/MailServer" component={MailServer} />
         <Route path="/Security-Roles" component={SecurityRoles} />
