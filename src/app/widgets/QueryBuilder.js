@@ -9,68 +9,47 @@ import { Modal, Button, Input, Menu, Dropdown } from "antd";
 
 
 
-//Modify type to object object
-  // // API for Columns generation
-  // React.useEffect(() => {
-  //   const parsed = queryString.parse(props.location.search);
-  //   redaxios
-  //   // .get(`http://localhost:8080/EuclideV2/api/getPageList?pageListid=${parsed.pagelistid}&fluxId=${parsed.fluxId}`)
-  //     .get("https://run.mocky.io/v3/86b418dc-085b-415d-8c2d-bee469ac5b82")
-  //     .then((res) => setColumsData(res.data));
-  //     console.log(parsed);
-  //     console.log("props",props);
-  // }, []);
-
 
 //ADD COLUMN ID + NA IF DATA IS NULL or Unindefined
 // You need to provide your own config. See below 'Config format'
-const config = {
-  ...BasicConfig,
-  fields: {
-    Name: {
-      label: "Name",
-      type: "text",
-      valueSources: ["value"],
-    },
-    gender: {
-      label: "Gender",
-      type: "text",
-      valueSources: ["value"],
-    },
-    email: {
-      label: "Email",
-      type: "text",
-      valueSources: ["value"],
-    },
-    location: {
-      label: "Location",
-      type: "text",
-      valueSources: ["value"],
-    },
-    number: {
-      label: "Number",
-      type: "number",
-      valueSources: ["value"],
-      preferWidgets: ["number"],
-      fieldSettings: {
-        min: 0,
-        max: 9999999,
-      },
-    },
-  },
-};
 
 // You can load query value from your backend storage (for saving see `Query.onChange()`)
 const queryValue = { id: QbUtils.uuid(), type: "group" };
 
 export default class QueryBuilder extends Component {
   state = {
-    tree: QbUtils.checkTree(QbUtils.loadTree(queryValue), config),
-    config: config,
+    tree: QbUtils.checkTree(QbUtils.loadTree(queryValue), this.config),
+    config: this.config,
     value: "",
     input: "",
     visible: false,
     selectedItem: null,
+  };
+
+   getType = (type) => {
+    if (type === 'String') {
+      return 'text';
+    } else if (type === 'Number') {
+      return 'number'
+    } else {
+      return 'select'
+    }
+  }
+
+  convertedColumnsData = this.props.columnsData.columns.map(elem => ({
+    label: elem.title,
+    type: this.getType(elem.type),
+    valueSources: ["value"],
+    fieldSettings: elem.association.hasAssociation ? { listValues: 
+      elem.association.values.map((val) => ({ value: val.defaultValue, title: val.defaultValue }))
+    } : null
+  }))
+
+  config= {
+    ...BasicConfig,
+    fields: {
+      ...this.convertedColumnsData
+    },
   };
 
 
@@ -111,7 +90,7 @@ export default class QueryBuilder extends Component {
   render = () => (
     <div>
       <Query
-        {...config}
+        {...this.config}
         value={this.state.tree}
         onChange={this.onChange}
         renderBuilder={this.renderBuilder}
