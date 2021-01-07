@@ -12,29 +12,38 @@ import {
 import ModalAttachementList from "./ModalAttachement";
 import redaxios from "redaxios";
 import queryString from "query-string";
-import AttachementList from "./AttachementList";
 
  function Datatable(props) {
+   //main Table
   const [columnsApi, setColumnsApi] = useState([]);
   const [columnsData, setColumsData] = useState(null);
   const [data, setData] = useState(null);
   const [dataSource, setDataSource] = useState(null);
 
+  //Table's functionality
   const [pagination, setPagination] = useState({});
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchColumn] = useState("");
   const [userInfo, setUserInfo] = useState(null);
 
+  // Sample Table
   const [columnsSampleApi, setColumnsSampleApi] = useState([]);
   const [dataSample, setDataSample] = useState(null);
   const [dataSourceSample, setDataSourceSample] = useState(null);
   const [columnsDataSample, setColumnsDataSample] = useState(null);
 
+  //Result Table
   const [columnsResultsApi, setColumnsResultsApi] = useState([]);
   const [dataResults, setDataResults] = useState(null);
   const [dataSourceResults, setDataSourceResults] = useState(null);  
   const [columnsDataResults, setColumnsDataResults] = useState(null);
+
+  //selected element of the table to send it to attachements
+  const [selectedElement,setSelectedElement]=useState(null);
+
+  //id of table
+  const [idTable,setIdTable]=useState(null);
 
 
 
@@ -69,25 +78,25 @@ import AttachementList from "./AttachementList";
     setUserInfo(val);
   };
 
-  const showModal = () => {
-    this.setState({
-      visible: true,
-    });
-  };
+  // const showModal = () => {
+  //   this.setState({
+  //     visible: true,
+  //   });
+  // };
 
-  const handleOk = e => {
-    console.log(e);
-    this.setState({
-      visible: false,
-    });
-  };
+  // const handleOk = e => {
+  //   console.log(e);
+  //   this.setState({
+  //     visible: false,
+  //   });
+  // };
 
-  const handleCancel = e => {
-    console.log(e);
-    this.setState({
-      visible: false,
-    });
-  };
+  // const handleCancel = e => {
+  //   console.log(e);
+  //   this.setState({
+  //     visible: false,
+  //   });
+  // };
 
   const handleTableChange = (pagination, filters, sorter) => {
     const pager = { ...pagination };
@@ -262,15 +271,29 @@ import AttachementList from "./AttachementList";
   //       text
   //     ),
   // });
+
   const columnAttachement = [{
     title:"Attachement",
     dataindex:"test",
     key:"test",
     render: (id, val) =>(
-         <ModalAttachementList/>
+         <ModalAttachementList selectedElement={selectedElement} />
           )
   }
   ];
+
+//adding id to table
+
+  // React.useEffect(()=>{
+  //   if(!data) return;
+  //   const mapData = data.data.map((datarow,index)=>(
+  //     {
+  //     id:datarow,
+
+  //   }))
+  //   setIdTable(mapData);
+  //   console.log("idmap",mapData)
+  //   },[data])
 
   //map data in columns
   React.useEffect(() => {
@@ -317,14 +340,14 @@ import AttachementList from "./AttachementList";
         a instanceof String || null
           ? a.userInfo.localeCompare(b.userInfo)
           : a.userInfo - b.userInfo,
-      render: (id, val) =>
-        index === 0 && !userInfo ? (
-          <Button type="link" onClick={() => handleChangeId(val)}>
-            {id}
-          </Button>
-        ) : (
-          id
-        ),
+          render: (id, val) =>
+          index === 0 && !userInfo ? (
+            <Button type="link" onClick={() => handleChangeId(val)}>
+              {id}
+            </Button>
+          ) : (
+            id
+          ),
     }));
     setColumnsApi(mapColumns);
     console.log("userinfo",userInfo)
@@ -371,7 +394,7 @@ import AttachementList from "./AttachementList";
 
   return (
     <>
-      <QueryBuilder data={data} />
+      <QueryBuilder data={columnsApi} />
      {!userInfo&& <Table
         style={{ backgroundColor: "white" }}
         columns={[...columnsApi,...columnAttachement]}

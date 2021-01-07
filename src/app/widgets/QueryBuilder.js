@@ -6,7 +6,6 @@ import {
   Utils as QbUtils,
 } from "react-awesome-query-builder";
 import { Modal, Button, Input, Menu, Dropdown } from "antd";
-import redaxios from "redaxios";
 
 
 
@@ -73,6 +72,9 @@ export default class QueryBuilder extends Component {
     visible: false,
     selectedItem: null,
   };
+
+
+//function to call data in QueryBuilder
 
   // add a componentDidMount to Map Data for QueryBuilder
 // componentDidMount

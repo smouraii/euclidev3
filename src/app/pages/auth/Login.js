@@ -45,10 +45,12 @@ function Login(props) {
         }
       )
       .then((res) => {
-        if (res.data.success && res.data.success === true)
+        if (res.data.success && res.data.success === true) {
           setIsAuth(res.data.success);
-        else {
-          setIsAuth(true);
+          disableLoading();
+        } else {
+          setIsAuth(false);
+          disableLoading();
         }
       })
       .catch((error) => console.log("error", error));
@@ -119,39 +121,31 @@ function Login(props) {
               return errors;
             }}
             onSubmit={(values, { setStatus, setSubmitting }) => {
-             authenticate(values);
+              authenticate(values);
               enableLoading();
               setTimeout(() => {
-                login(values.username, values.password)
-                  .then(({ data: { accessToken } }) => {
-                    disableLoading();
-                    props.login(accessToken);
-                  })
-                  .catch(() => {
-                    disableLoading();
-                    setSubmitting(false);
-                    setStatus(
-                      intl.formatMessage({
-                        id: "AUTH.VALIDATION.INVALID_LOGIN",
-                      })
-                    );
-                  });
+                if (isAuth === true) {
+                  login(values.username, values.password)
+                    .then(({ data: { accessToken } }) => {
+                      props.login(accessToken);
+                    })
+                    .catch(() => {
+                      setSubmitting(false);
+                      setStatus(
+                        intl.formatMessage({
+                          id: "AUTH.VALIDATION.INVALID_LOGIN",
+                        })
+                      );
+                    });
+                } else if (isAuth !== true) {
+                  setSubmitting(false);
+                  setStatus(
+                    intl.formatMessage({
+                      id: "AUTH.VALIDATION.INVALID_LOGIN",
+                    })
+                  );
+                }
               }, 1000);
-            //     if( isAuth == true){
-            //      (({ data: { accessToken } }) => {
-            //         disableLoading();
-            //         props.login(accessToken);
-            //       }),
-            //       else if (isAuth == false) {
-            //         disableLoading();
-            //         setSubmitting(false);
-            //         setStatus(
-            //           intl.formatMessage({
-            //             id: "AUTH.VALIDATION.INVALID_LOGIN",
-            //           })
-            //         );
-            //       };
-            //   }, 1000);
             }}
           >
             {({
