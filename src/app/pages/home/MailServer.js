@@ -8,7 +8,8 @@ import {
   Checkbox,
   Button,
   AutoComplete,
-  Divider
+  Divider,
+  message
 } from "antd";
 import {
   Portlet,
@@ -17,9 +18,9 @@ import {
 } from "../../partials/content/Portlet";
 import InputComp from "../../widgets/InputComp";
 import redaxios from "redaxios";
+import qs from "qs";
 
 const { Option } = Select;
-const AutoCompleteOption = AutoComplete.Option;
 
 function onChange(value) {
   console.log(`selected ${value}`);
@@ -39,9 +40,46 @@ class MailServer extends React.Component {
     autoCompleteResult: []
   };
 
+  componentDidMount() {
+    const { form } = this.props
+
+    redaxios.get(
+      process.env.REACT_APP_HOST + "/EuclideV2/api/admin/sysmail",
+      {
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        withCredentials: true,
+      }
+    )
+    .then((res) => {
+      if (res.ok) {
+        form.setFieldsValue({
+          id: res.data.id,
+          username: res.data.username,
+          MailServer: res.data.host,
+          Port: res.data.port,
+          SmtpAuth: res.data.smtpAuth ? 'Yes' : 'No',
+          SmtpEnable: res.data.smtpStarttls ? 'Yes' : 'No',
+          SocketFactortyPort: res.data.smtpSocketFactoryPort,
+          SocketFactoryFallbackgit: res.data.smtpSocketFactoryFallback ? 'Yes' : 'No',
+          password: res.data.password,
+          socketFatoryClass: res.data.smtpSocketFactoryClass,
+        })
+      }
+    })
+    .catch((error) => console.log("error", error));
+  }
+
   mailServerSave = (values) => {
+    const { form } = this.props
+
+    message.loading({ content: 'Saving mail onfiguration...', key: 'mailSave', duration: 0 });
     redaxios.post(
-      "http://localhost:8080/EuclideV2/saveMailConfig",({
+      process.env.REACT_APP_HOST + "/EuclideV2/api/admin/sysmail",qs.stringify({
+        id: values.id,
+        email: values.username,
         host: values.MailServer,
         port: values.Port,
         smtpAuth: values.SmtpAuth,
@@ -50,7 +88,6 @@ class MailServer extends React.Component {
         smtpSocketFactoryFallback: values.SocketFactoryFallbackgit,
         mailpassword: values.password,
         smtpSocketFactoryClass: values.socketFatoryClass,
-        id: values.username,
       }),
       {
         headers: {
@@ -60,9 +97,20 @@ class MailServer extends React.Component {
         withCredentials: true,
       }
     )
-    .then((res) => console.log("reponse",res))
-    .catch((error) => console.log("error", error));
-    console.log("Mailserver");
+    .then((res) => {
+      if (res && res.status == '200') {
+        form.setFieldsValue({
+          id: res.data.sysMailInstance.id
+        });
+        message.success({ content: 'Mail onfiguration saved', key: 'mailSave', duration: 10 });
+      } else {
+        message.error({ content: 'A error occur', key: 'mailSave', duration: 10 });
+      }
+    })
+    .catch((error) => {
+      console.log("error", error)      
+      message.error({ content: 'A error occur', key: 'mailSave', duration: 10 });
+    });
   };
 
   handleSubmit = e => {
@@ -75,14 +123,8 @@ class MailServer extends React.Component {
     });
   };
 
-  handleConfirmBlur = e => {
-    const { value } = e.target;
-    this.setState({ confirmDirty: this.state.confirmDirty || !!value });
-  };
-
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { autoCompleteResult } = this.state;
 
     const formItemLayout = {
       labelCol: {
@@ -106,18 +148,6 @@ class MailServer extends React.Component {
         }
       }
     };
-    const prefixSelector = getFieldDecorator("prefix", {
-      initialValue: "86"
-    })(
-      <Select style={{ width: 70 }}>
-        <Option value="86">+86</Option>
-        <Option value="87">+87</Option>
-      </Select>
-    );
-
-    const websiteOptions = autoCompleteResult.map(website => (
-      <AutoCompleteOption key={website}>{website}</AutoCompleteOption>
-    ));
 
     return (
       <>
@@ -134,6 +164,8 @@ class MailServer extends React.Component {
                     >
                       <PortletBody>
                         <PortletHeader title="Account Information" />
+
+                        {getFieldDecorator("id", {})(<Input style={{display: 'none'}}/>)}
 
                         <div className="row d-flex justify content-between">
                           <div className="col-md-6">

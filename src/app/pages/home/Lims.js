@@ -25,8 +25,6 @@ class Lims extends React.Component {
   };
 
   componentDidMount() {
-    console.log('componentDidMount')
-    console.log(this.props)
     const { form } = this.props
 
     redaxios.get(
@@ -54,6 +52,7 @@ class Lims extends React.Component {
   }
 
   limsSave = (values, configImport) => {
+    const { form } = this.props
 
     message.loading({ content: 'Testing connection', key: 'limsSave', duration: 0 });
 
@@ -107,6 +106,9 @@ class Lims extends React.Component {
     })
     .then((res) => {
       if (res && res.status == '200') {
+        form.setFieldsValue({
+          id: res.data.sysLimsInstance.id
+        });
         message.success(configImport ? { content: 'Import finished', key: 'limsSave', duration: 10 } : { content: 'Connection saved', key: 'limsSave', duration: 10 });
       }
     })
