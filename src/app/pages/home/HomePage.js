@@ -47,13 +47,13 @@ export default function HomePage() {
         {/* <Route path="/docs" component={DocsPage} /> */}
         <Route path="/FolderList" component={FolderList} />
         <Route path="/newrequest" component={StepsNewRequest}/>
-        <Route path="/lims" component={WrappedLims}/>
-        <Route path="/DB-Configuration" component={WrappedDbconfiguration} />
-        <Route path="/MailServer" component={MailServer} />
-        <Route path="/Security-Roles" component={SecurityRoles} />
-        <Route path="/User-Configuration" component={UserConfiguration} />
-        <Route path="/Audit-Configuration" component={AuditConfiguration} />
-         <Route path="/efiles-configuration" component={EfilesConfiguration} />
+        <Route path="/admin/lims" component={WrappedLims}/>
+        <Route path="/admin/DB-Configuration" component={WrappedDbconfiguration} />
+        <Route path="/admin/MailServer" component={MailServer} />
+        <Route path="/admin/Security-Roles" component={SecurityRoles} />
+        <Route path="/admin/User-Configuration" component={UserConfiguration} />
+        <Route path="/admin/Audit-Configuration" component={AuditConfiguration} />
+         <Route path="/admin/efiles-configuration" component={EfilesConfiguration} />
        <Route path="/bugreport" component={BugReport} /> 
         <Route path="/errorlog" component={ErrorLog} />
         <Route path="/auditlog" component={AuditLog} /> 
