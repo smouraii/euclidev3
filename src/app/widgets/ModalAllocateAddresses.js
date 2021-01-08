@@ -33,7 +33,7 @@ class ModalAllocateAddresses extends React.Component {
     const { visible, loading } = this.state;
     return (
       <div>
-        <Button type="ghost" onClick={this.showModal}>
+        <Button type="default" onClick={this.showModal}>
         <Icon type="environment" />
         </Button>
         <Modal

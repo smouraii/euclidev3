@@ -34,7 +34,7 @@ class ModalAddRole extends React.Component {
     const { visible, loading } = this.state;
     return (
       <div>
-        <Button type="ghost" onClick={this.showModal}>
+        <Button type="default" onClick={this.showModal}>
         <Icon type="plus-circle" /> Add User Role 
         </Button>
         <Modal
