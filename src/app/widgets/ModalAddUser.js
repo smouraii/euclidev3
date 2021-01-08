@@ -151,7 +151,7 @@ class ModalAddUser extends React.Component {
     return (
       <div>
         <Button type="default" onClick={this.showModal}>
-          <Icon type="file-add" />
+          <Icon type="user-add" />
         </Button>
         <Formik
             initialValues={{

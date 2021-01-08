@@ -34,7 +34,7 @@ class ModalChangeRole extends React.Component {
     return (
       <div>
         <Button type="default" onClick={this.showModal}>
-        <Icon type="user-add" />
+          <Icon type="like" />
         </Button>
         <Modal
           visible={visible}
