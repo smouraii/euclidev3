@@ -18,84 +18,42 @@ export default function UserConfiguration() {
     <>
       <div className="d-flex justify-content-end">
         <div style={{ margin: 5 }}>
-          <Portlet>
-            <PortletBody fit={true}>
-              <RefreshButton />
-            </PortletBody>
-          </Portlet>
+          <RefreshButton />
         </div>
         <div style={{ margin: 5 }}>
-          <Portlet>
-            <PortletBody fit={true}>
-              <ModalAddUser />
-            </PortletBody>
-          </Portlet>
+          <ModalAddUser />
         </div>
         <div style={{ margin: 5 }}>
-          <Portlet>
-            <PortletBody fit={true}>
-              <ModalChangeRole />
-            </PortletBody>
-          </Portlet>
+          <ModalChangeRole />
         </div>
         <div style={{ margin: 5 }}>
-          <Portlet>
-            <PortletBody fit={true}>
-              <ModalActivate />
-            </PortletBody>
-          </Portlet>
+          <ModalActivate />
         </div>
         <div style={{ margin: 5 }}>
-          <Portlet>
-            <PortletBody fit={true}>
-              <ModalDisableUser />
-            </PortletBody>
-          </Portlet>
+          <ModalDisableUser />
         </div>
         <div style={{ margin: 5 }}>
-          <Portlet>
-            <PortletBody fit={true}>
-              <ModalSuspendUser />
-            </PortletBody>
-          </Portlet>
+          <ModalSuspendUser />
         </div>
         <div style={{ margin: 5 }}>
-          <Portlet>
-            <PortletBody fit={true}>
-              <ModalAllocateAddresses />
-            </PortletBody>
-          </Portlet>
+          <ModalAllocateAddresses />
         </div>
         <div style={{ margin: 5 }}>
-          <Portlet>
-            <PortletBody fit={true}>
-              <ModalChangePassword />
-            </PortletBody>
-          </Portlet>
+          <ModalChangePassword />
         </div>
       </div>
 
-      {/* <FullscreenButton
-current= {<> */}
+
       <div className="col-xl-12">
         <Portlet
           className="kt-portlet--height-fluid kt-portlet--border-bottom-dark"
           fluidHeight={true}
         >
-          <FullscreenButton
-            style={{ margin: 10 }}
-            isFull={isFull}
-            setIsFull={setIsFull}
-            current={
-              <PortletBody fit={true}>
-                <DatatableUserConfig />
-              </PortletBody>
-            }
-          />
+          <PortletBody>
+            <DatatableUserConfig />
+          </PortletBody>
         </Portlet>
       </div>
-      {/* </>
-        } /> */}
     </>
   );
 }
