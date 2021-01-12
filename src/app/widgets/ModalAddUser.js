@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Button, Icon, Select, Typography, message } from "antd";
+import { Modal, Button, Icon, Select, Typography, message, Tooltip } from "antd";
 import FInput from "./inputs/FInput";
 import { Formik, Form, Field, ErrorMessage, useField, useFormikContext } from "formik";
 import redaxios from "redaxios";
@@ -150,9 +150,11 @@ class ModalAddUser extends React.Component {
     const { visible, loading, addresses, selectedAddresses } = this.state;
     return (
       <div>
-        <Button type="default" onClick={this.showModal}>
-          <Icon type="user-add" />
-        </Button>
+        <Tooltip title='Add user'>
+          <Button size="large" type="default" onClick={this.showModal}>
+            <Icon type="user-add" />
+          </Button>
+        </Tooltip>
         <Formik
             initialValues={{
               name: '',
