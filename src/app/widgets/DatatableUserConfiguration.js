@@ -1,31 +1,41 @@
 import React from "react";
-import { Table, Input, Button, Icon, Checkbox, Space, DatePicker } from "antd";
-import reqwest from "reqwest";
+import { Table, Icon, Tag, Tooltip, Typography } from "antd";
+import redaxios from "redaxios";
 import { withRouter } from "react-router-dom";
 import Highlighter from "react-highlight-words";
-import {
-  PortletBody,
-  Portlet,
-  PortletHeader,
-} from "../partials/content/Portlet";
+import qs from "qs";
 
-import { Label } from "reactstrap";
+const { Text } = Typography;
 
 class DatatableUserConfig extends React.Component {
   state = {
     data: [],
-    pagination: {},
+    pagination: {
+      total: null,
+      current: 1,
+      pageSize: 5
+    },
+    sorter: {
+      field: 'username',
+      order: 'asc',
+    },
+    filters: null,
     loading: false,
-    searchText: "",
-    searchedColumn: "",
-    userInfo: null,
   };
 
-//   componentDidMount() {
-//     this.fetch();
-//   }
-  componentDidUpdate() {
-    console.log(this.state.userInfo,"userinfo");
+  componentDidMount() {
+    this.fetch();
+  }
+  componentDidUpdate(prevProps, prevState,) {
+    if (
+      prevState.pagination.current != this.state.pagination.current ||
+      prevState.sorter.field != this.state.sorter.field ||
+      prevState.sorter.order != this.state.sorter.order||
+      prevState.filters != this.state.filters ||
+      prevProps.search != this.props.search
+    ) {
+      this.fetch({search: this.props.search});
+    }
   }
 
   handleChangeId = (val) => {
@@ -35,270 +45,137 @@ class DatatableUserConfig extends React.Component {
   handleTableChange = (pagination, filters, sorter) => {
     const pager = { ...this.state.pagination };
     pager.current = pagination.current;
+    
+    const sort = {...this.state.sorter}
+    sort.field = sorter && sorter.field ? sorter.field : sort.field
+    sort.order = sorter && sorter.field ? sorter.order : sort.order
+    
+    const search = filters ? 
+      Object.keys(filters)?.reduce(
+        (current, key) => Object.assign(
+          current,
+          {[key]: filters[key]}
+        ), 
+        {}
+      ) : 
+      {...this.state.filters}
+
     this.setState({
       pagination: pager,
+      sorter: sort,
+      filters: search
     });
   };
 
-//   fetch = (params = {}) => {
-//     this.setState({ loading: true });
-//     reqwest({
-//       url: "https://randomuser.me/api",
-//       method: "get",
-//       data: {
-//         results: 10,
-//         ...params,
-//       },
-//       type: "json",
-//     }).then((data) => {
-//       console.log(data);
-//       const mapData = data.results.map((user) => {
-//         return {
-//           ...user,
-//           name: `${user.name.first} ${user.name.last}`,
-//           location: `${user.location.country} ${user.location.state}`,
-//           date:`${user.dob.date}`,
-//           age:`${user.dob.age}`,
-//         };
-//       });
-//       const pagination = { ...this.state.pagination };
-//       // Read total count from server
-//       // pagination.total = data.totalCount;
-//       pagination.total = 200;
-//       this.setState({
-//         loading: false,
-//         data: mapData,
-//         pagination,
-//       });
-//     });
-//   };
-
-  //Search Function for text Areas
-  getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-    }) => (
-      <div style={{ padding: 8 }}>
-        {console.log(dataIndex)}
-        <Input
-          ref={(node) => {
-            this.searchInput = node;
-          }}
-          placeholder={`Search ${dataIndex}`}
-          value={selectedKeys[0]}
-          onChange={(e) =>
-            setSelectedKeys(e.target.value ? [e.target.value] : [])
-          }
-          onPressEnter={() =>
-            this.handleSearch(selectedKeys, confirm, dataIndex.first)
-          }
-          style={{ width: 188, marginBottom: 8, display: "block" }}
-        />
-        <Button
-          type="primary"
-          onClick={() =>
-            this.handleSearch(selectedKeys, confirm, dataIndex.first)
-          }
-          size="small"
-          style={{ width: 90, marginRight: 8 }}
-        >
-          <Icon type="search" style={{ marginBottom: 10 }} />
-          Search
-        </Button>
-        <Button
-          onClick={() => this.handleReset(clearFilters)}
-          size="small"
-          style={{ width: 90 }}
-        >
-          Reset
-        </Button>
-      </div>
-    ),
-    filterIcon: (filtered) => (
-      <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
-    ),
-    onFilter: (value, record) =>
-      record[dataIndex]
-        .toString()
-        .toLowerCase()
-        .includes(value.toLowerCase()),
-    onFilterDropdownVisibleChange: (visible) => {
-      if (visible) {
-        setTimeout(() => this.searchInput.select());
+  fetch = ({search = null} = {}) => {
+    const { pagination, sorter, filters } = this.state;
+    this.setState({ loading: true });
+    redaxios.get(
+      process.env.REACT_APP_HOST + "/EuclideV2/api/admin/user",
+      {
+        params: {
+          length : pagination.pageSize,
+          start: pagination.pageSize * (pagination.current - 1),
+          field: sorter.field,
+          order: sorter.order,
+          filters: qs.stringify(filters),
+          search: search || ''
+        },
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        withCredentials: true,
       }
-    },
-    render: (text) =>
-      this.state.searchedColumn === dataIndex ? (
-        <Highlighter
-          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
-          searchWords={[this.state.searchText]}
-          autoEscape
-          textToHighlight={text.toString()}
-        />
-      ) : (
-        text
-      ),
-  });
-  handleSearch = (selectedKeys, confirm, dataIndex) => {
-    confirm();
-    this.setState({
-      searchText: selectedKeys[0],
-      searchedColumn: dataIndex,
+    )
+    .then((res) => {
+      if (res.ok) {
+        const pagination = { ...this.state.pagination };
+        pagination.total = res.data.recordsFiltered;
+        this.setState({
+          loading: false,
+          data: res.data.results,
+          pagination,
+        });
+      } else {
+        this.setState({
+          loading: false,
+        });
+      }
+    })
+    .catch((error) => {
+      console.log("error", error)
+      this.setState({
+        loading: false,
+      });
     });
   };
-  e;
-
-  handleReset = (clearFilters) => {
-    clearFilters();
-    this.setState({ searchText: "" });
-  };
-
-  onShowSizeChange = (current, pageSizeOptions) => {
-    this.setState({ pageSizeOptions });
-    console.log(current, pageSizeOptions);
-  };
-
-  //SearchFunction For Date
-  getColumnSearchPropsDate = (dataIndex) => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-      autoFocus,
-      handleChange,
-      placeholder,
-      value,
-      format,
-      handleSearch,
-      handleClear,
-    }) => (
-      <div style={{ padding: 8 }}>
-        <DatePicker.RangePicker
-          autoFocus={autoFocus}
-          onChange={handleChange}
-          placeholder={placeholder}
-          value={value}
-          format={format}
-          style={{ marginBottom: 8 }}
-        />
-        <Button
-          type="primary"
-          role="search"
-          onClick={handleSearch}
-          style={{ width: 90 }}
-          size="small"
-        >
-          search
-        </Button>
-        <Button
-          role="reset"
-          style={{ width: 90 }}
-          onClick={handleClear}
-          size="small"
-        >
-          reset
-        </Button>
-      </div>
-    ),
-    filterIcon: (filtered) => (
-      <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
-    ),
-    onFilter: (value, record) =>
-      record[dataIndex]
-        .toString()
-        .toLowerCase()
-        .includes(value.toLowerCase()),
-    onFilterDropdownVisibleChange: (visible) => {
-      if (visible) {
-        setTimeout(() => this.searchInput.select());
-      }
-    },
-    render: (text) =>
-      this.state.searchedColumn === dataIndex ? (
-        <Highlighter
-          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
-          searchWords={[this.state.searchText]}
-          autoEscape
-          textToHighlight={text.toString()}
-        />
-      ) : (
-        text
-      ),
-  });
 
   render() {
-
       const columns = [
         {
           title: "Username",
           dataIndex: "username",
           key: "username",
-          sorter: (a, b) => a.username.value - b.username.value,
+          sorter: true,
+          defaultSortOrder: "ascend",
         },
         {
           title: "Name",
           dataIndex: "name",
           key: "name",
-          sorter: (a, b) => a.name.localeCompare(b.name),
-          width: "20%",
-          ...this.getColumnSearchProps("name"),
+          sorter: true,
         },
         {
           title: "Surname",
           dataIndex: "surname",
           key: "surname",
-          defaultSortOrder: "descend",
-          //dob is date of birth from api
-          //a b used to sort from big to small
-          sorter: (a, b) => a.surname - b.surname,
-          ...this.getColumnSearchProps("surname"),
+          sorter: true,
         },
         {
           title: "Date Created",
-          dataIndex: "date",
-          key: "date",
-          defaultSortOrder: "descend",
-          //dob is date of birth from api
-          //a b used to sort from big to small
-          sorter: (a, b) => a.date - b.date,
-          ...this.getColumnSearchPropsDate("date"),
+          dataIndex: "dateCreated",
+          key: "dateCreated",
+          sorter: true,
         },
         {
           title: "Status",
           dataIndex: "status",
           key: "status",
-          sorter: (a, b) => a.status.length - b.status.length,
-          filters: [
-            { text: "Activated", value: "activated" },
-            { text: "Disabled", value: "disabled" },
-            { text: "Suspended", value: "suspended" },
-          ],
-          onFilter: (value, record) => record.status.indexOf(value) === 0,
+          sorter: true,
+          align: 'center',
+          render: status => (
+            <Tag color={status == 1 ? 'green' : status == 2 ? 'orange' : 'red'}>
+              {status == 1 ? 'activated' : status == 2 ? 'suspended' : 'disabled'}
+            </Tag>
+          ),
         },
         {
           title: "Email",
           dataIndex: "email",
           key: "email",
-          sorter: (a, b) => a.email.localeCompare(b.email),
-          ...this.getColumnSearchProps("email"),
+          sorter: true,
         },
         {
           title: "Role",
           dataIndex: "role",
           key: "role",
-          sorter: (a, b) => a.role.localeCompare(b.role),
-          ...this.getColumnSearchProps("role"),
+          sorter: false,
         },
         {
             title: "Lims Clients",
-            dataIndex: "limsClients",
-            key: "limsClients",
-            sorter: (a, b) => a.limsClients.localeCompare(b.limsClients),
-            ...this.getColumnSearchProps("limsClients"),
+            dataIndex: "clientLims",
+            key: "clientLims",
+            sorter: false,
+            align: 'center',
+            render: clientLims => (
+              clientLims.length > 0 && <Tooltip title={clientLims.map(client => (
+                  <Text style={{color: 'white'}} key={client.id}>{client.addressdesc} <br /></Text>
+              ))}>
+                <Icon type="unordered-list" />
+              </Tooltip>
+              
+            ),
           },
       ];
       return (
@@ -306,14 +183,12 @@ class DatatableUserConfig extends React.Component {
           <Table
             style={{ backgroundColor: "white" }}
             columns={columns}
-            rowKey={(record) => record.login.uuid}
+            rowKey={(record) => record.id}
             dataSource={this.state.data}
             pagination={this.state.pagination}
             loading={this.state.loading}
             onChange={this.handleTableChange}
           />
-
-          {console.log(this)}
         </>
       );
 }
