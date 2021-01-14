@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 import {
   Query,
   Builder,
@@ -6,9 +6,58 @@ import {
   Utils as QbUtils,
 } from "react-awesome-query-builder";
 import { Modal, Button, Input, Menu, Dropdown } from "antd";
+import redaxios from "redaxios";
 
+const getConfig = async (props) => {
+  if (!props.columnsData || props.columnsData.lenght < 2) return;
+  const getType = (type) => {
+    if (type === "String") {
+      return "text";
+    } else if (type === "Number") {
+      return "number";
+    } else {
+      return "select";
+    }
+  };
+  console.log("lenght", props.columnsData.lenght);
+  console.log("ColumnsData", props.columnsData);
 
+  var columnsObj;
 
+  const convertedColumnsData = props.columnsData.columns.forEach(
+    async (elem) =>
+      (columnsObj[elem.title] = {
+        label: elem.title,
+        type: getType(elem.type),
+        valueSources: ["value"],
+        fieldSettings:
+          elem.association.hasAssociation && elem.association.values != null
+            ? {
+                listValues: elem.association.values.map((val) => ({
+                  value: val.defaultValue,
+                  title: val.defaultValue,
+                })),
+              }
+            : elem.association.hasAssociation && elem.association.values
+            ? await redaxios
+                // .get(`http://localhost:8080/EuclideV2/api/getPageList?pageListid=${parsed.pagelistid}&fluxId=${parsed.fluxId}`)
+                .get(
+                  `http://localhost:8080/EuclideV2/api//ddc/getSelect2Options?dc=+ $(column.association.package) +.+ $(column.association.domain)+&display=$(+column.association.displayValue )
+            : null,
+      })
+  );
+  //add logic for when hasAssociation is true but the values are not there need to add a get methode to fetch my data with an API that takes package+domaine and params(refer to exemple)
+  //exemple of the API
+  // url:'/'+pathArray[1]+'/ddc/getSelect2Options?dc='+ column.association.package +'.'+ column.association.domain+'&display='+column.association.displayValue,
+
+  return {
+    ...BasicConfig,
+    fields: {
+      ...convertedColumnsData,
+      ...columnsObj,
+    },
+  };
+};
 
 //ADD COLUMN ID + NA IF DATA IS NULL or Unindefined
 // You need to provide your own config. See below 'Config format'
@@ -18,50 +67,26 @@ const queryValue = { id: QbUtils.uuid(), type: "group" };
 
 export default class QueryBuilder extends Component {
   state = {
-    tree: QbUtils.checkTree(QbUtils.loadTree(queryValue), this.config),
-    config: this.config,
+    tree: QbUtils.checkTree(
+      QbUtils.loadTree(queryValue),
+      getConfig(this.props)
+    ),
+    config: getConfig(this.props),
     value: "",
     input: "",
     visible: false,
     selectedItem: null,
   };
 
-   getType = (type) => {
-    if (type === 'String') {
-      return 'text';
-    } else if (type === 'Number') {
-      return 'number'
-    } else {
-      return 'select'
-    }
-  }
-
-  convertedColumnsData = this.props.columnsData.columns.map(elem => ({
-    label: elem.title,
-    type: this.getType(elem.type),
-    valueSources: ["value"],
-    fieldSettings: elem.association.hasAssociation ? { listValues: 
-      elem.association.values.map((val) => ({ value: val.defaultValue, title: val.defaultValue }))
-    } : null
-  }))
-
-  config= {
-    ...BasicConfig,
-    fields: {
-      ...this.convertedColumnsData
-    },
-  };
-
-
-//function to call data in QueryBuilder
+  //function to call data in QueryBuilder
 
   // add a componentDidMount to Map Data for QueryBuilder
-// componentDidMount
-// console.log('componentDidMount() lifecycle');
+  // componentDidMount
+  // console.log('componentDidMount() lifecycle');
 
-// // Trigger update
-// this.setState({ foo: !this.state.foo });
-// }
+  // // Trigger update
+  // this.setState({ foo: !this.state.foo });
+  // }
 
   showModal = () => {
     this.setState({
@@ -118,7 +143,7 @@ export default class QueryBuilder extends Component {
         <pre>
           {JSON.stringify(QbUtils.jsonLogicFormat(immutableTree, config))}
         </pre>
-      </div> 
+      </div>
 
       <div>
         {this.state.selectedItem ? (
@@ -158,13 +183,12 @@ export default class QueryBuilder extends Component {
               Cancel
             </Button>
           </>
-        ) : (<div>
-          <Button style={{ marginBottom: 10 }} onClick={this.showModal}>
-            Save
-          </Button>
-          <Button style={{ marginBottom: 10 }} >
-            Lancer la requete
-          </Button>
+        ) : (
+          <div>
+            <Button style={{ marginBottom: 10 }} onClick={this.showModal}>
+              Save
+            </Button>
+            <Button style={{ marginBottom: 10 }}>Lancer la requete</Button>
           </div>
         )}
 
@@ -210,7 +234,7 @@ export default class QueryBuilder extends Component {
                       tree: QbUtils.loadTree(elem, config),
                       selectedItem: elem.name,
                     });
-                    console.log(elem, config)
+                    console.log(elem, config);
                   }}
                   key="edit"
                 >

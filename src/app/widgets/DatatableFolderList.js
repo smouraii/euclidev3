@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, {  useRef, useState } from "react";
 import { Table, Input, Button, Icon, DatePicker } from "antd";
 import reqwest from "reqwest";
 import { useLocation, withRouter } from "react-router-dom";
@@ -12,6 +12,7 @@ import {
 import ModalAttachementList from "./ModalAttachement";
 import redaxios from "redaxios";
 import queryString from "query-string";
+
 
  function Datatable(props) {
    //main Table
@@ -394,7 +395,7 @@ import queryString from "query-string";
 
   return (
     <>
-      <QueryBuilder data={columnsApi} />
+      <QueryBuilder columnsData={columnsData} />
      {!userInfo&& <Table
         style={{ backgroundColor: "white" }}
         columns={[...columnsApi,...columnAttachement]}
