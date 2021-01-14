@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Table, Icon, Tag, Tooltip, Typography, Button, Popconfirm, Popover, Modal, Select, Input, message } from "antd";
 import FInput from "../../widgets/inputs/FInput";
 import redaxios from "redaxios";
@@ -129,159 +129,184 @@ const ModalAddUser = () => {
 
   const clearSelectedAddresses = () => setSelectedAddresses([])
 
-    return (
-      <div>
-        <Tooltip title='Add user'>
-          <Button size="large" type="default" onClick={() => setModalVisible(true)}>
-            <Icon type="user-add" />
-          </Button>
-        </Tooltip>
-        <Formik
-            initialValues={{
-              name: '',
-              surname: '',
-              username: '',
-              email: ''
-            }}
-            onSubmit={(data, { setSubmitting, resetForm }) => {
-              setSubmitting(true);
-              redaxios.post(
-                process.env.REACT_APP_HOST + "/EuclideV2/api/admin/user",qs.stringify({
-                  name:data.name,
-                  surname:data.surname,
-                  username:data.username,
-                  email:data.email,
-                  // select_all:data.select_all,
-                  adress_selected:JSON.stringify(selectedAddresses.map((address) => address.id))
-                }),
-                {
-                  headers: {
-                    "content-type": "application/x-www-form-urlencoded",
-                    "X-Requested-With": "XMLHttpRequest",
-                  },
-                  withCredentials: true,
-                }
-              )
-              .then((res) => {
-                setSubmitting(false);
-                if (res.data.message == 'success') {
-                  setModalVisible(false);
+  return (
+    <div>
+      <Tooltip title='Add user'>
+        <Button size="large" type="default" onClick={() => setModalVisible(true)}>
+          <Icon type="user-add" />
+        </Button>
+      </Tooltip>
+      <Formik
+          initialValues={{
+            name: '',
+            surname: '',
+            username: '',
+            email: ''
+          }}
+          onSubmit={(data, { setSubmitting, resetForm }) => {
+            setSubmitting(true);
+            redaxios.post(
+              process.env.REACT_APP_HOST + "/EuclideV2/api/admin/user",qs.stringify({
+                name:data.name,
+                surname:data.surname,
+                username:data.username,
+                email:data.email,
+                // select_all:data.select_all,
+                adress_selected:JSON.stringify(selectedAddresses.map((address) => address.id))
+              }),
+              {
+                headers: {
+                  "content-type": "application/x-www-form-urlencoded",
+                  "X-Requested-With": "XMLHttpRequest",
+                },
+                withCredentials: true,
+              }
+            )
+            .then((res) => {
+              setSubmitting(false);
+              if (res.data.message == 'success') {
+                setModalVisible(false);
+                resetForm();
+                clearSelectedAddresses();
+                message.success({ content: 'User created', key: 'userSave', duration: 10 });
+              } else {
+                message.error({ content: 'A error occur', key: 'userSave', duration: 10 });
+              }
+            })
+            .catch((error) => {
+              setSubmitting(false);
+              message.error({ content: 'A error occur', key: 'userSave', duration: 10 });
+              console.log("error", error)
+            });
+          }}
+          validationSchema={userSchema}
+        >
+          {({
+            values,
+            isSubmitting,
+            status,
+            errors,
+            touched,
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            setFieldValue,
+            resetForm,
+          }) => (
+            <Form>
+              <Modal
+                visible={modalVisible}
+                title="Add a User"
+                onCancel={() => {
                   resetForm();
                   clearSelectedAddresses();
-                  message.success({ content: 'User created', key: 'userSave', duration: 10 });
-                } else {
-                  message.error({ content: 'A error occur', key: 'userSave', duration: 10 });
-                }
-              })
-              .catch((error) => {
-                setSubmitting(false);
-                message.error({ content: 'A error occur', key: 'userSave', duration: 10 });
-                console.log("error", error)
-              });
-            }}
-            validationSchema={userSchema}
-          >
-            {({
-              values,
-              isSubmitting,
-              status,
-              errors,
-              touched,
-              handleChange,
-              handleBlur,
-              handleSubmit,
-              setFieldValue,
-              resetForm,
-            }) => (
-              <Form>
-                <Modal
-                  visible={modalVisible}
-                  title="Add a User"
-                  onCancel={() => {
+                  setModalVisible(false);
+                }}
+                footer={[
+                  <Button key="back" onClick={() => {
                     resetForm();
                     clearSelectedAddresses();
                     setModalVisible(false);
-                  }}
-                  footer={[
-                    <Button key="back" onClick={() => {
-                      resetForm();
-                      clearSelectedAddresses();
-                      setModalVisible(false);
-                    }}>
-                      Return
-                    </Button>,
-                    <Button
-                      key="submit"
-                      type="primary"
-                      htmlType="submit"
-                      loading={isSubmitting}
-                      onClick={handleSubmit}
-                    >
-                      Submit
-                    </Button>
-                  ]}
-                >
+                  }}>
+                    Return
+                  </Button>,
+                  <Button
+                    key="submit"
+                    type="primary"
+                    htmlType="submit"
+                    loading={isSubmitting}
+                    onClick={handleSubmit}
+                  >
+                    Submit
+                  </Button>
+                ]}
+              >
 
-                  <FInput
-                    key="name"
-                    name="name"
-                    label="Name"
+                <FInput
+                  key="name"
+                  name="name"
+                  label="Name"
+                />
+                <FInput
+                  key="surname"
+                  name="surname"
+                  label="Surname"
+                />
+                <UsernameField
+                  key="username"
+                  name="username"
+                  label="Username"
+                />
+                <FInput
+                  key="email"
+                  name="email"
+                  label="Email"
+                />
+                <div className="inputContainer">
+                  <label htmlFor="addresses">Addresses</label>
+                  <Field
+                    component={Select}
+                    name="addresses"
+                    style={{ width: "100%" }}
+                    mode="multiple"
+                    onDropdownVisibleChange={(open) => open ? getAddresses() : null}
+                    onSelect={selectAddress}
+                    onDeselect={deselectAddress}
+                    filterOption={true}
+                    optionFilterProp={'content'}
+                    value={selectedAddresses.map(elem => elem.id)}
+                  >
+                    {addresses.map((elem) => (
+                      <Select.Option key={elem.id} value={elem.id} content={elem.addressid} >
+                        {elem.addressid}
+                      </Select.Option>
+                    ))}
+                  </Field>
+                  <ErrorMessage
+                    name="addresses"
+                    render={(msg) => <Typography.Text type="danger">{msg}</Typography.Text>}
                   />
-                  <FInput
-                    key="surname"
-                    name="surname"
-                    label="Surname"
-                  />
-                  <UsernameField
-                    key="username"
-                    name="username"
-                    label="Username"
-                  />
-                  <FInput
-                    key="email"
-                    name="email"
-                    label="Email"
-                  />
-                  <div className="inputContainer">
-                    <label htmlFor="addresses">Addresses</label>
-                    <Field
-                      component={Select}
-                      name="addresses"
-                      style={{ width: "100%" }}
-                      mode="multiple"
-                      onDropdownVisibleChange={(open) => open ? getAddresses() : null}
-                      onSelect={selectAddress}
-                      onDeselect={deselectAddress}
-                      filterOption={true}
-                      optionFilterProp={'content'}
-                      value={selectedAddresses.map(elem => elem.id)}
-                    >
-                      {addresses.map((elem) => (
-                        <Select.Option key={elem.id} value={elem.id} content={elem.addressid} >
-                          {elem.addressid}
-                        </Select.Option>
-                      ))}
-                    </Field>
-                    <ErrorMessage
-                      name="addresses"
-                      render={(msg) => <Typography.Text type="danger">{msg}</Typography.Text>}
-                    />
-                  </div>
-                </Modal>
-              </Form>
-          )}
-        </Formik>
-      </div>
-    );
+                </div>
+              </Modal>
+            </Form>
+        )}
+      </Formik>
+    </div>
+  );
 }
 
 function UserRole(props) {
   const [hover, setHover] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedRole, setSelectedRole] = useState(null);
-  const roles = [];
+  const [roles, setRoles] = useState([]);
+  const { role, record, actionCallback } = props;
 
-  const getRoles = () => console.log('get roles')
+  useEffect(() => {
+    redaxios.get(
+      process.env.REACT_APP_HOST + "/EuclideV2/api/admin/roles",
+      {
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        withCredentials: true,
+      }
+    )
+    .then((res) => {
+      if (res.ok) {
+        setRoles(res.data);
+      }
+    })
+    .catch((error) => console.log("error", error));
+  }, [])
+
+  useEffect(() => {
+    const selected = roles.find(e => e.role == role);
+    if (selected) {
+      selectRole(selected.id)
+    }
+  }, [roles, role])
 
   const selectRole = (id) => {
     const selected = roles.find(e => e.id == id);
@@ -303,36 +328,42 @@ function UserRole(props) {
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
           icon={hover ? "edit" : "team"}
-        >{props.text}</Button></Tooltip>
-      <Modal
-        visible={modalVisible}
-        title="Change Role"
-        onOk={() => console.log('Edit Role')}
-        onCancel={() => setModalVisible(false)}
-        footer={[
-          <Button key="back" onClick={() => setModalVisible(false)}>
-            Return
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            loading={false}
-            onClick={() => console.log('Edit Addresses')}
-          >
-            Submit
-          </Button>
-        ]}>
+        >{role}</Button></Tooltip>
           <Formik
             initialValues={{
-              Description: "",
-              Types: "",
-              Products: "",
-              Analysis: "",
-              Comments: "",
-              
+              role: "",
             }}
-            onSubmit={(data, { setSubmitting }) => {
-              setSubmitting(false);
+            onSubmit={(data, { setSubmitting, resetForm }) => {
+              setSubmitting(true);
+              redaxios.post(
+                process.env.REACT_APP_HOST + "/EuclideV2/api/admin/user/role",qs.stringify({
+                  userRow: record.id,
+                  newRole:selectedRole.id,
+                }),
+                {
+                  headers: {
+                    "content-type": "application/x-www-form-urlencoded",
+                    "X-Requested-With": "XMLHttpRequest",
+                  },
+                  withCredentials: true,
+                }
+              )
+              .then((res) => {
+                setSubmitting(false);
+                if (res.data.success) {
+                  setModalVisible(false);
+                  resetForm();
+                  actionCallback();
+                  message.success({ content: 'User role updated', key: 'userRole', duration: 10 });
+                } else {
+                  message.error({ content: 'A error occur', key: 'userRole', duration: 10 });
+                }
+              })
+              .catch((error) => {
+                setSubmitting(false);
+                message.error({ content: 'A error occur', key: 'userRole', duration: 10 });
+                console.log("error", error)
+              });
             }}
           >
             {({
@@ -347,55 +378,95 @@ function UserRole(props) {
               handleSubmit
             }) => (
               <Form>
+                <Modal
+                  visible={modalVisible}
+                  title="Change Role"
+                  onCancel={() => setModalVisible(false)}
+                  footer={[
+                    <Button key="back" onClick={() => setModalVisible(false)}>
+                      Return
+                    </Button>,
+                    <Button
+                      key="submit"
+                      type="primary"
+                      loading={false}
+                      onClick={() => handleSubmit()}
+                    >
+                      Submit
+                    </Button>
+                  ]}>
                 <div className="inputContainer">
                   <div className="inputContainer">
-                      <label htmlFor="role">Role</label>
-                      <Field
-                        component={Select}
-                        name="role"
-                        style={{ width: "100%" }}
-                        onDropdownVisibleChange={(open) => open ? getRoles() : null}
-                        onSelect={selectRole}
-                        onDeselect={deselectRole}
-                        filterOption={true}
-                        optionFilterProp={'content'}
-                        value={selectedRole && selectedRole.id}
-                      >
-                        {roles.map((elem) => (
-                          <Select.Option key={elem.id} value={elem.id} content={elem.addressid} >
-                            {elem.addressid}
-                          </Select.Option>
-                        ))}
-                      </Field>
-                      <ErrorMessage
-                        name="role"
-                        render={(msg) => <Typography.Text type="danger">{msg}</Typography.Text>}
-                      />
-                    </div>
+                    <Field
+                      component={Select}
+                      name="role"
+                      style={{ width: "100%" }}
+                      onSelect={selectRole}
+                      onDeselect={deselectRole}
+                      filterOption={true}
+                      optionFilterProp={'content'}
+                      value={selectedRole && selectedRole.id}
+                    >
+                      {roles.map((elem) => (
+                        <Select.Option key={elem.id} value={elem.id} content={elem.role} >
+                          {elem.role}
+                        </Select.Option>
+                      ))}
+                    </Field>
+                    <ErrorMessage
+                      name="role"
+                      render={(msg) => <Typography.Text type="danger">{msg}</Typography.Text>}
+                    />
+                  </div>
                 </div>
+                </Modal>
               </Form>
             )}
           </Formik>
-        </Modal>
     </>
   )
 }
 
 function UserClientLims(props) {
-  const { clientLims } = props;
-  const [hover, setHover] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedAddresses, setSlectedAddresses] = useState([]);
-  const addresses = [];
+  const [selectedAddresses, setSelectedAddresses] = useState([]);
+  const [addresses, setAddresses] = useState([]);
+  const { clientLims, record, actionCallback } = props;
+  
+  useEffect(() => {
+    setAddresses(clientLims);
+  }, [clientLims])
 
-  const getAddresses = () => console.log('get address')
+  useEffect(() => {
+    if (clientLims) {
+      setSelectedAddresses(clientLims)
+    }
+  }, [clientLims])
+
+  const getAddresses = () => {
+    redaxios.get(
+      process.env.REACT_APP_HOST + "/EuclideV2/api/admin/user/addresses",
+      {
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        withCredentials: true,
+      }
+    )
+    .then((res) => {
+      if (res.ok) {
+        setAddresses(res.data);
+      }
+    })
+    .catch((error) => console.log("error", error));
+  }
 
   const selectAddress = (id) => {
-    const { addresses, selectedAddresses } = this.state;
     const selected = addresses.find(e => e.id == id);
 
     if (selected) {
-      setSlectedAddresses([
+      setSelectedAddresses([
         ...selectedAddresses,
         selected
       ]);
@@ -406,110 +477,129 @@ function UserClientLims(props) {
     const deselected = addresses.find(e => e.id == id)
 
     if (deselected) {
-      setSlectedAddresses(selectedAddresses.filter(e => e.id != deselected.id))
+      setSelectedAddresses(selectedAddresses.filter(e => e.id != deselected.id))
     }
   }
 
   return (
     <>
-      <span
-          style={{width: '100%'}}
-          onMouseEnter={() => setHover(true)}
-          onMouseLeave={() => setHover(false)}>
-      {
-        clientLims.length > 0 && <Popover
-          title={<Text><Icon type="environment"/> Allocated Addresses</Text>}
-          content={(
-            <>
-              <Paragraph>
-              {
-                clientLims.map(client => (
-                  <Text style={{textAlign: 'center'}} key={client.id}>{client.addressid} <br /></Text>
-                ))
-              }
-              </Paragraph>
-              <Button size="small" type="dashed" icon="plus" onClick={() => setModalVisible(true)}>Allocate Addresses</Button>
-            </>
-          )}
-        >
-          <Icon type="unordered-list" />
-        </Popover>
-      }
-      </span>
-      <Modal
-        visible={modalVisible}
-        title="Allocate Addresses"
-        onOk={() => console.log('Edit Addresses')}
-        onCancel={() => setModalVisible(false)}
-        footer={[
-          <Button key="back" onClick={() => setModalVisible(false)}>
-            Return
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            loading={false}
-            onClick={() => console.log('Edit Addresses')}
-          >
-            Submit
-          </Button>
-        ]}
+      <Popover
+        title={<Text><Icon type="environment"/> Allocated Addresses</Text>}
+        content={(
+          <>
+            { clientLims.length > 0 && <Paragraph>
+            {
+              clientLims.map(client => (
+                <Text style={{textAlign: 'center'}} key={client.id}>{client.addressid} <br /></Text>
+              ))
+            }
+            </Paragraph>}
+            <Button size="small" type="dashed" icon="plus" onClick={() => setModalVisible(true)}>Allocate Addresses</Button>
+          </>
+        )}
       >
-        <Formik
-          initialValues={{
-            Description: "",
-            Types: "",
-            Products: "",
-            Analysis: "",
-            Comments: ""
-          }}
-          onSubmit={(data, { setSubmitting }) => {
+        <Icon type="unordered-list" />
+      </Popover>
+      <Formik
+        initialValues={{
+          Description: "",
+          Types: "",
+          Products: "",
+          Analysis: "",
+          Comments: ""
+        }}
+        onSubmit={(data, { setSubmitting, resetForm }) => {setSubmitting(true);
+          redaxios.post(
+            process.env.REACT_APP_HOST + "/EuclideV2/api/admin/user/addresses",qs.stringify({
+              user: record.id,
+              selected_add: JSON.stringify(selectedAddresses.map((address) => address.id)),
+            }),
+            {
+              headers: {
+                "content-type": "application/x-www-form-urlencoded",
+                "X-Requested-With": "XMLHttpRequest",
+              },
+              withCredentials: true,
+            }
+          )
+          .then((res) => {
             setSubmitting(false);
-          }}
-        >
-          {({
-            values,
-            isSubmitting,
-            status,
-            errors,
-            touched,
-            handleChange,
-            handleBlur,
-            handleFocus,
-            handleSubmit
-          }) => (
-            <Form>
+            if (res.data.success) {
+              setModalVisible(false);
+              resetForm();
+              actionCallback();
+              message.success({ content: 'User lims clients updated', key: 'userClientLims', duration: 10 });
+            } else {
+              message.error({ content: 'A error occur', key: 'userClientLims', duration: 10 });
+            }
+          })
+          .catch((error) => {
+            setSubmitting(false);
+            message.error({ content: 'A error occur', key: 'userClientLims', duration: 10 });
+            console.log("error", error)
+          });
+        }}
+      >
+        {({
+          values,
+          isSubmitting,
+          status,
+          errors,
+          touched,
+          handleChange,
+          handleBlur,
+          handleFocus,
+          handleSubmit
+        }) => (
+          <Form>
+            <Modal
+              visible={modalVisible}
+              title="Allocate Addresses"
+              onCancel={() => setModalVisible(false)}
+              footer={[
+                <Button key="back" onClick={() => setModalVisible(false)}>
+                  Return
+                </Button>,
+                <Button
+                  key="submit"
+                  type="primary"
+                  loading={false}
+                  onClick={handleSubmit}
+                >
+                  Save
+                </Button>
+              ]}
+            >
               <div className="inputContainer">
                 <div className="inputContainer">
-                    <label htmlFor="addresses">Addresses</label>
-                    <Field
-                      component={Select}
-                      name="addresses"
-                      style={{ width: "100%" }}
-                      mode="multiple"
-                      onDropdownVisibleChange={(open) => open ? getAddresses() : null}
-                      onSelect={selectAddress}
-                      onDeselect={deselectAddress}
-                      filterOption={true}
-                      optionFilterProp={'content'}
-                      value={selectedAddresses.map(elem => elem.id)}
-                    >
-                      {addresses.map((elem) => (
-                        <Select.Option key={elem.id} value={elem.id} content={elem.addressid} >
-                          {elem.addressid}
-                        </Select.Option>
-                      ))}
-                    </Field>
-                    <ErrorMessage
-                      name="addresses"
-                      render={(msg) => <Typography.Text type="danger">{msg}</Typography.Text>}
-                    />
-                  </div>
+                  <Field
+                    component={Select}
+                    name="addresses"
+                    style={{ width: "100%" }}
+                    mode="multiple"
+                    onDropdownVisibleChange={(open) => open ? getAddresses() : null}
+                    onSelect={selectAddress}
+                    onDeselect={deselectAddress}
+                    filterOption={true}
+                    optionFilterProp={'content'}
+                    value={selectedAddresses.map(elem => elem.id)}
+                  >
+                    {addresses.map((elem) => (
+                      <Select.Option key={elem.id} value={elem.id} content={elem.addressid} >
+                        {elem.addressid}
+                      </Select.Option>
+                    ))}
+                  </Field>
+                  <ErrorMessage
+                    name="addresses"
+                    render={(msg) => <Typography.Text type="danger">{msg}</Typography.Text>}
+                  />
+                </div>
               </div>
-            </Form>
-          )}
-        </Formik>
-      </Modal>
+            </Modal>
+          </Form>
+        )}
+      </Formik>
     </>
   )
 }
@@ -706,7 +796,6 @@ function MoreActions(props) {
             <Modal
               visible={changePWModalVisible}
               title="Change password"
-              onOk={() => console.log('Change password')}
               onCancel={() => setchangePWModalVisible(false)}
               footer={[
                 <Button key="back" onClick={() => setchangePWModalVisible(false)}>
@@ -788,7 +877,6 @@ function MoreActions(props) {
             <Modal
               visible={suspendModalVisible}
               title="Suspend user"
-              onOk={() => console.log('Suspend user')}
               onCancel={() => setSuspendModalVisible(false)}
               footer={[
                 <Button key="back" onClick={() => setSuspendModalVisible(false)}>
@@ -827,7 +915,7 @@ class DatatableUserConfig extends React.Component {
     pagination: {
       total: null,
       current: 1,
-      pageSize: 5
+      pageSize: 10
     },
     sorter: {
       field: 'username',
@@ -1050,8 +1138,8 @@ class DatatableUserConfig extends React.Component {
           dataIndex: "role",
           key: "role",
           sorter: false,
-          render: role => (
-            <UserRole text={role}/>
+          render: (role, record) => (
+            <UserRole role={role} record={record} actionCallback={() => this.fetch({search: this.state.search})}/>
           ),
         },
         {
@@ -1060,8 +1148,8 @@ class DatatableUserConfig extends React.Component {
           key: "clientLims",
           sorter: false,
           align: 'center',
-          render: clientLims => (
-            <UserClientLims clientLims={clientLims}/>
+          render: (clientLims, record) => (
+            <UserClientLims clientLims={clientLims} record={record} actionCallback={() => this.fetch({search: this.state.search})}/>
           ),
         },
         {
