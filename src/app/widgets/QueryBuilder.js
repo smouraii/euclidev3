@@ -1,4 +1,4 @@
-import React, { Component, useContext } from "react";
+import React, { Component } from "react";
 import {
   Query,
   Builder,
@@ -8,70 +8,48 @@ import {
 import { Modal, Button, Input, Menu, Dropdown } from "antd";
 import redaxios from "redaxios";
 
-const getConfig = async (props) => {
-  if (!props.columnsData || props.columnsData.lenght < 2) return;
-  const getType = (type) => {
-    if (type === "String") {
-      return "text";
-    } else if (type === "Number") {
-      return "number";
-    } else {
-      return "select";
-    }
-  };
-  console.log("lenght", props.columnsData.lenght);
-  console.log("ColumnsData", props.columnsData);
-
-  var columnsObj;
-
-  const convertedColumnsData = props.columnsData.columns.forEach(
-    async (elem) =>
-      (columnsObj[elem.title] = {
-        label: elem.title,
-        type: getType(elem.type),
-        valueSources: ["value"],
-        fieldSettings:
-          elem.association.hasAssociation && elem.association.values != null
-            ? {
-                listValues: elem.association.values.map((val) => ({
-                  value: val.defaultValue,
-                  title: val.defaultValue,
-                })),
-              }
-            : elem.association.hasAssociation && elem.association.values
-            ? await redaxios
-                // .get(`http://localhost:8080/EuclideV2/api/getPageList?pageListid=${parsed.pagelistid}&fluxId=${parsed.fluxId}`)
-                .get(
-                  `http://localhost:8080/EuclideV2/api//ddc/getSelect2Options?dc=+ $(column.association.package) +.+ $(column.association.domain)+&display=$(+column.association.displayValue )
-            : null,
-      })
-  );
-  //add logic for when hasAssociation is true but the values are not there need to add a get methode to fetch my data with an API that takes package+domaine and params(refer to exemple)
-  //exemple of the API
-  // url:'/'+pathArray[1]+'/ddc/getSelect2Options?dc='+ column.association.package +'.'+ column.association.domain+'&display='+column.association.displayValue,
-
-  return {
-    ...BasicConfig,
-    fields: {
-      ...convertedColumnsData,
-      ...columnsObj,
-    },
-  };
+const config = {
+  ...BasicConfig,
+  fields: {},
 };
+
+// const getConfig = async (props) => {
+//   if (!props.columnsData || props.columnsData.lenght < 2) return;
+//   const getType = (type) => {
+//     if (type === "String") {
+//       return "text";
+//     } else if (type === "Number") {
+//       return "number";
+//     } else {
+//       return "select";
+//     }
+//   };
+//   console.log("lenght", props.columnsData.lenght);
+//   console.log("ColumnsData", props.columnsData);
+
+//     //add logic for when hasAssociation is true but the values are not there need to add a get methode to fetch my data with an API that takes package+domaine and params(refer to exemple)
+//     //exemple of the API
+// // url:'/'+pathArray[1]+',
+
+//   return {
+//     ...BasicConfig,
+//     fields: {
+//       ...convertedColumnsData,
+//       ...columnsObj,
+//     },
+//   };
+// };
 
 //ADD COLUMN ID + NA IF DATA IS NULL or Unindefined
 // You need to provide your own config. See below 'Config format'
 
-// You can load query value from your backend storage (for saving see `Query.onChange()`)
+// You can load query value from your backend storage (for saving see ,`Query.onChange()`)
 const queryValue = { id: QbUtils.uuid(), type: "group" };
 
 export default class QueryBuilder extends Component {
   state = {
-    tree: QbUtils.checkTree(
-      QbUtils.loadTree(queryValue),
-      getConfig(this.props)
-    ),
-    config: getConfig(this.props),
+    tree: QbUtils.checkTree(QbUtils.loadTree(queryValue), config),
+    config: config,
     value: "",
     input: "",
     visible: false,
@@ -80,13 +58,63 @@ export default class QueryBuilder extends Component {
 
   //function to call data in QueryBuilder
 
-  // add a componentDidMount to Map Data for QueryBuilder
-  // componentDidMount
-  // console.log('componentDidMount() lifecycle');
+  getConfig = (columnsData) => {
+    const getType = (elem) => {
+      if (elem.type === "String") {
+        return "text";
+      } else if (elem.type === "Number") {
+        return "number";
+      } else if (elem.type === "Date") {
+        return "date";
+      } else if (elem.association.hasAssociation === true) {
+        return "select";
+      }
+    };
 
-  // // Trigger update
-  // this.setState({ foo: !this.state.foo });
-  // }
+    //
+
+    const convertedColumnsData = columnsData.columns.reduce((fields, elem) => {
+      return {
+        ...fields,
+        [elem.title]: {
+          label: elem.title,
+          type: getType(elem),
+          valueSources: ["value"],
+          fieldSettings:
+            elem.association.hasAssociation && elem.association.values != null
+              ? {
+                  listValues: elem.association.values.map((val) => ({
+                    value: val.defaultValue,
+                    title: val.defaultValue,
+                  })),
+                }
+              : elem.association.hasAssociation && elem.association.values
+              ? redaxios
+                  // .get(`http://localhost:8080/EuclideV2/api/getPageList?pageListid=${parsed.pagelistid}&fluxId=${parsed.fluxId}`)
+                  .get(
+                    `http://localhost:8080/EuclideV2/ddc/getSelectOptions?dc=+${columnsData.columns.association.package}+.+${columnsData.columns.association.domain}+&display=+${columnsData.columns.association.displayValue}`
+                  )
+              : null,
+        },
+      };
+    }, {});
+
+    console.log("QueryBuilderData", convertedColumnsData);
+    console.log("columnsQuery", columnsData.columns);
+    return {
+      ...BasicConfig,
+      fields: {
+        ...convertedColumnsData,
+      },
+    };
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log(prevProps);
+    if (prevProps.columnsData !== this.props.columnsData) {
+      this.setState({ config: this.getConfig(this.props.columnsData) });
+    }
+  }
 
   showModal = () => {
     this.setState({
@@ -114,8 +142,9 @@ export default class QueryBuilder extends Component {
 
   render = () => (
     <div>
+      {console.log("config", this.state.config)}
       <Query
-        {...this.config}
+        {...this.state.config}
         value={this.state.tree}
         onChange={this.onChange}
         renderBuilder={this.renderBuilder}
@@ -156,7 +185,7 @@ export default class QueryBuilder extends Component {
                   "queryStoredValue"
                 );
                 if (queryStoredValue) {
-                  console.log("test");
+                  console.log("queryStoredValue", queryStoredValue);
                   const queryStoredArray = JSON.parse(queryStoredValue);
                   const filteredArray = queryStoredArray.filter(
                     (arrayelem) => arrayelem.name !== this.state.selectedItem
@@ -188,7 +217,36 @@ export default class QueryBuilder extends Component {
             <Button style={{ marginBottom: 10 }} onClick={this.showModal}>
               Save
             </Button>
-            <Button style={{ marginBottom: 10 }}>Lancer la requete</Button>
+            <Button
+              style={{ marginBottom: 10 }}
+              onClick={(columnsData) => {
+                const Jsonlogic = {
+                  jsonlogic: JSON.stringify(
+                    QbUtils.jsonLogicFormat(immutableTree, config)
+                  ),
+                };
+                redaxios
+                  .post(
+                    `http://localhost:8080/EuclideV2/querybuilder?domain=${columnsData.columns.association.package}+.+${columnsData.columns.association.domain}+&pagelist+${columnsData.pagelistid}`,
+                    Jsonlogic,
+                    {
+                      headers: {
+                        "content-type": "application/x-www-form-urlencoded",
+                        "X-Requested-With": "XMLHttpRequest",
+                      },
+                      withCredentials: true,
+                    }
+                  )
+                  .then(function(response) {
+                    console.log(response);
+                  })
+                  .catch(function(error) {
+                    console.log(error);
+                  });
+              }}
+            >
+              Lancer la requete
+            </Button>
           </div>
         )}
 
@@ -229,12 +287,27 @@ export default class QueryBuilder extends Component {
             overlay={
               <Menu>
                 <Menu.Item
-                  onClick={() => {
+                  onClick={(columnsData) => {
+                    //Edit
+                    const Jsonlogic = {
+                      jsonlogic: JSON.stringify(QbUtils.loadTree(elem, config)),
+                    };
+                    redaxios.post(
+                      `http://localhost:8080/EuclideV2/api/querybuilder?domain=${columnsData.columns.association.package}+.+${columnsData.columns.association.domain}+&pagelist+${columnsData.pagelistid}`,
+                      { Jsonlogic },
+                      {
+                        headers: {
+                          "content-type": "application/x-www-form-urlencoded",
+                          "X-Requested-With": "XMLHttpRequest",
+                        },
+                        withCredentials: true,
+                      }
+                    );
                     this.setState({
                       tree: QbUtils.loadTree(elem, config),
                       selectedItem: elem.name,
                     });
-                    console.log(elem, config);
+                    console.log("elements in config liste", elem, config);
                   }}
                   key="edit"
                 >
@@ -242,6 +315,9 @@ export default class QueryBuilder extends Component {
                 </Menu.Item>
                 <Menu.Item
                   onClick={() => {
+                    redaxios.delete(
+                      `http://localhost:8080/EuclideV2/api/querybuilder`
+                    );
                     const queryStoredValue = localStorage.getItem(
                       "queryStoredValue"
                     );
@@ -271,7 +347,34 @@ export default class QueryBuilder extends Component {
             }
             trigger={["contextMenu"]}
           >
-            <Button style={{ marginRight: 10 }} key={elem.name}>
+            <Button
+              style={{ marginRight: 10 }}
+              key={elem.name}
+              onClick={() => {
+                //redaxios
+                //     .post(
+                //       `http://localhost:8080/EuclideV2//api/querybuilder/search?domain=${columnsData.columns.association.package}+.+${columnsData.columns.association.domain}+&pagelist+${columnsData.pagelistid}`,
+                //       {
+                //         jsonlogic: JSON.stringify(
+                //           QbUtils.jsonLogicFormat(immutableTree, config)
+                //         ),
+                //       },
+                //       {
+                //         headers: {
+                //           "content-type": "application/x-www-form-urlencoded",
+                //           "X-Requested-With": "XMLHttpRequest",
+                //         },
+                //         withCredentials: true,
+                //       }
+                //     )
+                //     .then(function(response) {
+                //       console.log(response);
+                //     })
+                //     .catch(function(error) {
+                //       console.log(error);
+                //     })
+              }}
+            >
               {elem.name}
             </Button>
           </Dropdown>
