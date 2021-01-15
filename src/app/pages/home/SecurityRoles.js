@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Table, Icon } from "antd";
+import React, { useState, useEffect } from "react";
+import { Table, Icon, Tooltip } from "antd";
 import {
   Portlet,
   PortletBody,
@@ -8,6 +8,7 @@ import {
 import ModalAddRole from "./../../widgets/ModalAddRole";
 import TreeList from "../../widgets/Treelist";
 import FullscreenButton from "../../widgets/FullscreenButton";
+import redaxios from "redaxios";
 
 const euclideData = [
   {
@@ -168,8 +169,27 @@ export default function SecurityRoles() {
   const [checkedKeysEFilesData, setCheckedKeysEFilesData] = useState([]);
   const [checkedKeysBugReport, setCheckedKeysBugReport] = useState([]);
   const [checkedKeysDDC, setCheckedKeysDDC] = useState([]);
+  const [roles, setRoles] = useState([]);
 
-  const [isFull, setIsFull] = React.useState(false);
+  useEffect(() => {
+    redaxios.get(
+      process.env.REACT_APP_HOST + "/EuclideV2/api/admin/security/roles",
+      {
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        withCredentials: true,
+      }
+    )
+    .then((res) => {
+      console.log(res)
+      if (res.ok) {
+        setRoles(res.data.roles);
+      }
+    })
+    .catch((error) => console.log("error", error));
+  }, [])
 
   const expandedRowRender = () => {
     return (
@@ -194,23 +214,23 @@ export default function SecurityRoles() {
   };
 
   const status = (keys, data) => {
-    console.log(keys.length, data);
-    if (keys.length >= data) {
+    console.log(keys, data);
+    if (keys >= data) {
       return <Icon type="check" style={{ color: "green" }} />;
-    } else if (1 <= keys.length && keys.length < data) {
+    } else if (1 <= keys && keys < data) {
       return <Icon type="check" style={{ color: "orange" }} />;
-    } else if (keys.length === 0) {
+    } else if (keys === 0) {
       return <Icon type="minus" style={{ color: "red" }} />;
     }
   };
 
   const columns = [
-    { title: "Role", dataIndex: "role", key: "role" },
-    { title: "Euclide", dataIndex: "euclide", key: "euclide" },
-    { title: "Dashboard", dataIndex: "dashboard", key: "dashboard" },
-    { title: "EFiles", dataIndex: "eFiles", key: "eFiles" },
-    { title: "bugReport", dataIndex: "bugReport", key: "bugReport" },
-    { title: "DDC", dataIndex: "DDC", key: "DDC" },
+    { title: "Role", dataIndex: "description", key: "id" },
+    { title: "Euclide", dataIndex: "Euclide", key: "Euclide", render: (data) => status(data, euclideData[0].children.length) },
+    { title: "Dashboard", dataIndex: "Dashboard", key: "Dashboard", render: (data) => status(data, dashboardData[0].children.length) },
+    { title: "EFiles", dataIndex: "eFiles", key: "eFiles", render: (data) => status(data, eFilesData[0].children.length) },
+    { title: "BugReport", dataIndex: "BugReport", key: "BugReport", render: (data) => status(data, bugReportData[0].children.length) },
+    { title: "DDC", dataIndex: "DDC", key: "DDC", render: (data) => status(data, DDCData[0].children.length) },
   ];
 
   const data = [];
@@ -232,36 +252,36 @@ export default function SecurityRoles() {
   //   bugReport: status(checkedKeysBugReport,bugReportData[0].children.length),
   //   DDC: status(checkedKeysDDC,13)
   // });
-
+  console.log({roles})
   return (
-    <PortletBody heightfluid={true}>
-      <div className="d-flex justify-content-end">
+
+    <>
+      <div className="col-xl-12 d-flex">
         <div style={{ margin: 5 }}>
-          <Portlet>
-            <PortletBody fit={true}>
-              <ModalAddRole />
-            </PortletBody>
-          </Portlet>
+          <Tooltip title='Add role'>
+            {/* <Button size="large" onClick={() => this.fetch({search: this.state.search})}><Icon type="retweet" /></Button> */}
+            <ModalAddRole />
+          </Tooltip>
         </div>
       </div>
-
-      <FullscreenButton
-        style={{ margin: 10 }}
-        isFull={isFull}
-        setIsFull={setIsFull}
-        current={
-          <PortletBody fit={true}>
+      
+      <div className="col-xl-12">
+        <Portlet
+          className="kt-portlet--height-fluid kt-portlet--border-bottom-dark"
+          fluidHeight={true}
+        >
+          <PortletBody>
             <Table
               style={{ backgroundColor: "white" }}
               className="components-table-demo-nested"
               columns={columns}
               expandedRowRender={expandedRowRender}
-              dataSource={data}
+              dataSource={roles}
               pagination={false}
             />
           </PortletBody>
-        }
-      />
-    </PortletBody>
+        </Portlet>
+      </div>
+    </>
   );
 }
