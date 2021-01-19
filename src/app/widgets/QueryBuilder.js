@@ -3,10 +3,16 @@ import {
   Query,
   Builder,
   BasicConfig,
+  // AntdConfig,
   Utils as QbUtils,
 } from "react-awesome-query-builder";
 import { Modal, Button, Input, Menu, Dropdown } from "antd";
 import redaxios from "redaxios";
+import qs from "qs";
+// import AntdConfig from "react-awesome-query-builder/lib/config/antd";
+// import 'react-awesome-query-builder/css/antd.less';
+
+// const InitialConfig = AntdConfig;
 
 const config = {
   ...BasicConfig,
@@ -54,8 +60,10 @@ export default class QueryBuilder extends Component {
     input: "",
     visible: false,
     selectedItem: null,
+    selectedValuesData: null,
   };
 
+  
   //function to call data in QueryBuilder
 
   getConfig = (columnsData) => {
@@ -88,17 +96,32 @@ export default class QueryBuilder extends Component {
                     title: val.defaultValue,
                   })),
                 }
-              : elem.association.hasAssociation && elem.association.values
+              : elem.association.hasAssociation &&
+                elem.association.values == null
               ? redaxios
-                  // .get(`http://localhost:8080/EuclideV2/api/getPageList?pageListid=${parsed.pagelistid}&fluxId=${parsed.fluxId}`)
                   .get(
-                    `http://localhost:8080/EuclideV2/ddc/getSelectOptions?dc=+${columnsData.columns.association.package}+.+${columnsData.columns.association.domain}+&display=+${columnsData.columns.association.displayValue}`
+                    `http://localhost:8080/EuclideV2/api/getSelectOptions?dc=${elem.association.package}.${elem.association.domain}&display=${elem.association.displayValue}`,
+                    { withCredentials: true }
                   )
+                  .then((res) => {
+                    this.setState(
+                      { selectedValuesData: res.data },
+                      {
+                        listValues: this.state.selectedValuesData.map(
+                          (val) => ({
+                            value: val.id,
+                            title: val.name,
+                          })
+                        ),
+                      },
+                      console.log("SelecOptions", this.state.selectedValuesData)
+                    );
+                  })
               : null,
         },
       };
     }, {});
-
+    console.log("querybuilderRes", this.selectedValuesData);
     console.log("QueryBuilderData", convertedColumnsData);
     console.log("columnsQuery", columnsData.columns);
     return {
@@ -142,6 +165,7 @@ export default class QueryBuilder extends Component {
 
   render = () => (
     <div>
+      {console.log("SelectedValuesData", this.state.selectedValuesData)}
       {console.log("config", this.state.config)}
       <Query
         {...this.state.config}
@@ -160,6 +184,30 @@ export default class QueryBuilder extends Component {
       </div>
     </div>
   );
+
+  // componentDidUMount(){
+  //   document.querySelector(".query-builder").addEventListener("click", (elem)=>{
+  //     redaxios
+  //   .get(
+  //     `http://localhost:8080/EuclideV2/api/getSelectOptions?dc=${elem.association.package}.${elem.association.domain}&display=${elem.association.displayValue}`,
+  //     { withCredentials: true }
+  //   )
+  //   .then((res) => {
+  //     this.setState(
+  //       { selectedValuesData: res.data },
+  //       {
+  //         listValues: this.state.selectedValuesData.map(
+  //           (val) => ({
+  //             value: val.id,
+  //             title: val.name,
+  //           })
+  //         ),
+  //       },
+  //       console.log("SelecOptions", this.state.selectedValuesData)
+  //     );
+  //   })})
+  //   console.log()
+  //   };
 
   renderResult = ({ tree, tree: immutableTree, config }) => (
     <div className="query-builder-result" style={{ padding: "10px" }}>
@@ -227,8 +275,8 @@ export default class QueryBuilder extends Component {
                 };
                 redaxios
                   .post(
-                    `http://localhost:8080/EuclideV2/querybuilder?domain=${columnsData.columns.association.package}+.+${columnsData.columns.association.domain}+&pagelist+${columnsData.pagelistid}`,
-                    Jsonlogic,
+                    `http://localhost:8080/EuclideV2/querybuilder?domain=${columnsData.columns.association.package}.${columnsData.columns.association.domain}&pagelist${columnsData.pagelistid}`,
+                    qs.stringify({ rules: Jsonlogic }),
                     {
                       headers: {
                         "content-type": "application/x-www-form-urlencoded",
@@ -288,21 +336,6 @@ export default class QueryBuilder extends Component {
               <Menu>
                 <Menu.Item
                   onClick={(columnsData) => {
-                    //Edit
-                    const Jsonlogic = {
-                      jsonlogic: JSON.stringify(QbUtils.loadTree(elem, config)),
-                    };
-                    redaxios.post(
-                      `http://localhost:8080/EuclideV2/api/querybuilder?domain=${columnsData.columns.association.package}+.+${columnsData.columns.association.domain}+&pagelist+${columnsData.pagelistid}`,
-                      { Jsonlogic },
-                      {
-                        headers: {
-                          "content-type": "application/x-www-form-urlencoded",
-                          "X-Requested-With": "XMLHttpRequest",
-                        },
-                        withCredentials: true,
-                      }
-                    );
                     this.setState({
                       tree: QbUtils.loadTree(elem, config),
                       selectedItem: elem.name,
@@ -316,7 +349,8 @@ export default class QueryBuilder extends Component {
                 <Menu.Item
                   onClick={() => {
                     redaxios.delete(
-                      `http://localhost:8080/EuclideV2/api/querybuilder`
+                      `http://localhost:8080/EuclideV2/api/querybuilder`,
+                      { withCredentials: true }
                     );
                     const queryStoredValue = localStorage.getItem(
                       "queryStoredValue"
