@@ -60,7 +60,7 @@ export default class QueryBuilder extends Component {
     input: "",
     visible: false,
     selectedItem: null,
-    selectedValuesData: null,
+    selectedValuesData: [],
   };
 
   
@@ -98,25 +98,12 @@ export default class QueryBuilder extends Component {
                 }
               : elem.association.hasAssociation &&
                 elem.association.values == null
-              ? redaxios
-                  .get(
-                    `http://localhost:8080/EuclideV2/api/getSelectOptions?dc=${elem.association.package}.${elem.association.domain}&display=${elem.association.displayValue}`,
-                    { withCredentials: true }
-                  )
-                  .then((res) => {
-                    this.setState(
-                      { selectedValuesData: res.data },
-                      {
-                        listValues: this.state.selectedValuesData.map(
+              ?  {  listValues: this.state.selectedValuesData.map(
                           (val) => ({
                             value: val.id,
                             title: val.name,
-                          })
-                        ),
-                      },
-                      console.log("SelecOptions", this.state.selectedValuesData)
-                    );
-                  })
+                          })),
+                        }
               : null,
         },
       };
@@ -185,29 +172,21 @@ export default class QueryBuilder extends Component {
     </div>
   );
 
-  // componentDidUMount(){
-  //   document.querySelector(".query-builder").addEventListener("click", (elem)=>{
-  //     redaxios
-  //   .get(
-  //     `http://localhost:8080/EuclideV2/api/getSelectOptions?dc=${elem.association.package}.${elem.association.domain}&display=${elem.association.displayValue}`,
-  //     { withCredentials: true }
-  //   )
-  //   .then((res) => {
-  //     this.setState(
-  //       { selectedValuesData: res.data },
-  //       {
-  //         listValues: this.state.selectedValuesData.map(
-  //           (val) => ({
-  //             value: val.id,
-  //             title: val.name,
-  //           })
-  //         ),
-  //       },
-  //       console.log("SelecOptions", this.state.selectedValuesData)
-  //     );
-  //   })})
-  //   console.log()
-  //   };
+  componentDidUMount(){
+    document.querySelector(".query-builder-container").addEventListener("click", ()=>{
+      redaxios
+    .get(
+      `http://localhost:8080/EuclideV2/api/getSelectOptions?dc=${this.props.columnsData.columns.association.package}.${this.props.columnsData.columns.association.domain}&display=${this.props.columnsData.columns.association.displayValue}`,
+      { withCredentials: true }
+    )
+    .then((res) => {
+      this.setState(
+        { selectedValuesData: res.data },
+        console.log("SelecOptions", this.state.selectedValuesData)
+      );
+    })})
+    console.log()
+    };
 
   renderResult = ({ tree, tree: immutableTree, config }) => (
     <div className="query-builder-result" style={{ padding: "10px" }}>
