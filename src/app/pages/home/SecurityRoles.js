@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Table, Icon, Tooltip } from "antd";
+import React, { useState, useEffect, useReducer } from "react";
+import { Table, Icon, Tooltip, Tree } from "antd";
 import {
   Portlet,
   PortletBody,
@@ -46,6 +46,7 @@ const euclideData = [
     ],
   },
 ];
+
 const dashboardData = [
   {
     title: "Dashboard",
@@ -163,14 +164,86 @@ const DDCData = [
   },
 ];
 
+const ComponentTree = (props) => {
+  const {component, checkedKeys, setCheckedKeys} = props
+  const [expandedKeys, setExpandedKeys] = useState([])
+
+  useEffect(() => {
+    setExpandedKeys([
+      component.key
+    ])
+  }, [component])
+
+  return (
+    <div className="col-xl-4">
+      <Portlet
+        className="kt-portlet--height-fluid kt-portlet--border-bottom-dark"
+        fluidHeight={true}
+      >
+        <PortletHeader title={component.title} />
+        <PortletBody>
+          <Tree
+            checkable
+            expandedKeys={expandedKeys}
+            treeData={[component]}
+            onCheck={setCheckedKeys}
+            checkedKeys= {checkedKeys}
+          />
+        </PortletBody>
+      </Portlet>
+    </div>
+  )
+};
+
+const ExpandedRowRender = (props) => {
+  const {record, expanded, components} = props;
+  const [activeNodes, setActiveNodes] = useReducer((state, action) => {
+    return {
+      ...state,
+      [action.key] : action.selectedKeys
+    }
+  },[]);
+  
+
+  useEffect(() => {
+    components.forEach(
+        (component) => setActiveNodes({
+          key: component.key,
+          selectedKeys: [
+            ...(record.activeNodes.includes(component.key) ? [component.key] : []),
+            ...component.children.filter(child => record.activeNodes.includes(child.key)).map(child => child.key)
+          ]})
+      )
+  }, [components])
+
+  return (
+      expanded && <div className="row d-flex justify-content-center">
+        {
+          components.map( component => (
+            <ComponentTree 
+              key={component.key}
+              component={component}
+              setCheckedKeys={(selectedKeys) => setActiveNodes({key: component.key, selectedKeys})}
+              checkedKeys={activeNodes[component.key]}
+            />
+          ))
+        }
+      </div>
+    )
+}
+
+
 export default function SecurityRoles() {
-  const [checkedKeys, setCheckedKeys] = useState([]);
-  const [checkedKeysDashboard, setCheckedKeysDashboard] = useState([]);
-  const [checkedKeysEFilesData, setCheckedKeysEFilesData] = useState([]);
-  const [checkedKeysBugReport, setCheckedKeysBugReport] = useState([]);
-  const [checkedKeysDDC, setCheckedKeysDDC] = useState([]);
+  const [components, setComponents] = useState([
+    ...euclideData,
+    ...dashboardData,
+    ...eFilesData,
+    ...bugReportData,
+    ...DDCData,
+  ])
   const [roles, setRoles] = useState([]);
 
+  // Get Roles list at component mount
   useEffect(() => {
     redaxios.get(
       process.env.REACT_APP_HOST + "/EuclideV2/api/admin/security/roles",
@@ -183,7 +256,6 @@ export default function SecurityRoles() {
       }
     )
     .then((res) => {
-      console.log(res)
       if (res.ok) {
         setRoles(res.data.roles);
       }
@@ -191,30 +263,7 @@ export default function SecurityRoles() {
     .catch((error) => console.log("error", error));
   }, [])
 
-  const expandedRowRender = () => {
-    return (
-      <TreeList
-        checkedKeys={checkedKeys}
-        setCheckedKeys={setCheckedKeys}
-        checkedKeysDashboard={checkedKeysDashboard}
-        setCheckedKeysDashboard={setCheckedKeysDashboard}
-        checkedKeysBugReport={checkedKeysBugReport}
-        setCheckedKeysBugReport={setCheckedKeysBugReport}
-        checkedKeysEFilesData={checkedKeysEFilesData}
-        setCheckedKeysEFilesData={setCheckedKeysEFilesData}
-        checkedKeysDDC={checkedKeysDDC}
-        setCheckedKeysDDC={setCheckedKeysDDC}
-        euclideData={euclideData}
-        dashboardData={dashboardData}
-        eFilesData={eFilesData}
-        bugReportData={bugReportData}
-        DDCData={DDCData}
-      />
-    );
-  };
-
   const status = (keys, data) => {
-    console.log(keys, data);
     if (keys >= data) {
       return <Icon type="check" style={{ color: "green" }} />;
     } else if (1 <= keys && keys < data) {
@@ -233,28 +282,7 @@ export default function SecurityRoles() {
     { title: "DDC", dataIndex: "DDC", key: "DDC", render: (data) => status(data, DDCData[0].children.length) },
   ];
 
-  const data = [];
-  data.push({
-    key: 1,
-    role: "Administrateur",
-    euclide: status(checkedKeys, euclideData[0].children.length),
-    dashboard: status(checkedKeysDashboard, dashboardData[0].children.length),
-    eFiles: status(checkedKeysEFilesData, eFilesData[0].children.length),
-    bugReport: status(checkedKeysBugReport, bugReportData[0].children.length),
-    DDC: status(checkedKeysDDC, 13),
-  });
-  // data.push({
-  //   key: 3,
-  //   role: "Screem",
-  //   euclide:status(checkedKeys,euclideData[0].children.length),
-  //   dashboard: status(checkedKeysDashboard,dashboardData[0].children.length) ,
-  //   eFiles: status(checkedKeysEFilesData,eFilesData[0].children.length),
-  //   bugReport: status(checkedKeysBugReport,bugReportData[0].children.length),
-  //   DDC: status(checkedKeysDDC,13)
-  // });
-  console.log({roles})
   return (
-
     <>
       <div className="col-xl-12 d-flex">
         <div style={{ margin: 5 }}>
@@ -275,7 +303,7 @@ export default function SecurityRoles() {
               style={{ backgroundColor: "white" }}
               className="components-table-demo-nested"
               columns={columns}
-              expandedRowRender={expandedRowRender}
+              expandedRowRender={(record, index, indent, expanded) => <ExpandedRowRender components={components} record={record} expanded={expanded}/>}
               dataSource={roles}
               pagination={false}
             />
