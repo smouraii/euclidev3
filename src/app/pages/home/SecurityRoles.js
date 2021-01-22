@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useReducer } from "react";
-import { Table, Icon, Tooltip, Tree } from "antd";
+import { Table, Icon, Tooltip, Tree, Button } from "antd";
 import {
   Portlet,
   PortletBody,
   PortletHeader,
 } from "../../partials/content/Portlet";
 import ModalAddRole from "./../../widgets/ModalAddRole";
-import TreeList from "../../widgets/Treelist";
-import FullscreenButton from "../../widgets/FullscreenButton";
 import redaxios from "redaxios";
 
 const euclideData = [
@@ -42,23 +40,6 @@ const euclideData = [
       {
         title: "EFiles Configuration",
         key: "EFilesConfiguration",
-      },
-    ],
-  },
-];
-
-const dashboardData = [
-  {
-    title: "Dashboard",
-    key: "dashboard",
-    children: [
-      {
-        title: "Request Per Status",
-        key: "requestPerStatus",
-      },
-      {
-        title: "Sample Per Request",
-        key: "samplePerRequest",
       },
     ],
   },
@@ -99,80 +80,9 @@ const bugReportData = [
     ],
   },
 ];
-const DDCData = [
-  {
-    title: "DDC",
-    key: "DDC",
-    children: [
-      {
-        title: "Analysis Request",
-        key: "analysisRequest",
-        children: [
-          {
-            title: "Request01",
-            key: "request01",
-          },
-          {
-            title: "List01",
-            key: "list01",
-          },
-        ],
-      },
-      {
-        title: "Analysis Request 2",
-        key: "analysisRequest02",
-        children: [
-          {
-            title: "Analysis Request Without RI",
-            key: "analysisRequestWithoutRI",
-          },
-        ],
-      },
-      {
-        title: "Adress",
-        key: "Adress",
-        children: [
-          {
-            title: "Adress Billing",
-            key: "AdressBilling",
-          },
-          {
-            title: "AdressReportTo",
-            key: "AdressReportTo",
-          },
-          {
-            title: "AdressList",
-            key: "AdressList",
-          },
-        ],
-      },
-      {
-        title: "Post Message",
-        key: "PostMessage",
-        children: [
-          {
-            title: "Post Message",
-            key: "postMessage",
-          },
-          {
-            title: "Message List",
-            key: "MessageList",
-          },
-        ],
-      },
-    ],
-  },
-];
 
 const ComponentTree = (props) => {
-  const {component, checkedKeys, setCheckedKeys} = props
-  const [expandedKeys, setExpandedKeys] = useState([])
-
-  useEffect(() => {
-    setExpandedKeys([
-      component.key
-    ])
-  }, [component])
+  const {component, checkedKeys, setCheckedKeys, disable} = props
 
   return (
     <div className="col-xl-4">
@@ -184,10 +94,11 @@ const ComponentTree = (props) => {
         <PortletBody>
           <Tree
             checkable
-            expandedKeys={expandedKeys}
+            defaultExpandAll={true}
             treeData={[component]}
             onCheck={setCheckedKeys}
             checkedKeys= {checkedKeys}
+            disabled={disable}
           />
         </PortletBody>
       </Portlet>
@@ -203,7 +114,23 @@ const ExpandedRowRender = (props) => {
       [action.key] : action.selectedKeys
     }
   },[]);
+  const [disable, setDisable] = useState(true)
   
+  useEffect(() => {
+    if (!expanded) {
+      setDisable(true)
+      components.forEach(
+        (component) => setActiveNodes({
+          key: component.key,
+          selectedKeys: [
+            ...(record.activeNodes.includes(component.key) ? [component.key] : []),
+            ...component.children.filter(child => record.activeNodes.includes(child.key)).map(child => child.key)
+          ]})
+      )   
+    }
+  }, [expanded])
+
+  console.log({components})
 
   useEffect(() => {
     components.forEach(
@@ -218,28 +145,33 @@ const ExpandedRowRender = (props) => {
 
   return (
       expanded && <div className="row d-flex justify-content-center">
-        {
-          components.map( component => (
-            <ComponentTree 
-              key={component.key}
-              component={component}
-              setCheckedKeys={(selectedKeys) => setActiveNodes({key: component.key, selectedKeys})}
-              checkedKeys={activeNodes[component.key]}
-            />
-          ))
-        }
+        <div className="col-xl-12 d-flex">
+          <div style={{ marginBottom: 15 }}>
+            <Button size="small" type={disable ? 'default' : 'primary'} onClick={() => disable ? setDisable(!disable) : setDisable(!disable)}><Icon type={disable ? 'edit' : 'save'} />{disable ? 'Edit' : 'Save'}</Button>
+          </div>
+        </div>
+      
+          {
+            components.map( component => (
+              <ComponentTree 
+                key={component.key}
+                component={component}
+                setCheckedKeys={(selectedKeys) => setActiveNodes({key: component.key, selectedKeys})}
+                checkedKeys={activeNodes[component.key]}
+                disable={disable}
+              />
+            ))
+          }
       </div>
     )
 }
 
-
 export default function SecurityRoles() {
   const [components, setComponents] = useState([
     ...euclideData,
-    ...dashboardData,
-    ...eFilesData,
-    ...bugReportData,
-    ...DDCData,
+  ])
+  const [columns, setColumns] = useState([
+    { title: "Role", dataIndex: "description", key: "id" },
   ])
   const [roles, setRoles] = useState([]);
 
@@ -263,7 +195,49 @@ export default function SecurityRoles() {
     .catch((error) => console.log("error", error));
   }, [])
 
-  const status = (keys, data) => {
+  // Get DDC list at component mount
+  useEffect(() => {
+    redaxios.get(
+      process.env.REACT_APP_HOST + "/EuclideV2/api/admin/security/components",
+      {
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        withCredentials: true,
+      }
+    )
+    .then((res) => {
+      if (res.ok) {
+        console.log(res)
+
+        setColumns([
+          { title: "Role", dataIndex: "description", key: "id" },
+          ...res.data.components.map(component => ({
+            title: component.title,
+            dataIndex: component.title,
+            key: component.title,
+            render: (data) => status(data, component.nodesCount)
+          })),
+        ])
+
+        setComponents([
+          ...res.data.components.map(component => ({
+            title: component.title,
+            key: component.title,
+            children: component.children.map(child => ({
+              title: child.title,
+              key: child.title,
+            }))
+          })),
+        ])
+      }
+    })
+    .catch((error) => console.log("error", error));
+  }, [])
+
+  const status = (keys = 0, data) => {
+    console.log({keys, data})
     if (keys >= data) {
       return <Icon type="check" style={{ color: "green" }} />;
     } else if (1 <= keys && keys < data) {
@@ -272,15 +246,6 @@ export default function SecurityRoles() {
       return <Icon type="minus" style={{ color: "red" }} />;
     }
   };
-
-  const columns = [
-    { title: "Role", dataIndex: "description", key: "id" },
-    { title: "Euclide", dataIndex: "Euclide", key: "Euclide", render: (data) => status(data, euclideData[0].children.length) },
-    { title: "Dashboard", dataIndex: "Dashboard", key: "Dashboard", render: (data) => status(data, dashboardData[0].children.length) },
-    { title: "EFiles", dataIndex: "eFiles", key: "eFiles", render: (data) => status(data, eFilesData[0].children.length) },
-    { title: "BugReport", dataIndex: "BugReport", key: "BugReport", render: (data) => status(data, bugReportData[0].children.length) },
-    { title: "DDC", dataIndex: "DDC", key: "DDC", render: (data) => status(data, DDCData[0].children.length) },
-  ];
 
   return (
     <>
