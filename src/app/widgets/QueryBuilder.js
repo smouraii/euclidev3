@@ -17,60 +17,46 @@ import SelectQuery from "./SelectQuery";
 
 const config = {
   ...BasicConfig,
-  fields: {
-      select: {
-        type: "selectQuery",
-        widgets: {
-          selectQuery: {
-            widgetProps: {
-              customProps: {
-                ddc: 'com.euclide.sdc.RequestStatus',
-                displayvalue: 'requeststatus'
-              },
-            }
-          },
-        },
-      }
-    },
-    widgets: {
+  widgets: {
+    ...BasicConfig.widgets,
+    selectQuery: {
       ...BasicConfig.widgets.select,
-      selectQuery: {
-        factory: ({
-          value,
-          setValue,
-          allowCustomValues,
-          placeholder,
-          customProps,
-        }) => {
-          const onChange = (e, data) => {
-            setValue(data?.value?.value || "");
-          };
-          return (
-            <SelectQuery
-              label={placeholder}
-              selectedValue={value}
-              onChange={onChange}
-            />
-          );
+      factory: ({
+        value,
+        setValue,
+        allowCustomValues,
+        placeholder,
+        customProps,
+      }) => {
+        const onChange = (e, data) => {
+          setValue(data?.value?.value || "");
+        };
+        return (
+          <SelectQuery
+          // selectedValuesData={this.state.selectedValuesData}
+            placeholder="Select value"
+            selectedValue={value}
+            onChange={onChange}
+            customProps={customProps}
+          />
+        );
+      },
+    },
+  },
+  //cannot  convert  undefined or null to object
+  types: {
+    ...BasicConfig.types,
+    selectQuery: {
+      valueSources: ["value", "field", "func"],
+      defaultOperator: "equal",
+      widgets: {
+        selectQuery: {
+          operators: ["equal", "between"],
         },
       },
     },
-    //cannot  convert  undefined or null to object
-    types: {
-        ...BasicConfig.types.select,
-      selectQuery: {
-        valueSources: ["value", "field", "func"],
-        defaultOperator: "equal",
-        widgets: {
-          selectQuery: {
-            operators: ["equal", "between"],
-          },
-        },
-      },
   },
 };
-
-
 
 //basicConfig
 
@@ -105,7 +91,7 @@ const config = {
 // You need to provide your own config. See below 'Config format'
 
 // You can load query value from your backend storage (for saving see ,`Query.onChange()`)
-console.log("BasicConfig",BasicConfig.types.select)
+console.log("BasicConfig", BasicConfig.types.select);
 const queryValue = { id: QbUtils.uuid(), type: "group" };
 
 export default class QueryBuilder extends Component {
@@ -144,18 +130,30 @@ export default class QueryBuilder extends Component {
         [elem.title]: {
           label: elem.title,
           type: getType(elem),
+          widgets:
+            getType(elem) === "selectQuery" ? {
+                  selectQuery: {
+                    widgetProps: {
+                      customProps: {
+                        package: elem.association.package,
+                        domain:elem.association.domain,
+                        displayValue: elem.association.displayValue,
+                      },
+                    },
+                  },
+                }
+              : null,
           valueSources: ["value"],
           //add widget with ondropdownChange open if element with association
           fieldSettings:
             elem.association.hasAssociation && elem.association.values
               ? {
                   listValues: elem.association.values.map((val) => ({
-                    value: val.defaultValue,
-                    title: val.defaultValue,
+                    value: val.defaultvalue,
+                    title: val.defaultvalue,
                   })),
                 }
-              : elem.association.hasAssociation &&
-                !elem.association.values
+              : elem.association.hasAssociation && !elem.association.values
               ? {
                   listValues: this.state.selectedValuesData.map((val) => ({
                     value: val.id,
@@ -170,7 +168,7 @@ export default class QueryBuilder extends Component {
     console.log("QueryBuilderData", convertedColumnsData);
     console.log("columnsQuery", columnsData.columns);
     return {
-      ...BasicConfig,
+      ...config,
       fields: {
         ...convertedColumnsData,
       },
@@ -229,30 +227,31 @@ export default class QueryBuilder extends Component {
       </div>
     </div>
   );
+//test d'ajouter le call des le click sur la column du querybuilder
 
-  componentDidUMount() {
-    console.log(
-      "document query selector",
-      document.querySelector(".query-builder-container")
-    );
+  // componentDidUMount() {
+  //   console.log(
+  //     "document query selector",
+  //     document.querySelector(".query-builder-container")
+  //   );
 
-    document
-      .querySelector("div.query-builder-container")
-      .addEventListener("click", (columnsData) => {
-        redaxios
-          .get(
-            `http://localhost:8080/EuclideV2/api/getSelectOptions?dc=${columnsData.columns.association.package}.${columnsData.columns.association.domain}&display=${columnsData.columns.association.displayValue}`,
-            { withCredentials: true }
-          )
-          .then((res) => {
-            this.setState(
-              { selectedValuesData: res.data },
-              console.log("SelecOptions", this.state.selectedValuesData)
-            );
-          });
-      });
-    console.log("ComponentDidMount");
-  }
+  //   document
+  //     .querySelector("div.query-builder-container")
+  //     .addEventListener("click", (columnsData) => {
+  //       redaxios
+  //         .get(
+  //           `http://localhost:8080/EuclideV2/api/getSelectOptions?dc=${columnsData.columns.association.package}.${columnsData.columns.association.domain}&display=${columnsData.columns.association.displayValue}`,
+  //           { withCredentials: true }
+  //         )
+  //         .then((res) => {
+  //           this.setState(
+  //             { selectedValuesData: res.data },
+  //             console.log("SelecOptions", this.state.selectedValuesData)
+  //           );
+  //         });
+  //     });
+  //   console.log("ComponentDidMount");
+  // }
 
   renderResult = ({ tree, tree: immutableTree, config }) => (
     <div className="query-builder-result" style={{ padding: "10px" }}>

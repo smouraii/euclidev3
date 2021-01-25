@@ -13,6 +13,7 @@ import { Portlet, PortletBody } from "../../partials/content/Portlet";
 import SwitchComp from "../../widgets/SwitchComp";
 import InputComp from "../../widgets/InputComp";
 import redaxios from "redaxios";
+import SelectQuery from "../../widgets/SelectQuery";
 
 const { Option } = Select;
 const AutoCompleteOption = AutoComplete.Option;
