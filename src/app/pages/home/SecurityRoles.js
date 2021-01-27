@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useReducer } from "react";
-import { Table, Icon, Tooltip, Tree, Button } from "antd";
+import { Table, Icon, Tooltip, Tree, Button, Modal, message } from "antd";
+import { Formik, Form, Field, ErrorMessage, useField, useFormikContext } from "formik";
+import * as Yup from 'yup';
 import {
   Portlet,
   PortletBody,
   PortletHeader,
 } from "../../partials/content/Portlet";
-import ModalAddRole from "./../../widgets/ModalAddRole";
+import FInput from "../../widgets/inputs/FInput";
 import redaxios from "redaxios";
+import qs from "qs";
 
 const euclideData = [
   {
@@ -44,42 +47,151 @@ const euclideData = [
     ],
   },
 ];
-const eFilesData = [
-  {
-    title: "eFiles Data",
-    key: "eFilesData",
-    children: [
-      {
-        title: "eFiles Client",
-        key: "eFilesClient",
-      },
-    ],
-  },
-];
-const bugReportData = [
-  {
-    title: "Bug Report",
-    key: "bugReport",
-    children: [
-      {
-        title: "Report List",
-        key: "reportList",
-      },
-      {
-        title: "Error Log",
-        key: "errorLog",
-      },
-      {
-        title: "Audti List",
-        key: "AuditList",
-      },
-      {
-        title: "Online Users",
-        key: "onlineUsers",
-      },
-    ],
-  },
-];
+
+const AuthorityField = (props) => {
+  const {
+    values: { role },
+    touched,
+    setFieldValue,
+  } = useFormikContext();
+  const [field, meta] = useField(props);
+
+  React.useEffect(() => {
+    if (
+      role.trim() !== '' &&
+      touched.role
+    ) {
+      setFieldValue(props.name, `ROLE_${role.toUpperCase().replace(/ /g,'_')}`);
+    }
+  }, [role, touched.role]);
+
+  return (
+    <FInput {...props} {...field} />
+  );
+};
+
+const ModalAddRole = (props) => {
+  const { callBack } = props;
+  const [loading, setLoading] = useState(false);
+  const [visible, setVisible] = useState(false);
+
+  const roleSchema = Yup.object().shape({
+    role: Yup.string()
+      .required('Required'),
+    authority: Yup.string()
+      .required('Required')
+      .test('checkRoleUnique', 'This role already exist.', value =>
+        redaxios.get(
+          process.env.REACT_APP_HOST + "/EuclideV2/api/admin/roles/check",
+          {
+            params: {
+              authority: value
+            },
+            headers: {
+              "content-type": "application/x-www-form-urlencoded",
+              "X-Requested-With": "XMLHttpRequest",
+            },
+            withCredentials: true,
+          }
+        )
+        .then(res => {
+          return res.data.status == 'OK'
+        }),
+      ),
+  });
+
+  return (
+    <div>
+      <Button type="default" onClick={() => setVisible(true)}>
+      <Icon type="usergroup-add" />Add User Role 
+      </Button>
+      <Formik
+        initialValues={{
+          role: "",
+          authority: "",
+        }}
+        validationSchema={roleSchema}
+        onSubmit={(data, { setSubmitting, resetForm }) => {
+          setSubmitting(true);
+          redaxios.post(
+            process.env.REACT_APP_HOST + "/EuclideV2/api/admin/roles",qs.stringify({
+              role_description:data.role,
+              role_authority:data.authority,
+            }),
+            {
+              headers: {
+                "content-type": "application/x-www-form-urlencoded",
+                "X-Requested-With": "XMLHttpRequest",
+              },
+              withCredentials: true,
+            }
+          )
+          .then((res) => {
+            setSubmitting(false);
+            if (res.data.message == 'success') {
+              setVisible(false);
+              resetForm();
+              callBack();
+              message.success({ content: 'Role created', key: 'roleSave', duration: 10 });
+            } else {
+              message.error({ content: 'A error occur', key: 'roleSave', duration: 10 });
+            }
+          })
+          .catch((error) => {
+            setSubmitting(false);
+            message.error({ content: 'A error occur', key: 'roleSave', duration: 10 });
+            console.log("error", error)
+          });
+        }}
+      >
+        {({
+          handleSubmit,
+          resetForm
+        }) => (
+          <Form>
+            
+            <Modal
+              visible={visible}
+              title="New Folder"
+              onCancel={() => {
+                resetForm();
+                setVisible(false);
+              }}
+              footer={[
+                <Button key="back" onClick={() => {
+                  resetForm();
+                  setVisible(false);
+                }}>
+                  Return
+                </Button>,
+                <Button
+                  key="submit"
+                  type="primary"
+                  loading={loading}
+                  onClick={handleSubmit}
+                >
+                  Submit
+                </Button>
+              ]}
+            >
+              <FInput
+                key="role"
+                name="role"
+                label="User Roles Description"
+              />
+              <AuthorityField
+                key="authority"
+                name="authority"
+                label="User Roles Authority"
+                readonly={true}
+              />
+            </Modal>
+          </Form>
+        )}
+      </Formik>
+    </div>
+  );
+}
 
 const ComponentTree = (props) => {
   const {component, checkedKeys, setCheckedKeys, disable} = props
@@ -176,24 +288,7 @@ export default function SecurityRoles() {
   const [roles, setRoles] = useState([]);
 
   // Get Roles list at component mount
-  useEffect(() => {
-    redaxios.get(
-      process.env.REACT_APP_HOST + "/EuclideV2/api/admin/security/roles",
-      {
-        headers: {
-          "content-type": "application/x-www-form-urlencoded",
-          "X-Requested-With": "XMLHttpRequest",
-        },
-        withCredentials: true,
-      }
-    )
-    .then((res) => {
-      if (res.ok) {
-        setRoles(res.data.roles);
-      }
-    })
-    .catch((error) => console.log("error", error));
-  }, [])
+  useEffect(() => fetchRoles(), [])
 
   // Get DDC list at component mount
   useEffect(() => {
@@ -247,13 +342,32 @@ export default function SecurityRoles() {
     }
   };
 
+  const fetchRoles = () => {
+    redaxios.get(
+      process.env.REACT_APP_HOST + "/EuclideV2/api/admin/security/roles",
+      {
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        withCredentials: true,
+      }
+    )
+    .then((res) => {
+      if (res.ok) {
+        setRoles(res.data.roles);
+      }
+    })
+    .catch((error) => console.log("error", error));
+  }
+
   return (
     <>
       <div className="col-xl-12 d-flex">
         <div style={{ margin: 5 }}>
           <Tooltip title='Add role'>
             {/* <Button size="large" onClick={() => this.fetch({search: this.state.search})}><Icon type="retweet" /></Button> */}
-            <ModalAddRole />
+            <ModalAddRole callBack={fetchRoles}/>
           </Tooltip>
         </div>
       </div>
