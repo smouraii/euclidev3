@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer } from "react";
-import { Table, Icon, Tooltip, Tree, Button, Modal, message } from "antd";
+import { Table, Icon, Tooltip, Tree, Button, Modal, message, Popconfirm, Input } from "antd";
 import { Formik, Form, Field, ErrorMessage, useField, useFormikContext } from "formik";
 import * as Yup from 'yup';
 import {
@@ -242,8 +242,6 @@ const ExpandedRowRender = (props) => {
     }
   }, [expanded])
 
-  console.log({components})
-
   useEffect(() => {
     components.forEach(
         (component) => setActiveNodes({
@@ -278,12 +276,84 @@ const ExpandedRowRender = (props) => {
     )
 }
 
+const Role = (props) => {
+  const { record, role, actionCallback } = props
+  return (
+    <Formik
+        initialValues={{
+          role: role,
+        }}
+        validationSchema={Yup.object().shape({
+          role: Yup.string()
+            .required('Required'),
+        })}
+        onSubmit={(data, { setSubmitting, resetForm }) => {
+          setSubmitting(true);
+          redaxios.put(
+            process.env.REACT_APP_HOST + "/EuclideV2/api/admin/roles",qs.stringify({
+              pk: record.id,
+              value:data.role,
+            }),
+            {
+              headers: {
+                "content-type": "application/x-www-form-urlencoded",
+                "X-Requested-With": "XMLHttpRequest",
+              },
+              withCredentials: true,
+            }
+          )
+          .then((res) => {
+            setSubmitting(false);
+            if (res.data.message == 'success') {
+              resetForm();
+              actionCallback();
+              message.success({ content: 'Role updated', key: 'roleUpdate', duration: 10 });
+            } else {
+              message.error({ content: 'A error occur', key: 'roleUpdate', duration: 10 });
+            }
+          })
+          .catch((error) => {
+            setSubmitting(false);
+            message.error({ content: 'A error occur', key: 'roleUpdate', duration: 10 });
+            console.log("error", error)
+          });
+        }}
+      >
+        {({
+          handleSubmit,
+          resetForm
+        }) => (
+          <Form>
+            <Popconfirm
+              title={<FInput
+                key="role"
+                name="role"
+              />}
+              onConfirm={handleSubmit}
+              placement="right"
+            >
+              <Button type="dashed">{props.role}</Button>
+            </Popconfirm>
+          </Form>
+        )}
+      </Formik>
+  )
+}
+
 export default function SecurityRoles() {
+  const roleColumn = {
+    title: "Role",
+    dataIndex: "description",
+    key: "id",
+    render: (role, record) => (
+      <Role role={role} record={record} actionCallback={() => fetchRoles()}/>
+    ),
+  }
   const [components, setComponents] = useState([
     ...euclideData,
   ])
   const [columns, setColumns] = useState([
-    { title: "Role", dataIndex: "description", key: "id" },
+    roleColumn,
   ])
   const [roles, setRoles] = useState([]);
 
@@ -304,10 +374,9 @@ export default function SecurityRoles() {
     )
     .then((res) => {
       if (res.ok) {
-        console.log(res)
 
         setColumns([
-          { title: "Role", dataIndex: "description", key: "id" },
+          roleColumn,
           ...res.data.components.map(component => ({
             title: component.title,
             dataIndex: component.title,
@@ -332,7 +401,6 @@ export default function SecurityRoles() {
   }, [])
 
   const status = (keys = 0, data) => {
-    console.log({keys, data})
     if (keys >= data) {
       return <Icon type="check" style={{ color: "green" }} />;
     } else if (1 <= keys && keys < data) {
