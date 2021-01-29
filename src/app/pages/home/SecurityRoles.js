@@ -219,7 +219,7 @@ const ComponentTree = (props) => {
 };
 
 const ExpandedRowRender = (props) => {
-  const {record, expanded, components} = props;
+  const {record, expanded, components, callBack} = props;
   const [activeNodes, setActiveNodes] = useReducer((state, action) => {
     return {
       ...state,
@@ -253,11 +253,44 @@ const ExpandedRowRender = (props) => {
       )
   }, [components])
 
+  const applyComponent = () => {
+      redaxios.post(
+        process.env.REACT_APP_HOST + "/EuclideV2/api/admin/security/roles",{
+          activeNodes,
+        },
+        {
+          headers: {
+            "content-type": "application/x-www-form-urlencoded",
+            "X-Requested-With": "XMLHttpRequest",
+          },
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        console.log(res)
+        setDisable(!disable)
+        callBack()
+        message.success({ content: 'Security applied', key: 'securitySave', duration: 10 });
+        // if (res.data.message == 'success') {
+        //   setVisible(false);
+        //   resetForm();
+        //   callBack();
+        //   message.success({ content: 'Role created', key: 'roleSave', duration: 10 });
+        // } else {
+        //   message.error({ content: 'A error occur', key: 'roleSave', duration: 10 });
+        // }
+      })
+      .catch((error) => {
+        message.error({ content: 'A error occur', key: 'roleSave', duration: 10 });
+        console.log("error", error)
+      });
+  }
+
   return (
       expanded && <div className="row d-flex justify-content-center">
         <div className="col-xl-12 d-flex">
           <div style={{ marginBottom: 15 }}>
-            <Button size="small" type={disable ? 'default' : 'primary'} onClick={() => disable ? setDisable(!disable) : setDisable(!disable)}><Icon type={disable ? 'edit' : 'save'} />{disable ? 'Edit' : 'Save'}</Button>
+            <Button size="small" type={disable ? 'default' : 'primary'} onClick={() => disable ? setDisable(!disable) : applyComponent()}><Icon type={disable ? 'edit' : 'save'} />{disable ? 'Edit' : 'Save'}</Button>
           </div>
         </div>
       
@@ -380,7 +413,7 @@ export default function SecurityRoles() {
           ...res.data.components.map(component => ({
             title: component.title,
             dataIndex: component.title,
-            key: component.title,
+            key: component.key,
             render: (data) => status(data, component.nodesCount)
           })),
         ])
@@ -388,10 +421,10 @@ export default function SecurityRoles() {
         setComponents([
           ...res.data.components.map(component => ({
             title: component.title,
-            key: component.title,
+            key: component.key,
             children: component.children.map(child => ({
               title: child.title,
-              key: child.title,
+              key: child.key,
             }))
           })),
         ])
@@ -450,7 +483,7 @@ export default function SecurityRoles() {
               style={{ backgroundColor: "white" }}
               className="components-table-demo-nested"
               columns={columns}
-              expandedRowRender={(record, index, indent, expanded) => <ExpandedRowRender components={components} record={record} expanded={expanded}/>}
+              expandedRowRender={(record, index, indent, expanded) => <ExpandedRowRender components={components} record={record} expanded={expanded} callBack={fetchRoles}/>}
               dataSource={roles}
               pagination={false}
             />
