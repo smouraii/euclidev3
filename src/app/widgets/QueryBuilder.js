@@ -17,6 +17,7 @@ import SelectQuery from "./SelectQuery";
 
 const config = {
   ...BasicConfig,
+  fields: {},
   widgets: {
     ...BasicConfig.widgets,
     selectQuery: {
@@ -33,7 +34,7 @@ const config = {
         };
         return (
           <SelectQuery
-          // selectedValuesData={this.state.selectedValuesData}
+            // selectedValuesData={this.state.selectedValuesData}
             placeholder="Select value"
             selectedValue={value}
             onChange={onChange}
@@ -101,8 +102,11 @@ export default class QueryBuilder extends Component {
     value: "",
     input: "",
     visible: false,
-    selectedItem: [],
+    selectedItem: null,
     selectedValuesData: [],
+    queryData: [],
+    queryRules: [],
+    visibleDelete:false,
   };
 
   //function to call data in QueryBuilder
@@ -131,12 +135,13 @@ export default class QueryBuilder extends Component {
           label: elem.title,
           type: getType(elem),
           widgets:
-            getType(elem) === "selectQuery" ? {
+            getType(elem) === "selectQuery"
+              ? {
                   selectQuery: {
                     widgetProps: {
                       customProps: {
                         package: elem.association.package,
-                        domain:elem.association.domain,
+                        domain: elem.association.domain,
                         displayValue: elem.association.displayValue,
                       },
                     },
@@ -175,10 +180,33 @@ export default class QueryBuilder extends Component {
     };
   };
 
-  componentDidUpdate(prevProps, prevState) {
-    console.log(prevProps);
+  //GetSavedQuery
+  getQuery() {
+    redaxios
+      .get(
+        `http://localhost:8080/EuclideV2/api/querybuilder?domain=com.euclide.sdc.${this.props.columnsData.sdcid}&pagelist=${this.props.columnsData.pagelistid}`,
+        { withCredentials: true }
+      )
+      .then((res) => {
+        this.setState({ queryData: res.data });
+        console.log("queryData", res.data);
+      });
+  }
+  mapData() {
+    const mapData = this.state.queryData.map((datarow) => ({
+      rules: JSON.parse(datarow.rules),
+    }));
+    this.setState({ queryRules: mapData });
+    console.log("queryRules", mapData);
+  }
+
+  //change the config State and GetQuery on update
+  componentDidUpdate(prevProps, prevState, queryData) {
+    console.log("prevProps", prevProps);
     if (prevProps.columnsData !== this.props.columnsData) {
       this.setState({ config: this.getConfig(this.props.columnsData) });
+      this.getQuery();
+      this.mapData();
     }
   }
 
@@ -187,6 +215,13 @@ export default class QueryBuilder extends Component {
       visible: true,
     });
   };
+
+  showDeleteModal = () => {
+    this.setState({
+      visibleDelete: true,
+    });
+  };
+  
 
   handleOk = (e) => {
     console.log(this.elem);
@@ -199,6 +234,12 @@ export default class QueryBuilder extends Component {
     console.log(e);
     this.setState({
       visible: false,
+    });
+  };
+  handleDeleteCancel = (e) => {
+    console.log(e);
+    this.setState({
+      visibleDelete: false,
     });
   };
 
@@ -227,7 +268,7 @@ export default class QueryBuilder extends Component {
       </div>
     </div>
   );
-//test d'ajouter le call des le click sur la column du querybuilder
+  //test d'ajouter le call des le click sur la column du querybuilder
 
   // componentDidUMount() {
   //   console.log(
@@ -253,7 +294,7 @@ export default class QueryBuilder extends Component {
   //   console.log("ComponentDidMount");
   // }
 
-  renderResult = ({ tree, tree: immutableTree, config }) => (
+  renderResult = ({ tree, tree: immutableTree, config, queryData }) => (
     <div className="query-builder-result" style={{ padding: "10px" }}>
       {/* <div>
         SQL where:{" "}
@@ -272,26 +313,46 @@ export default class QueryBuilder extends Component {
             <Button
               style={{ marginBottom: 10 }}
               onClick={() => {
-                const jsonTree = QbUtils.getTree(immutableTree);
-                const queryStoredValue = localStorage.getItem(
-                  "queryStoredValue"
-                );
-                if (queryStoredValue) {
-                  console.log("queryStoredValue", queryStoredValue);
-                  const queryStoredArray = JSON.parse(queryStoredValue);
-                  const filteredArray = queryStoredArray.filter(
-                    (arrayelem) => arrayelem.name !== this.state.selectedItem
-                  );
-
-                  filteredArray.push({
-                    ...jsonTree,
-                    name: this.state.selectedItem,
+                redaxios
+                  .post(
+                    `http://localhost:8080/EuclideV2/api/querybuilder?`,
+                    {
+                      domain: `com.euclide.sdc.${this.props.columnsData.sdcid}`,
+                      pagelist: `${this.props.columnsData.pagelistid}`,
+                      rules: QbUtils.jsonLogicFormat(immutableTree, config),
+                      name: this.state.input,
+                      id: this.queryData.id,
+                    },
+                    {
+                      withCredentials: true,
+                    }
+                  )
+                  .then(function(response) {
+                    console.log("response", response);
+                    window.location.reload();
+                  })
+                  .catch(function(error) {
+                    console.log("error", error);
                   });
-                  localStorage.setItem(
-                    "queryStoredValue",
-                    JSON.stringify(filteredArray)
-                  );
-                }
+                // const jsonTree = QbUtils.getTree(immutableTree);
+                // // const queryStoredValue = localStorage.getItem(
+                // //   "queryStoredValue"
+                // // );
+                // if (queryData) {
+                //   // console.log("queryStoredValue", queryStoredValue);
+                //   const queryStoredArray = queryData.rules;
+                //   const filteredArray = queryStoredArray.filter(
+                //     (arrayelem) => arrayelem.name !== this.state.selectedItem
+                //   );
+                //   filteredArray.push({
+                //     ...jsonTree,
+                //     name: this.state.selectedItem,
+                //   });
+                //   localStorage.setItem(
+                //     "queryStoredValue",
+                //     JSON.stringify(filteredArray)
+                //   );
+                // }
                 this.setState({ selectedItem: null });
               }}
             >
@@ -311,31 +372,7 @@ export default class QueryBuilder extends Component {
             </Button>
             <Button
               style={{ marginBottom: 10 }}
-              onClick={(columnsData) => {
-                const Jsonlogic = {
-                  jsonlogic: JSON.stringify(
-                    QbUtils.jsonLogicFormat(immutableTree, config)
-                  ),
-                };
-                redaxios
-                  .post(
-                    `http://localhost:8080/EuclideV2/querybuilder?domain=${columnsData.columns.association.package}.${columnsData.columns.association.domain}&pagelist${columnsData.pagelistid}`,
-                    qs.stringify({ rules: Jsonlogic }),
-                    {
-                      headers: {
-                        "content-type": "application/x-www-form-urlencoded",
-                        "X-Requested-With": "XMLHttpRequest",
-                      },
-                      withCredentials: true,
-                    }
-                  )
-                  .then(function(response) {
-                    console.log(response);
-                  })
-                  .catch(function(error) {
-                    console.log(error);
-                  });
-              }}
+              onClick={() => console.log("lancer la requete")}
             >
               Lancer la requete
             </Button>
@@ -343,27 +380,53 @@ export default class QueryBuilder extends Component {
         )}
 
         <Modal
-          title="Basic Modal"
+          title="Add a new Query"
           visible={this.state.visible}
           onOk={() => {
-            const jsonTree = QbUtils.getTree(immutableTree);
-            const queryStoredValue = localStorage.getItem("queryStoredValue");
-            const array = JSON.parse(queryStoredValue);
-            if (queryStoredValue) {
-              console.log("testModal");
-              localStorage.setItem(
-                "queryStoredValue",
-                JSON.stringify([
-                  ...array,
-                  { ...jsonTree, name: this.state.input },
-                ])
-              );
-            } else {
-              localStorage.setItem(
-                "queryStoredValue",
-                JSON.stringify([{ ...jsonTree, name: this.state.input }])
-              );
-            }
+            console.log("columnsDataPost", this.props.columnsData);
+            redaxios
+              .post(
+                `http://localhost:8080/EuclideV2/api/querybuilder`,
+                {
+                  domain: `com.euclide.sdc.${this.props.columnsData.sdcid}`,
+                  pagelist: `${this.props.columnsData.pagelistid}`,
+                  rules: QbUtils.jsonLogicFormat(immutableTree, config).logic,
+                  name: this.state.input,
+                },
+                {
+                  headers: {
+                    "content-type": "application/x-www-form-urlencoded",
+                    "X-Requested-With": "XMLHttpRequest",
+                  },
+                  withCredentials: true,
+                }
+              )
+              .then(function(response) {
+                console.log("response", response);
+                window.location.reload();
+              })
+              .catch(function(error) {
+                console.log("error", error);
+              });
+
+            // const jsonTree = QbUtils.getTree(immutableTree);
+            // const queryStoredValue = queryData.rules;
+            // const array = JSON.parse(queryStoredValue);
+            // if (queryStoredValue) {
+            //   console.log("testModal");
+            //   localStorage.setItem(
+            //     "queryStoredValue",
+            //     JSON.stringify([
+            //       ...array,
+            //       { ...jsonTree, name: this.state.input },
+            //     ])
+            //   );
+            // } else {
+            //   localStorage.setItem(
+            //     "queryStoredValue",
+            //     JSON.stringify([{ ...jsonTree, name: this.state.input }])
+            //   );
+            // }
             this.setState({ visible: false, input: "" });
           }}
           onCancel={this.handleCancel}
@@ -372,50 +435,81 @@ export default class QueryBuilder extends Component {
         </Modal>
       </div>
 
-      {localStorage.getItem("queryStoredValue") &&
-        JSON.parse(localStorage.getItem("queryStoredValue")).map((elem) => (
+      {queryData &&
+        queryData.map((elem) => (<>
+          <Modal
+          title="Delete a Query"
+          visible={this.state.visibleDelete}
+          onOk={() => {
+            console.log("Deletequerydata",queryData);
+            redaxios
+              .delete(
+                `http://localhost:8080/EuclideV2/api/querybuilder?id=${elem.id}`,
+                { withCredentials: true }
+              )
+              .then(function(response) {
+                console.log("delete", response);
+                window.location.reload();
+              });
+            // const queryStoredValue = localStorage.getItem(
+            //   "queryStoredValue"
+            // );
+            // const queryStoredArray = JSON.parse(queryStoredValue);
+            // const filteredArray = queryStoredArray.filter(
+            //   (arrayelem) => arrayelem.name !== elem.name
+            // );
+            // localStorage.setItem(
+            //   "queryStoredValue",
+            //   JSON.stringify(filteredArray)
+            // );
+            this.setState({ visibleDelete: false });
+          }}
+          onCancel={this.handleDeleteCancel}
+        >
+          <p>Do you really want to delete this Query</p>
+        </Modal>
           <Dropdown
             style={{ marginRight: 10 }}
+            onDropDownChange={() => console.log(elem)}
             overlay={
               <Menu>
                 <Menu.Item
-                  onClick={(columnsData) => {
+                  onClick={() => {
+                    console.log(
+                      "elements in config liste",
+                      JSON.parse(elem.rules),
+                      elem,
+                      QbUtils.loadFromJsonLogic(
+                        JSON.parse(elem.rules),
+                        this.state.config
+                      )
+                    );
+
                     this.setState({
-                      tree: QbUtils.loadTree(elem, config),
+                      tree: QbUtils.loadFromJsonLogic(
+                        JSON.parse(elem.rules),
+                        this.state.config
+                      ),
                       selectedItem: elem.name,
                     });
-                    console.log("elements in config liste", elem, config);
                   }}
                   key="edit"
                 >
                   Edit
                 </Menu.Item>
-                <Menu.Item
-                  onClick={() => {
-                    redaxios.delete(
-                      `http://localhost:8080/EuclideV2/api/querybuilder`,
-                      { withCredentials: true }
-                    );
-                    const queryStoredValue = localStorage.getItem(
-                      "queryStoredValue"
-                    );
-                    const queryStoredArray = JSON.parse(queryStoredValue);
-                    const filteredArray = queryStoredArray.filter(
-                      (arrayelem) => arrayelem.name !== elem.name
-                    );
-                    localStorage.setItem(
-                      "queryStoredValue",
-                      JSON.stringify(filteredArray)
-                    );
-                    this.setState({ visible: false });
-                  }}
-                  key="delete"
-                >
+                <Menu.Item 
+                onClick={this.showDeleteModal} key="delete">
                   Delete
                 </Menu.Item>
                 <Menu.Item
                   onClick={() =>
-                    this.setState({ tree: QbUtils.loadTree(elem, config) })
+                    this.setState({
+                      tree: QbUtils.loadFromJsonLogic(
+                        JSON.parse(elem.rules),
+                        this.state.config
+                      ),
+                      selectedItem: null,
+                    })
                   }
                   key="copy"
                 >
@@ -428,50 +522,54 @@ export default class QueryBuilder extends Component {
             <Button
               style={{ marginRight: 10 }}
               key={elem.name}
-              onClick={() => {
-                //redaxios
-                //     .post(
-                //       `http://localhost:8080/EuclideV2//api/querybuilder/search?domain=${columnsData.columns.association.package}+.+${columnsData.columns.association.domain}+&pagelist+${columnsData.pagelistid}`,
-                //       {
-                //         jsonlogic: JSON.stringify(
-                //           QbUtils.jsonLogicFormat(immutableTree, config)
-                //         ),
-                //       },
-                //       {
-                //         headers: {
-                //           "content-type": "application/x-www-form-urlencoded",
-                //           "X-Requested-With": "XMLHttpRequest",
-                //         },
-                //         withCredentials: true,
-                //       }
-                //     )
-                //     .then(function(response) {
-                //       console.log(response);
-                //     })
-                //     .catch(function(error) {
-                //       console.log(error);
-                //     })
+              onClick={(columnsData) => {
+                redaxios
+                  .post(
+                    `http://localhost:8080/EuclideV2/api/querybuilder/search?domain=${columnsData.columns.association.package}.${columnsData.columns.association.domain}&pagelist=${columnsData.pagelistid}`,
+                    {
+                      jsonlogic: JSON.stringify(
+                        QbUtils.jsonLogicFormat(immutableTree, config)
+                      ),
+                    },
+                    {
+                      headers: {
+                        "content-type": "application/x-www-form-urlencoded",
+                        "X-Requested-With": "XMLHttpRequest",
+                      },
+                      withCredentials: true,
+                    }
+                  )
+                  .then(function(response) {
+                    console.log("search", response);
+                    window.location.reload();
+                  })
+                  .catch(function(error) {
+                    console.log(error);
+                  });
               }}
             >
+              {/* ajouter le nom de la query récupéré sur this.state.query  depending de l'arborescence */}
               {elem.name}
             </Button>
           </Dropdown>
+          </>
         ))}
     </div>
   );
 
   onChange = (immutableTree, config) => {
     // Tip: for better performance you can apply `throttle` - see `examples/demo`
+    console.log("onchageQuery", immutableTree, config);
     this.setState({ tree: immutableTree, config: config });
 
     // const jsonTree = QbUtils.getTree(immutableTree);
     // console.log(jsonTree);
     // `jsonTree` can be saved to backend, and later loaded to `queryValue`
   };
-  componentDidMount() {
-    const QueryStoredValue = localStorage.getItem("QueryStoredValue");
-    this.setState({ QueryStoredValue });
-  }
+  // componentDidMount() {
+  //   const QueryStoredValue = localStorage.getItem("QueryStoredValue");
+  //   this.setState({ QueryStoredValue });
+  // }
 
   //    QuerySaveButton =({jsonTree})=>{
   //   const querySaved = jsonTree.length ?( jsonTree.map(jsonTree =>{
