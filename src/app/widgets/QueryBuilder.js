@@ -307,21 +307,25 @@ export default class QueryBuilder extends Component {
         </pre>
       </div>
 
+{/* put this inside the querymap */}
+
       <div>
         {this.state.selectedItem ? (
           <>
             <Button
               style={{ marginBottom: 10 }}
               onClick={() => {
+                console.log("querydata edit", queryData, this.state.selectedItem)
+                
                 redaxios
                   .post(
-                    `http://localhost:8080/EuclideV2/api/querybuilder?`,
+                    `http://localhost:8080/EuclideV2/api/querybuilder`,
                     {
                       domain: `com.euclide.sdc.${this.props.columnsData.sdcid}`,
                       pagelist: `${this.props.columnsData.pagelistid}`,
-                      rules: QbUtils.jsonLogicFormat(immutableTree, config),
-                      name: this.state.input,
-                      id: this.queryData.id,
+                      rules: QbUtils.jsonLogicFormat(immutableTree, config).logic,
+                      name: this.state.selectedItem.name,
+                      id: this.state.selectedItem.id,
                     },
                     {
                       withCredentials: true,
@@ -490,7 +494,7 @@ export default class QueryBuilder extends Component {
                         JSON.parse(elem.rules),
                         this.state.config
                       ),
-                      selectedItem: elem.name,
+                      selectedItem: {"name":elem.name,"id":elem.id}
                     });
                   }}
                   key="edit"
