@@ -256,7 +256,8 @@ const ExpandedRowRender = (props) => {
   const applyComponent = () => {
       redaxios.post(
         process.env.REACT_APP_HOST + "/EuclideV2/api/admin/security/roles",{
-          activeNodes,
+          components : Object.keys(activeNodes).reduce((components, node) => [...components, ...activeNodes[node]], []),
+          role: record.id
         },
         {
           headers: {
@@ -311,8 +312,10 @@ const ExpandedRowRender = (props) => {
 
 const Role = (props) => {
   const { record, role, actionCallback } = props
+
   return (
     <Formik
+        enableReinitialize={true}
         initialValues={{
           role: role,
         }}
@@ -361,11 +364,14 @@ const Role = (props) => {
               title={<FInput
                 key="role"
                 name="role"
+                value={role}
               />}
               onConfirm={handleSubmit}
+              onCancel={() => resetForm()}
               placement="right"
+              icon={null}
             >
-              <Button type="dashed">{props.role}</Button>
+              <Button type="dashed">{role}</Button>
             </Popconfirm>
           </Form>
         )}
@@ -412,9 +418,9 @@ export default function SecurityRoles() {
           roleColumn,
           ...res.data.components.map(component => ({
             title: component.title,
-            dataIndex: component.title,
+            dataIndex: component.key,
             key: component.key,
-            render: (data) => status(data, component.nodesCount)
+            render: (data) => status(data, component.children.length)
           })),
         ])
 
@@ -431,7 +437,7 @@ export default function SecurityRoles() {
       }
     })
     .catch((error) => console.log("error", error));
-  }, [])
+  }, [roles])
 
   const status = (keys = 0, data) => {
     if (keys >= data) {
