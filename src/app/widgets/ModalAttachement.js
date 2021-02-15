@@ -25,7 +25,7 @@ export default function ModalAttachementList(props) {
       .then(
         (res) => setData(res.data.data),
         // setInitLoading(true),
-        setLoading(false),
+        // setLoading(false),
         setList(data.filter((elem, i) => i < 2))
       );
   }, []);

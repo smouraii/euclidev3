@@ -11,6 +11,7 @@ import {
 import ModalAttachementList from "./ModalAttachement";
 import redaxios from "redaxios";
 import queryString from "query-string";
+import PageDetails from "./PageDetails";
 
 function Datatable(props) {
   //parsed
@@ -28,7 +29,7 @@ function Datatable(props) {
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchColumn] = useState("");
-  const [userInfo, setUserInfo] = useState(null);
+  const [selectedRow, setSelectedRow] = useState(null);
 
   //selected element of the table to send it to attachements
   const [selectedElement, setSelectedElement] = useState(null);
@@ -52,24 +53,20 @@ function Datatable(props) {
   }, [parsed]);
 
   React.useEffect(() => {
-    if (columnsData != null)
+    if (columnsData !== null)
       redaxios
         .get(
           `http://localhost:8080/EuclideV2/api/getList?dc=com.euclide.sdc.${columnsData.sdcid}&masterdata=${columnsData.sdcid}&attachments=${columnsData.attachment}`,
           { withCredentials: true }
         )
         .then((res) => setData(res.data));
-    console.log("data", data);
   }, [columnsData]);
+  console.log("Alldata", data);
 
   React.useEffect(() => {
-    if (!userInfo) return;
-    console.log(userInfo, "userinfo");
-  }, [userInfo]);
-
-  const handleChangeId = (val) => {
-    setUserInfo(val);
-  };
+    if (!selectedRow) return;
+    console.log("selectedRow", selectedRow);
+  }, [selectedRow]);
 
   const handleTableChange = (pagination, filters, sorter) => {
     const pager = { ...pagination };
@@ -223,12 +220,12 @@ function Datatable(props) {
   //     ),
   // });
 
-//Attachement Column
+  //Attachement Column
 
   const columnAttachement = [
     {
       title: "Attachement",
-      dataindex: "test",
+      dataIndex: "test",
       key: "test",
       render: (id, val) => (
         <ModalAttachementList selectedElement={selectedElement} />
@@ -236,66 +233,74 @@ function Datatable(props) {
     },
   ];
 
-
   //map data in columns
   React.useEffect(() => {
     if (!data) return;
     const mapData = data.data.map((datarow) => ({
-      createdt: datarow.createdt,
-      moddt: datarow.moddt,
-      por_addressid: datarow.por_addressid,
-      por_addresstype: datarow.por_addresstype,
-      requestclass: datarow.requestclass,
-      requestdesc: datarow.requestdesc,
-      requeststatus: datarow.requeststatus,
-      requesttext: datarow.requesttext,
-      s_requestid: datarow.s_requestid,
-      templateflag: datarow.templateflag,
+      id: datarow.id,
+      createdt: datarow.createdt != null ? datarow.createdt : "N/A",
+      moddt: datarow.moddt != null ? datarow.moddt : "N/A",
+      por_addressid: datarow.por_addressid != null ? datarow.por_addressid : "N/A",
+      por_addresstype: datarow.por_addresstype != null ? datarow.por_addresstype : "N/A",
+      requestclass: datarow.requestclass != null ? datarow.requestclass : "N/A",
+      requestdesc: datarow.requestdesc != null ? datarow.requestdesc : "N/A",
+      requeststatus: datarow.requeststatus != null ? datarow.requeststatus : "N/A",
+      requesttext: datarow.requesttext != null ? datarow.requesttext : "N/A",
+      s_requestid: datarow.s_requestid != null ? datarow.s_requestid : "N/A",
+      templateflag: datarow.templateflag != null ? datarow.templateflag : "N/A",
       attachments: datarow.attachments,
     }));
     setDataSource(mapData);
     console.log("mapData", mapData);
   }, [data]);
 
+  React.useEffect(() => {}, []);
+
   //map columns for generating columns and search and sort and redirect to details
   React.useEffect(() => {
     if (!columnsData) return;
-    const mapColumns = columnsData.columns.map((column, index) => ({
-      title: column.title,
-      dataIndex: column.data,
-      key: column.name,
-      ...getColumnSearchProps(column.data),
-      sorter: (a, b) =>
-        a instanceof String || null
-          ? a.userInfo.localeCompare(b.userInfo)
-          : a.userInfo - b.userInfo,
-      render: (id, val) =>
-        index === 0 && !userInfo ? (
-          <Button type="link" onClick={() => handleChangeId(val)}>
+    const mapColumns = [
+      {
+        title: "id",
+        dataIndex: "id",
+        key: "id",
+        render: (id, val) => (
+          <Button type="link" onClick={() => setSelectedRow(val)}>
             {id}
           </Button>
-        ) : (
-          id
         ),
-    }));
+      },
+      ...columnsData.columns.map((column, index) => ({
+        title: column.title,
+        dataIndex: column.data,
+        key: column.name,
+        ...getColumnSearchProps(column.data),
+        sorter: (a, b) =>
+          a instanceof String || null
+            ? a.selectedRow.localeCompare(b.selectedRow)
+            : a.selectedRow - b.selectedRow,
+      })),
+    ];
     setColumnsApi(mapColumns);
-    console.log("userinfo", userInfo);
+    console.log("selectedRow", selectedRow);
     console.log("mapColumns", mapColumns);
-  }, [columnsData, userInfo]);
+  }, [columnsData, selectedRow]);
 
-
+  React.useEffect(() => {
+    console.log("columnsApi", columnsApi);
+  }, [columnsApi]);
 
   return (
     <>
       <QueryBuilder columnsData={columnsData} />
-      {!userInfo && (
+      {!selectedRow && (
         <Table
           style={{ backgroundColor: "white" }}
           columns={[...columnsApi, ...columnAttachement]}
           dataSource={dataSource}
         />
       )}
-      {userInfo && (
+      {selectedRow && (
         <div className="row row-no-padding row-col-separator-x1">
           <div className="col-xl-12">
             <Portlet>
@@ -304,12 +309,19 @@ function Datatable(props) {
                 <Table
                   style={{ backgroundColor: "white", padding: 20 }}
                   columns={columnsApi}
-                  dataSource={[userInfo]}
+                  dataSource={[selectedRow]}
                   // pagination={pagination}
                   onChange={handleTableChange}
                 />
               </PortletBody>
             </Portlet>
+            {columnsData.pagedetails.map((detail) => (
+              <PageDetails
+                detail={detail}
+                selectedRow={selectedRow}
+                sdcid={columnsData.sdcid}
+              />
+            ))}
           </div>
         </div>
       )}
