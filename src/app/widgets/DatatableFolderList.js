@@ -21,7 +21,7 @@ function Datatable(props) {
   //main Table
   const [columnsApi, setColumnsApi] = useState([]);
   const [columnsData, setColumsData] = useState(null);
-  const [data, setData] = useState(null);
+  const [data, setData] = useState({data:[]});
   const [dataSource, setDataSource] = useState(null);
 
   //Table's functionality
@@ -29,10 +29,12 @@ function Datatable(props) {
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchColumn] = useState("");
+  //data of the row
   const [selectedRow, setSelectedRow] = useState(null);
 
-  //selected element of the table to send it to attachements
-  const [selectedElement, setSelectedElement] = useState(null);
+  const [columnsId,setColumnsId] = useState(null);
+
+
 
   //id of table
   const [idTable, setIdTable] = useState(null);
@@ -228,31 +230,33 @@ function Datatable(props) {
       dataIndex: "test",
       key: "test",
       render: (id, val) => (
-        <ModalAttachementList selectedElement={selectedElement} />
+       
+        <ModalAttachementList 
+        recordId={[val.attachments]} />
       ),
     },
   ];
 
   //map data in columns
-  React.useEffect(() => {
-    if (!data) return;
-    const mapData = data.data.map((datarow) => ({
-      id: datarow.id,
-      createdt: datarow.createdt != null ? datarow.createdt : "N/A",
-      moddt: datarow.moddt != null ? datarow.moddt : "N/A",
-      por_addressid: datarow.por_addressid != null ? datarow.por_addressid : "N/A",
-      por_addresstype: datarow.por_addresstype != null ? datarow.por_addresstype : "N/A",
-      requestclass: datarow.requestclass != null ? datarow.requestclass : "N/A",
-      requestdesc: datarow.requestdesc != null ? datarow.requestdesc : "N/A",
-      requeststatus: datarow.requeststatus != null ? datarow.requeststatus : "N/A",
-      requesttext: datarow.requesttext != null ? datarow.requesttext : "N/A",
-      s_requestid: datarow.s_requestid != null ? datarow.s_requestid : "N/A",
-      templateflag: datarow.templateflag != null ? datarow.templateflag : "N/A",
-      attachments: datarow.attachments,
-    }));
-    setDataSource(mapData);
-    console.log("mapData", mapData);
-  }, [data]);
+  // React.useEffect(() => {
+  //   if (!data) return;
+  //   const mapData = data.data.map((datarow) => ({
+  //     id: datarow.id,
+  //     createdt: datarow.createdt != null ? datarow.createdt : "N/A",
+  //     moddt: datarow.moddt != null ? datarow.moddt : "N/A",
+  //     por_addressid: datarow.por_addressid != null ? datarow.por_addressid : "N/A",
+  //     por_addresstype: datarow.por_addresstype != null ? datarow.por_addresstype : "N/A",
+  //     requestclass: datarow.requestclass != null ? datarow.requestclass : "N/A",
+  //     requestdesc: datarow.requestdesc != null ? datarow.requestdesc : "N/A",
+  //     requeststatus: datarow.requeststatus != null ? datarow.requeststatus : "N/A",
+  //     requesttext: datarow.requesttext != null ? datarow.requesttext : "N/A",
+  //     s_requestid: datarow.s_requestid != null ? datarow.s_requestid : "N/A",
+  //     templateflag: datarow.templateflag != null ? datarow.templateflag : "N/A",
+  //     attachments: datarow.attachments,
+  //   }));
+  //   setDataSource(mapData);
+  //   console.log("mapData", mapData);
+  // }, [data]);
 
   React.useEffect(() => {}, []);
 
@@ -261,9 +265,10 @@ function Datatable(props) {
     if (!columnsData) return;
     const mapColumns = [
       {
-        title: "id",
+        title: "Id",
         dataIndex: "id",
         key: "id",
+        sorter: (a, b) => a.id - b.id,
         render: (id, val) => (
           <Button type="link" onClick={() => setSelectedRow(val)}>
             {id}
@@ -275,10 +280,14 @@ function Datatable(props) {
         dataIndex: column.data,
         key: column.name,
         ...getColumnSearchProps(column.data),
-        sorter: (a, b) =>
-          a instanceof String || null
-            ? a.selectedRow.localeCompare(b.selectedRow)
-            : a.selectedRow - b.selectedRow,
+        sorter: (a, b) =>{
+          console.log("a1",a,"b1",b);
+        console.log("a",a[column.data],"b",b[column.data]);
+        return a[column.data] !== null
+            ? a[column.data].localeCompare(b[column.data])
+            : a[column.data] - b[column.data] 
+        },
+            render:(data)=>(data!=null ?data:"N/A"),
       })),
     ];
     setColumnsApi(mapColumns);
@@ -297,7 +306,7 @@ function Datatable(props) {
         <Table
           style={{ backgroundColor: "white" }}
           columns={[...columnsApi, ...columnAttachement]}
-          dataSource={dataSource}
+          dataSource={data.data}
         />
       )}
       {selectedRow && (
