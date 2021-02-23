@@ -21,7 +21,7 @@ function Datatable(props) {
   //main Table
   const [columnsApi, setColumnsApi] = useState([]);
   const [columnsData, setColumsData] = useState(null);
-  const [data, setData] = useState({data:[]});
+  const [data, setData] = useState({ data: [] });
   const [dataSource, setDataSource] = useState(null);
 
   //Table's functionality
@@ -32,20 +32,22 @@ function Datatable(props) {
   //data of the row
   const [selectedRow, setSelectedRow] = useState(null);
 
-  const [columnsId,setColumnsId] = useState(null);
+  const [columnsId, setColumnsId] = useState(null);
 
+  const [showQuerybuilder, setShowQuerybuilder] = React.useState(false);
 
-
-  //id of table
-  const [idTable, setIdTable] = useState(null);
+  const { Search } = Input;
 
   // API for Columns generation
   React.useEffect(() => {
     redaxios
-      .get(
-        `http://localhost:8080/EuclideV2/api/getPageList?pagelistid=${parsed.pagelistid}&fluxId=${parsed.fluxId}`,
-        { withCredentials: true }
-      )
+      .get(`http://localhost:8080/EuclideV2/api/getPageList`, {
+        params: {
+          pagelistid: parsed.pagelistid,
+          fluxId: parsed.fluxId,
+        },
+        withCredentials: true,
+      })
       .then((res) => setColumsData(res.data));
     console.log("parsed", parsed);
     console.log("props", props);
@@ -57,19 +59,57 @@ function Datatable(props) {
   React.useEffect(() => {
     if (columnsData !== null)
       redaxios
-        .get(
-          `http://localhost:8080/EuclideV2/api/getList?dc=com.euclide.sdc.${columnsData.sdcid}&masterdata=${columnsData.sdcid}&attachments=${columnsData.attachment}`,
-          { withCredentials: true }
-        )
+        .get(`http://localhost:8080/EuclideV2/api/getList`, {
+          params: {
+            dc: `com.euclide.sdc.${columnsData.sdcid}`,
+            masterdata: columnsData.sdcid,
+            attachments: columnsData.attachment,
+          },
+          withCredentials: true,
+        })
         .then((res) => setData(res.data));
   }, [columnsData]);
-  console.log("Alldata", data);
+
+  React.useEffect(()=>{
+    console.log("Alldata", data);
+  },[data])
 
   React.useEffect(() => {
     if (!selectedRow) return;
     console.log("selectedRow", selectedRow);
   }, [selectedRow]);
 
+  //Search Input
+  const onSearch = (value) =>{
+  console.log("value",value)
+    redaxios
+      .get(`http://localhost:8080/EuclideV2/api/getList`, {
+        params: {
+          dc: `com.euclide.sdc.${columnsData.sdcid}`,
+          masterdata: columnsData.sdcid,
+          attachments: columnsData.attachment,
+          "search[value]": value,
+        },
+        withCredentials: true,
+      })
+      .then((res) => setData(res.data));
+    }
+
+  const handleClick = () => setShowQuerybuilder(!showQuerybuilder);
+
+  const handleResetSearch = () =>
+    redaxios
+      .get(`http://localhost:8080/EuclideV2/api/getList`, {
+        params: {
+          dc: `com.euclide.sdc.${columnsData.sdcid}`,
+          masterdata: columnsData.sdcid,
+          attachments: columnsData.attachment,
+        },
+        withCredentials: true,
+      })
+      .then((res) => setData(res.data));
+
+  //Table
   const handleTableChange = (pagination, filters, sorter) => {
     const pager = { ...pagination };
     pager.current = pagination.current;
@@ -230,9 +270,7 @@ function Datatable(props) {
       dataIndex: "test",
       key: "test",
       render: (id, val) => (
-       
-        <ModalAttachementList 
-        recordId={[val.attachments]} />
+        <ModalAttachementList recordId={[val.attachments]} />
       ),
     },
   ];
@@ -280,14 +318,14 @@ function Datatable(props) {
         dataIndex: column.data,
         key: column.name,
         ...getColumnSearchProps(column.data),
-        sorter: (a, b) =>{
-          console.log("a1",a,"b1",b);
-        console.log("a",a[column.data],"b",b[column.data]);
-        return a[column.data] !== null
+        sorter: (a, b) => {
+          console.log("a1", a, "b1", b);
+          console.log("a", a[column.data], "b", b[column.data]);
+          return a[column.data] !== null
             ? a[column.data].localeCompare(b[column.data])
-            : a[column.data] - b[column.data] 
+            : a[column.data] - b[column.data];
         },
-            render:(data)=>(data!=null ?data:"N/A"),
+        render: (data) => (data != null ? data : "N/A"),
       })),
     ];
     setColumnsApi(mapColumns);
@@ -301,7 +339,33 @@ function Datatable(props) {
 
   return (
     <>
-      <QueryBuilder columnsData={columnsData} />
+      <div className="row d-flex flex-space-evenly " style={{  margin: 10}}>
+        <div className="col-6">
+          <Search
+            placeholder="input search text"
+            allowClear
+            enterButton="Search"
+            size="large"
+            onSearch={onSearch}
+          />
+        </div>
+        <div className="row d-flex flex-space-around col-6">
+          <div className="col-6">
+            <Button size={"large"} style={{width:'100%'}} onClick={handleResetSearch}>
+              Reset Search
+            </Button>
+          </div>
+          <div className="col-6">
+            <Button size={"large"} style={{width:'100%'}} onClick={handleClick}>
+              Advanced
+            </Button>
+          </div>
+        </div>
+      </div>
+      <div className="col-12">
+        {showQuerybuilder ? <QueryBuilder columnsData={columnsData} /> : null}
+      </div>
+
       {!selectedRow && (
         <Table
           style={{ backgroundColor: "white" }}

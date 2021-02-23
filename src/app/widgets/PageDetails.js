@@ -31,8 +31,16 @@ export default function PageDetails(props) {
     )
       redaxios
         .get(
-          `http://localhost:8080/EuclideV2/api/getList?dc=com.euclide.sdc.${props.detail.sdcid}&masterdata=${props.sdcid}&masterdata_id=${props.selectedRow.id}`,
-          { withCredentials: true }
+          `http://localhost:8080/EuclideV2/api/getList`,
+          {
+            params: {
+              dc: `com.euclide.sdc.${props.detail.sdcid}`,
+              masterdata: props.sdcid,
+              masterdata_id: props.selectedRow.id,
+            },
+            withCredentials: true 
+          },
+         
         )
         .then((res) => setDataSample(res.data));
   }, [props.selectedRow.id]);
@@ -73,18 +81,24 @@ export default function PageDetails(props) {
   React.useEffect(() => {
     if (props.detail !== null && !dataSample) return;
     (async () => {
-        const results = await Promise.all(dataSample.data.map(async (datarow) => {
-            const res = await redaxios
-            .get(
-                `http://localhost:8080/EuclideV2/api/getResults?dc=com.euclide.sdc.${props.detail.sdcid}&id=${datarow.id}`,
-                { withCredentials: true }
-            )
-            return res.data
-        }));
+      const results = await Promise.all(
+        dataSample.data.map(async (datarow) => {
+          const res = await redaxios.get(
+            `http://localhost:8080/EuclideV2/api/getResults`,
+            {
+                params: {
+                  dc: `com.euclide.sdc.${props.detail.sdcid}`,
+                  id:datarow.id,
+                },
+                withCredentials: true,
+              }
+          );
+          return res.data;
+        })
+      );
 
-        setDataResults(results)
-    })()
-    
+      setDataResults(results);
+    })();
   }, [dataSample]);
 
   React.useEffect(() => {

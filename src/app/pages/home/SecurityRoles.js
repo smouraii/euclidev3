@@ -194,7 +194,7 @@ export default function SecurityRoles() {
   };
 
   const status = (keys, data) => {
-    console.log(keys.length, data);
+    console.log("securityRoles",keys.length, data);
     if (keys.length >= data) {
       return <Icon type="check" style={{ color: "green" }} />;
     } else if (1 <= keys.length && keys.length < data) {

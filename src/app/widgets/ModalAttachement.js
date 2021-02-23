@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Modal, Button, Icon, List, Skeleton } from "antd";
 import { Formik, Form } from "formik";
 import redaxios from "redaxios";
+import { Link } from "react-router-dom";
 
 export default function ModalAttachementList(props) {
   //Attachements States
@@ -27,14 +28,34 @@ export default function ModalAttachementList(props) {
     setVisible(false);
   };
 
+  console.log("recordId", props.recordId);
+  console.log("recordListLength", list.length);
+
   return (
-    <div>
-      <Button type="ghost" onClick={showModal}>
-        <Icon type="file" />
-      </Button>
+    <>
+      {props.recordId.map((row) =>
+        row.length > 1 ? (
+          <Button type="ghost" onClick={showModal}>
+            <Icon type="file" />
+          </Button>
+        ) : 0 < row.length && row.length < 2 ? (
+          <Button
+            type="ghost"
+            onClick={() =>
+              (window.location.href = `http://localhost:8080/EuclideV2/api/getAttachment?attachment=${row[0].id}`)
+            }
+          >
+            <Icon type="file" />
+          </Button>
+        ) : (
+          <Button type="ghost" disabled={true}>
+            <Icon type="file" />
+          </Button>
+        )
+      )}
       <Modal
         visible={visible}
-        title="Attachement list"
+        title="Attachement"
         onOk={handleOk}
         footer={[
           <Button key="back" type="primary" onClick={handleOk}>
@@ -64,6 +85,6 @@ export default function ModalAttachementList(props) {
           />
         </div>
       </Modal>
-    </div>
+    </>
   );
 }
