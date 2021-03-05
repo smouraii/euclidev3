@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Table,
   Input,
@@ -14,139 +14,138 @@ import Highlighter from "react-highlight-words";
 
 const EditableContext = React.createContext();
 
+const EditableRow = ({ form, index, ...props }) => (
+  <EditableContext.Provider value={form}>
+    <tr {...props} />
+  </EditableContext.Provider>
+);
+
+const EditableFormRow = Form.create()(EditableRow);
+
 class EditableCell extends React.Component {
-  getInput = () => {
-    if (this.props.inputType === "number") {
-      return <InputNumber />;
-    }
-    return <Input />;
+  state = {
+    editing: false,
   };
 
+  toggleEdit = () => {
+    const editing = !this.state.editing;
+    this.setState({ editing }, () => {
+      if (editing) {
+        this.input.focus();
+      }
+    });
+  };
 
+  save = e => {
+    const { record, handleSave } = this.props;
+    this.form.validateFields((error, values) => {
+      if (error && error[e.currentTarget.id]) {
+        return;
+      }
+      this.toggleEdit();
+      handleSave({ ...record, ...values });
+    });
+  };
 
-  
-  renderCell = ({ getFieldDecorator }) => {
+  renderCell = form => {
+    this.form = form;
+    const { children, dataIndex, record, title } = this.props;
+    const { editing } = this.state;
+    return editing ? (
+      <Form.Item style={{ margin: 0 }}>
+        {form.getFieldDecorator(dataIndex, {
+          rules: [
+            {
+              required: true,
+              message: `${title} is required.`,
+            },
+          ],
+          initialValue: record[dataIndex],
+        })(<Input ref={node => (this.input = node)} onPressEnter={this.save} onBlur={this.save} />)}
+      </Form.Item>
+    ) : (
+      <div
+        className="editable-cell-value-wrap"
+        style={{ paddingRight: 24 }}
+        onClick={this.toggleEdit}
+      >
+        {children}
+      </div>
+    );
+  };
+
+  render() {
     const {
-      editing,
+      editable,
       dataIndex,
       title,
-      inputType,
       record,
       index,
+      handleSave,
       children,
       ...restProps
     } = this.props;
     return (
       <td {...restProps}>
-        {editing ? (
-          <Form.Item style={{ margin: 0 }}>
-            {getFieldDecorator(dataIndex, {
-              rules: [
-                {
-                  required: true,
-                  message: `Please Input ${title}!`,
-                },
-              ],
-              initialValue: record[dataIndex],
-            })(this.getInput())}
-          </Form.Item>
+        {editable ? (
+          <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
         ) : (
           children
         )}
       </td>
     );
-  };
-
-  render() {
-    return (
-      <EditableContext.Consumer>{this.renderCell}</EditableContext.Consumer>
-    );
   }
 }
 
-class EditableTable extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { data: [], editingKey: "" };
-    this.columns = [
-      {
-        title: "Description",
-        dataIndex: "description",
-        key: "description",
-        sorter: (a, b) => a.description.localeCompare(b.description),
-        ...this.getColumnSearchProps("description"),
-      },
-      {
-        title: "Product",
-        dataIndex: "products",
-        key: "products",
-        sorter: (a, b) => a.products.localeCompare(b.products),
-        ...this.getColumnSearchProps("products"),
-      },
-      {
-        title: "Sample Template",
-        dataIndex: "sampleTemplate",
-        key: "sampleTemplate",
-        sorter: (a, b) => a.sampleTemplate.localeCompare(b.sampleTemplate),
-        ...this.getColumnSearchProps("sampleTemplate"),
-      },
-      {
-        title: "Sample Count",
-        dataIndex: "sampleCount",
-        key: "sampleCount",
-        sorter: (a, b) => a.sampleCount.localeCompare(b.sampleCount),
-        ...this.getColumnSearchProps("sampleCount"),
-      },
-      {
-        title: "Shipping Location",
-        dataIndex: "shippingLocation",
-        key: "shippingLocation",
-        sorter: (a, b) => a.shippingLocation.localeCompare(b.shippingLocation),
-        ...this.getColumnSearchProps("shippingLocation"),
-      },
-      {
-        title: "Contact",
-        dataIndex: "contact",
-        key: "contact",
-        sorter: (a, b) => a.contact.localeCompare(b.contact),
-        ...this.getColumnSearchProps("contact"),
-      },
-      {
-        title: "Quantity",
-        dataIndex: "quantity",
-        key: "quantity",
-        sorter: (a, b) => a.quantity.localeCompare(b.quantity),
-        ...this.getColumnSearchProps("quantity"),
-      },
-      {
-        title: "Quantity Units",
-        dataIndex: "quantityUnits",
-        key: "quantityUnits",
-        sorter: (a, b) => a.quantityUnits.localeCompare(b.quantityUnits),
-        ...this.getColumnSearchProps("quantityUnits"),
-      },
-      {
-        title: "Work Item",
-        dataIndex: "workItem",
-        key: "workItem",
-        render: (a) => (
-          <div>
-            {a.map((item) => (
-              <p key={item}>
-                {item}
-              </p>
-            ))}
-          </div>
-        ),
-        sorter: (a, b) => a.workItem.localeCompare(b.workItem),
-        ...this.getColumnSearchProps("workItem"),
-      },
-    ];
-  }
+function EditableTable(props) {
+  const [data, setData] = useState([]);
+  const [editingKey, setEditingKey] = useState([]);
+  const [columns, setColumns] = useState(null);
+  const [count,setCount]= useState(0);
+  const[dataSource,setDataSource]=useState([]);
+  console.log("propstableRequest", props);
 
-  tableStyle() {
-    return this.props.isFull ? { height: "100vh" } : null;
-  }
+  const handleAdd = () => {
+    const newData = {
+      key: count,
+      name: "",
+      age: 32,
+      address: `London, Park Lane no. ${count}`,
+    };
+    setDataSource([...dataSource, newData])
+    setCount(count+1);
+  };
+ const  handleDelete = (key) => {
+    const dataSource = [...this.state.dataSource];
+    setDataSource(dataSource.filter(item => item.key !== key) )
+  };
+
+ const handleSave = (row) => {
+    const newData = [...dataSource];
+    const index = newData.findIndex(item => row.key === item.key);
+    const item = newData[index];
+    newData.splice(index, 1, {
+      ...item,
+      ...row,
+    });
+    setDataSource(newData)
+  };
+
+
+  React.useEffect(() => {
+    if (!props.columns) return;
+    const mapColumns = props.columns.map((column, index) => ({
+      title: column.columntitle,
+      dataIndex: column.sdccolumnid,
+      key: column.sdccolumnid,
+    }));
+    setColumns(mapColumns);
+    console.log(mapColumns);
+  }, []);
+
+  const tableStyle = () => {
+    return props.isFull ? { height: "100vh" } : null;
+  };
 
   // componentDidMount() {
   //   this.fetch();
@@ -186,104 +185,29 @@ class EditableTable extends React.Component {
   //   });
   // };
 
-  getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-    }) => (
-      <div style={{ padding: 8 }}>
-        {console.log(dataIndex)}
-        <Input
-          ref={(node) => {
-            this.searchInput = node;
-          }}
-          placeholder={`Search ${dataIndex}`}
-          value={selectedKeys[0]}
-          onChange={(e) =>
-            setSelectedKeys(e.target.value ? [e.target.value] : [])
-          }
-          onPressEnter={() =>
-            this.handleSearch(selectedKeys, confirm, dataIndex.first)
-          }
-          style={{ width: 188, marginBottom: 8, display: "block" }}
-        />
-        <Button
-          type="primary"
-          onClick={() =>
-            this.handleSearch(selectedKeys, confirm, dataIndex.first)
-          }
-          size="small"
-          style={{ width: 90, marginRight: 8 }}
-        >
-          <Icon type="search" style={{ marginBottom: 10 }} />
-          Search
-        </Button>
-        <Button
-          onClick={() => this.handleReset(clearFilters)}
-          size="small"
-          style={{ width: 90 }}
-        >
-          Reset
-        </Button>
-      </div>
-    ),
-    filterIcon: (filtered) => (
-      <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
-    ),
-    onFilter: (value, record) =>
-      record[dataIndex]
-        .toString()
-        .toLowerCase()
-        .includes(value.toLowerCase()),
-    onFilterDropdownVisibleChange: (visible) => {
-      if (visible) {
-        setTimeout(() => this.searchInput.select());
-      }
-    },
-    render: (text) =>
-      this.state.searchedColumn === dataIndex ? (
-        <Highlighter
-          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
-          searchWords={[this.state.searchText]}
-          autoEscape
-          textToHighlight={text.toString()}
-        />
-      ) : (
-        text
-      ),
-  });
-  handleSearch = (selectedKeys, confirm, dataIndex) => {
-    confirm();
-    this.setState({
-      searchText: selectedKeys[0],
-      searchedColumn: dataIndex,
-    });
+  const isEditing = (record) => record.key === editingKey;
+
+  const cancel = () => {
+    setEditingKey("");
   };
 
-  handleReset = (clearFilters) => {
-    clearFilters();
-    this.setState({ searchText: "" });
-  };
+  // save = e => {
+  //   const { record, handleSave } = this.props;
+  //   this.form.validateFields((error, values) => {
+  //     if (error && error[e.currentTarget.id]) {
+  //       return;
+  //     }
+  //     this.toggleEdit();
+  //     handleSave({ ...record, ...values });
+  //   });
+  // };
 
-  onShowSizeChange = (current, pageSizeOptions) => {
-    this.setState({ pageSizeOptions });
-    console.log(current, pageSizeOptions);
-  };
-
-  isEditing = (record) => record.key === this.state.editingKey;
-
-  cancel = () => {
-    this.setState({ editingKey: "" });
-  };
-
-  save(form, key) {
+  const save = (form, key) => {
     form.validateFields((error, row) => {
       if (error) {
         return;
       }
-      const newData = [...this.state.data];
+      const newData = [...data];
       const index = newData.findIndex((item) => key === item.key);
       if (index > -1) {
         const item = newData[index];
@@ -291,57 +215,62 @@ class EditableTable extends React.Component {
           ...item,
           ...row,
         });
-        this.setState({ data: newData, editingKey: "" });
+        setData(newData);
+        setEditingKey("");
       } else {
         newData.push(row);
-        this.setState({ data: newData, editingKey: "" });
+        setData(newData);
+        setEditingKey("");
       }
     });
-  }
+  };
 
-  edit(key) {
+  const edit = (key) => {
     this.setState({ editingKey: key });
-  }
+  };
 
-  render() {
-    const components = {
-      body: {
-        cell: EditableCell,
-      },
-    };
+  const components = {
+    body: {
+      row: EditableFormRow,
+      cell: EditableCell,
+    },
+  };
 
-    const columns = this.columns.map((col) => {
-      if (!col.editable) {
-        return col;
-      }
-      return {
-        ...col,
-        onCell: (record) => ({
-          record,
-          inputType: col.dataIndex === "age" ? "number" : "text",
-          dataIndex: col.dataIndex,
-          title: col.title,
-          editing: this.isEditing(record),
-        }),
-      };
-    });
+  // const columnsTable = columns.map((col) => {
+  //   if (!col.editable) {
+  //     return col;
+  //   }
+  //   return {
+  //     ...col,
+  //     onCell: (record) => ({
+  //       record,
+  //       inputType: col.dataIndex === "age" ? "number" : "text",
+  //       dataIndex: col.dataIndex,
+  //       title: col.title,
+  //       editing: this.isEditing(record),
+  //     }),
+  //   };
+  // });
 
-    return (
-      <EditableContext.Provider value={this.props.form}>
-        <Table
-          style={this.tableStyle()}
-          components={components}
-          bordered
-          dataSource={this.props.tableData}
-          columns={columns}
-          rowClassName="editable-row"
-          pagination={{
-            onChange: this.cancel,
-          }}
-        />
-      </EditableContext.Provider>
-    );
-  }
+  return (
+    <div>
+      <Button
+        onClick={handleAdd}
+        type="primary"
+        style={{ marginBottom: 16 }}
+      >
+        Add a row
+      </Button>
+      <Table
+        style={tableStyle()}
+        components={components}
+        bordered
+        dataSource={props.tableData}
+        columns={columns}
+        rowClassName={() => "editable-row"}
+      />
+    </div>
+  );
 }
 
 const DatatableRequest = Form.create()(EditableTable);

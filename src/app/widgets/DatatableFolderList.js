@@ -20,7 +20,7 @@ function Datatable(props) {
   );
   //main Table
   const [columnsApi, setColumnsApi] = useState([]);
-  const [columnsData, setColumsData] = useState(null);
+  const [columnsData, setColumnsData] = useState(null);
   const [data, setData] = useState({ data: [] });
   const [dataSource, setDataSource] = useState(null);
 
@@ -48,7 +48,7 @@ function Datatable(props) {
         },
         withCredentials: true,
       })
-      .then((res) => setColumsData(res.data));
+      .then((res) => setColumnsData(res.data));
     console.log("parsed", parsed);
     console.log("props", props);
     console.log("columnsData", columnsData);
@@ -70,9 +70,9 @@ function Datatable(props) {
         .then((res) => setData(res.data));
   }, [columnsData]);
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
     console.log("Alldata", data);
-  },[data])
+  }, [data]);
 
   React.useEffect(() => {
     if (!selectedRow) return;
@@ -80,8 +80,8 @@ function Datatable(props) {
   }, [selectedRow]);
 
   //Search Input
-  const onSearch = (value) =>{
-  console.log("value",value)
+  const onSearch = (value) => {
+    console.log("value", value);
     redaxios
       .get(`http://localhost:8080/EuclideV2/api/getList`, {
         params: {
@@ -93,7 +93,7 @@ function Datatable(props) {
         withCredentials: true,
       })
       .then((res) => setData(res.data));
-    }
+  };
 
   const handleClick = () => setShowQuerybuilder(!showQuerybuilder);
 
@@ -327,7 +327,20 @@ function Datatable(props) {
         },
         render: (data) => (data != null ? data : "N/A"),
       })),
+      
     ];
+    if(columnsData.attachment===true){
+     mapColumns.push( {
+        title: "Attachement",
+        dataIndex: "test",
+        key: "test",
+        render: (id, val) => (
+          <ModalAttachementList recordId={[val.attachments]} />
+        ),
+      });
+    }
+   
+     
     setColumnsApi(mapColumns);
     console.log("selectedRow", selectedRow);
     console.log("mapColumns", mapColumns);
@@ -339,7 +352,7 @@ function Datatable(props) {
 
   return (
     <>
-      <div className="row d-flex flex-space-evenly " style={{  margin: 10}}>
+      <div className="row d-flex flex-space-evenly " style={{ margin: 10 }}>
         <div className="col-6">
           <Search
             placeholder="input search text"
@@ -351,12 +364,20 @@ function Datatable(props) {
         </div>
         <div className="row d-flex flex-space-around col-6">
           <div className="col-6">
-            <Button size={"large"} style={{width:'100%'}} onClick={handleResetSearch}>
+            <Button
+              size={"large"}
+              style={{ width: "100%" }}
+              onClick={handleResetSearch}
+            >
               Reset Search
             </Button>
           </div>
           <div className="col-6">
-            <Button size={"large"} style={{width:'100%'}} onClick={handleClick}>
+            <Button
+              size={"large"}
+              style={{ width: "100%" }}
+              onClick={handleClick}
+            >
               Advanced
             </Button>
           </div>
@@ -369,7 +390,7 @@ function Datatable(props) {
       {!selectedRow && (
         <Table
           style={{ backgroundColor: "white" }}
-          columns={[...columnsApi, ...columnAttachement]}
+          columns={[...columnsApi]}
           dataSource={data.data}
         />
       )}

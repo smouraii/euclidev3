@@ -22,7 +22,7 @@ export default function NewRequest(props) {
   const [validationObject, setValidationObject] = React.useState(null);
   const fieldsNames = props.step.fields.map((field) => field.sdccolumnid);
 
-  console.log(props);
+  console.log("propsNeWRequest",props);
 
   const renderFields = (formik) => {
     return props.step.fields.map((field) => {
@@ -47,6 +47,9 @@ export default function NewRequest(props) {
               hidden={field.hidden}
               instructionalText={field.columnInstructionalText}
               display={field.selectproperties.display}
+              step={props.step.id}
+              refsdcid={field.selectproperties.refsdcid}
+              
             />
           );
         case "auto":
@@ -130,8 +133,8 @@ export default function NewRequest(props) {
             //   return{
             //     name: field.sdccolumnid,
             //     validation: field.mandatory
-            //     ? Yup.FSelect("Must choose a value").required("Mandatory Field")
-            //      : Yup.FSelect("Must choose a value")
+            //     ? Yup.string("Must choose a value").required("Mandatory Field")
+            //      : Yup.string("Must choose a value")
             //   }
 
           default:
@@ -169,9 +172,6 @@ export default function NewRequest(props) {
                         {renderFields(formikProps)}
                         {props.current > 0 && props.current < 2 && (
                           <>
-                            <div className="row d-flex justify-content-center">
-                              <Button type="primary">Add</Button>
-                            </div>
                             <Portlet
                               className="kt-portlet--height-fluid kt-portlet--border-bottom-brand"
                               fluidHeight={true}
@@ -182,7 +182,7 @@ export default function NewRequest(props) {
                                     <TransferSample/>
                                   </div>
                                   <div className="col-md-12">
-                                    <DatatableRequest />
+                                    <DatatableRequest columns={props.step.fields} />
                                   </div>
                                 </div>
                               </PortletBody>
