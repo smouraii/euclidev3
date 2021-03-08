@@ -9,6 +9,7 @@ export const REQUEST_PASSWORD_URL = "api/auth/forgot-password";
 export const ME_URL = "api/me";
 
 export const USER_INFO_URL = process.env.REACT_APP_HOST + "/EuclideV2/api/user";
+export const USER_FORGOTPASSWORD_URL = process.env.REACT_APP_HOST + "/EuclideV2/api/user/forgot-password";
 
 export function login(username, password, remember = true) {
   return axios.post(
@@ -23,6 +24,10 @@ export function login(username, password, remember = true) {
 
 export function register(email, firstname, lastname, username, address, country, password) {
   return axios.post(REGISTER_URL, { email, firstname, lastname, username, address, country, password });
+}
+
+export function forgotPassword(email) {
+  return axios.post(USER_FORGOTPASSWORD_URL, qs.stringify({ email }));
 }
 
 export function requestPassword(email) {
