@@ -7,56 +7,13 @@ import { TextField } from "@material-ui/core";
 import clsx from "clsx";
 import * as auth from "../../store/ducks/auth.duck";
 import { login } from "../../crud/auth.crud";
-import redaxios from "redaxios";
-import qs from "qs";
 
 function Login(props) {
-  const [data, setData] = useState(null);
-  // const [JSESSIONID,setJSESSIONID]=useState(null);
-  const [isAuth, setIsAuth] = useState(null);
   const { intl } = props;
   const [loading, setLoading] = useState(false);
   const [loadingButtonStyle, setLoadingButtonStyle] = useState({
     paddingRight: "2.5rem",
   });
-
-  //   const readCookie =()=>{
-  //     setJSESSIONID(Cookies.get("JSESSIONID"))
-  //     console.log(JSESSIONID)
-  //   }
-  //   React.useEffect(() => {
-  // readCookie();
-  //   }, [])
-  const authenticate = (values) => {
-    redaxios
-      .post(
-        process.env.REACT_APP_HOST + "/EuclideV2/j_spring_security_check",
-        qs.stringify({
-          j_username: values.username,
-          j_password: values.password,
-          _spring_security_remember_me: false,
-        }),
-        {
-          headers: {
-            "content-type": "application/x-www-form-urlencoded",
-            "X-Requested-With": "XMLHttpRequest",
-          },
-          withCredentials: true,
-        }
-      )
-      .then((res) => {
-        if (res.data.success && res.data.success === true)
-          setIsAuth(res.data.success);
-        else {
-          setIsAuth(true);
-        }
-      })
-      .catch((error) => console.log("error", error));
-  };
-
-  useEffect(() => {
-    console.log("auth", isAuth);
-  }, [isAuth]);
 
   const enableLoading = () => {
     setLoading(true);
@@ -119,39 +76,24 @@ function Login(props) {
               return errors;
             }}
             onSubmit={(values, { setStatus, setSubmitting }) => {
-             authenticate(values);
               enableLoading();
-              setTimeout(() => {
-                login(values.username, values.password)
-                  .then(({ data: { accessToken } }) => {
-                    disableLoading();
-                    props.login(accessToken);
-                  })
-                  .catch(() => {
-                    disableLoading();
-                    setSubmitting(false);
-                    setStatus(
-                      intl.formatMessage({
-                        id: "AUTH.VALIDATION.INVALID_LOGIN",
-                      })
-                    );
-                  });
-              }, 1000);
-            //     if( isAuth == true){
-            //      (({ data: { accessToken } }) => {
-            //         disableLoading();
-            //         props.login(accessToken);
-            //       }),
-            //       else if (isAuth == false) {
-            //         disableLoading();
-            //         setSubmitting(false);
-            //         setStatus(
-            //           intl.formatMessage({
-            //             id: "AUTH.VALIDATION.INVALID_LOGIN",
-            //           })
-            //         );
-            //       };
-            //   }, 1000);
+              login(values.username, values.password)
+                .then ((res) => {
+                  console.log((res))
+                  disableLoading();
+                  if (res.data.success && res.data.success === true) {
+                    props.login(res.data.username);
+                  }
+                })
+                .catch(() => {
+                  disableLoading();
+                  setSubmitting(false);
+                  setStatus(
+                    intl.formatMessage({
+                      id: "AUTH.VALIDATION.INVALID_LOGIN",
+                    })
+                  );
+                });
             }}
           >
             {({
