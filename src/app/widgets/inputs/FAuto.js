@@ -1,50 +1,91 @@
 import React, { useState } from "react";
 import { Field, ErrorMessage } from "formik";
-import { Select } from "antd";
+import { Select, Input, DatePicker } from "antd";
 import redaxios from "redaxios";
 import queryString from "query-string";
 import { withRouter } from "react-router-dom";
 
- function FAuto(props) {
-  const [data,setData]=useState([]);
+function FAuto(props) {
+  const [data, setData] = useState([]);
 
-  React.useEffect(() => {
-    console.log("props", props);
-    const parsed = queryString.parse(props.location.search);
-    console.log(parsed);
-    redaxios
-      // .get(`http://localhost:8080/EuclideV2/api/getDependFields?dc=com.euclide.sdc.${parsed.pagelistid}&display=${props.steps.fields.selectproperties.display}`)
-    .get("https://run.mocky.io/v3/49335da3-1de5-40b9-83f5-464140dff9be")
-      .then((res) => setData(res.data));
-  }, []);
+  const renderFields = () => {
+    switch (props.type) {
+      case "C":
+      case null:
+        return (
+          <Field
+            key={props.key}
+            as={Input}
+            name={props.name}
+            label={props.label}
+            readonly={props.readonly}
+            hidden={props.hidden}
+            instructionalText={props.instructionalText}
+            defaultvalue={props.autoproperties.defaultvalue}
+          />
+        );
+      case "F":
+      case "V":
+      case "R":
+        return (
+          <Field
+            component={Select}
+            key={props.key}
+            name={props.name}
+            label={props.label}
+            readonly={props.readonly}
+            hidden={props.hidden}
+            instructionalText={props.instructionalText}
+            display={props.autoproperties.refvaluedesc}
+            defaultvalue={props.autoproperties.defaultvalue}
+          />
+        );
+      case "D":
+        return (
+          <Field
+            component={DatePicker}
+            key={props.key}
+            name={props.name}
+            label={props.label}
+            readonly={props.readonly}
+            hidden={props.hidden}
+            instructionalText={props.instructionalText}
+            defaultvalue={props.autoproperties.defaultvalue}
+          />
+        );
+      case "N":
+        return (
+          <Field
+            as={Input}
+            key={props.key}
+            name={props.name}
+            label={props.label}
+            readonly={props.readonly}
+            hidden={props.hidden}
+            instructionalText={props.instructionalText}
+            defaultvalue={props.autoproperties.defaultvalue}
+          />
+        );
+      default:
+        return "null";
+    }
+  };
 
   return (
     <>
       {data && (
         <div>
           <label htmlFor={props.name}>{props.label}</label>
-          <Field
-            component={Select}
-            name={props.name}
-            placeholder={props.label}
-            disabled={props.readonly}
-            hidden={props.hidden}
-            style={{ width: "100%" }}
-          >
-            {data.map((elem) => (
-              <Select.Option key={elem.id} value={elem.name}>
-                {elem.name}
-              </Select.Option>
-            ))}
-          </Field>
+
+          {renderFields()}
           <p style={{ margin: 0 }}>{props.instructionalText}</p>
           <ErrorMessage
             name={props.name}
             render={(msg) => <span style={{ color: "red" }}>{msg}</span>}
           />
         </div>
-              )}
-              </>
+      )}
+    </>
   );
 }
 export default withRouter(FAuto);
