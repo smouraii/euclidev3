@@ -193,75 +193,6 @@ function Datatable(props) {
     setSearchText("");
   };
 
-  //SearchFunction For Date
-  // const getColumnSearchPropsDate = (dataIndex) => ({
-  //   filterDropdown: ({
-  //     setSelectedKeys,
-  //     selectedKeys,
-  //     confirm,
-  //     clearFilters,
-  //     autoFocus,
-  //     handleChange,
-  //     placeholder,
-  //     value,
-  //     format,
-  //     handleSearch,
-  //     handleClear,
-  //   }) => (
-  //     <div style={{ padding: 8 }}>
-  //       <DatePicker.RangePicker
-  //         autoFocus={autoFocus}
-  //         onChange={handleChange}
-  //         placeholder={placeholder}
-  //         value={value}
-  //         format={format}
-  //         style={{ marginBottom: 8 }}
-  //       />
-  //       <Button
-  //         type="primary"
-  //         role="search"
-  //         onClick={handleSearch}
-  //         style={{ width: 90 }}
-  //         size="small"
-  //       >
-  //         search
-  //       </Button>
-  //       <Button
-  //         role="reset"
-  //         style={{ width: 90 }}
-  //         onClick={handleClear}
-  //         size="small"
-  //       >
-  //         reset
-  //       </Button>
-  //     </div>
-  //   ),
-  //   filterIcon: (filtered) => (
-  //     <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
-  //   ),
-  //   onFilter: (value, record) =>
-  //     record[dataIndex]
-  //       .toString()
-  //       .toLowerCase()
-  //       .includes(value.toLowerCase()),
-  //   onFilterDropdownVisibleChange: (visible) => {
-  //     if (visible) {
-  //       setTimeout(() => searchInput.current.select());
-  //     }
-  //   },
-  //   render: (text) =>
-  //     searchedColumn === dataIndex ? (
-  //       <Highlighter
-  //         highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
-  //         searchWords={[searchText]}
-  //         autoEscape
-  //         textToHighlight={text.toString()}
-  //       />
-  //     ) : (
-  //       text
-  //     ),
-  // });
-
   //Attachement Column
 
   const columnAttachement = [
@@ -274,27 +205,6 @@ function Datatable(props) {
       ),
     },
   ];
-
-  //map data in columns
-  // React.useEffect(() => {
-  //   if (!data) return;
-  //   const mapData = data.data.map((datarow) => ({
-  //     id: datarow.id,
-  //     createdt: datarow.createdt != null ? datarow.createdt : "N/A",
-  //     moddt: datarow.moddt != null ? datarow.moddt : "N/A",
-  //     por_addressid: datarow.por_addressid != null ? datarow.por_addressid : "N/A",
-  //     por_addresstype: datarow.por_addresstype != null ? datarow.por_addresstype : "N/A",
-  //     requestclass: datarow.requestclass != null ? datarow.requestclass : "N/A",
-  //     requestdesc: datarow.requestdesc != null ? datarow.requestdesc : "N/A",
-  //     requeststatus: datarow.requeststatus != null ? datarow.requeststatus : "N/A",
-  //     requesttext: datarow.requesttext != null ? datarow.requesttext : "N/A",
-  //     s_requestid: datarow.s_requestid != null ? datarow.s_requestid : "N/A",
-  //     templateflag: datarow.templateflag != null ? datarow.templateflag : "N/A",
-  //     attachments: datarow.attachments,
-  //   }));
-  //   setDataSource(mapData);
-  //   console.log("mapData", mapData);
-  // }, [data]);
 
   React.useEffect(() => {}, []);
 

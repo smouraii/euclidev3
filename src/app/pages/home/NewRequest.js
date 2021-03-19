@@ -22,14 +22,17 @@ import {
 import redaxios from "redaxios";
 import TransferSample from "../../widgets/TransferSample";
 import DatatableRequest from "../../widgets/DatatableRequest";
+import DatatableWizard from "../../widgets/DatatableWizard";
 import queryString from "query-string";
 import { withRouter } from "react-router-dom";
 import moment from "moment";
+import EditableTable from "../../widgets/DatatableRequest";
 
 function NewRequest(props) {
   const [fieldsNamesObject, setFieldsNameObject] = useState(null);
   const [validationObject, setValidationObject] = useState(null);
-  const [data, setData] = useState([]);
+  const [current,setCurrent]=useState(props.current);
+
   const fieldsNames = props.step.fields.map((field) => field.sdccolumnid);
 
   console.log("propsNeWRequest", props);
@@ -43,6 +46,29 @@ function NewRequest(props) {
   const FAuto = (props) => {
     const { values, touched, setFieldValue } = useFormikContext();
     const [field, meta] = useField(props);
+    const [selectData, setSelectData] = useState([]);
+    const [hasMore, setHasMore] = useState(false);
+    const [scrollPosition, setScrollPosition] = useState(window.pageYOffset);
+    const [page, setPage] = useState(0);
+
+    React.useEffect(() => {
+      if (props.refsdcid === null) return;
+      redaxios
+        .get("http://localhost:8080/EuclideV2/api/getSelectOptions", {
+          params: {
+            dc: `com.euclide.sdc.${props.refsdcid}`,
+            displayValueColumnid: props.displayValueColumnid,
+            page: page,
+          },
+          withCredentials: true,
+        })
+        .then((response) => {
+          setSelectData(response.data.results);
+          setHasMore(response.data.more);
+        });
+      console.log("selectData", selectData);
+    }, [props, page]);
+    console.log("selectData", selectData);
     console.log("MYFIELDprops", props);
     const dateFormat = "YYYY-MM-DD hh:mm:ss.S";
     if (props.type === "D") {
@@ -66,10 +92,10 @@ function NewRequest(props) {
               as={Input}
               name={props.name}
               label={props.label}
-              readonly={props.readonly}
+              readOnly={props.readonly}
               hidden={props.hidden}
               instructionalText={props.instructionalText}
-              defaultvalue={props.autoproperties.defaultvalue}
+              defaultValue={props.autoproperties.defaultvalue}
             />
           );
         case "F":
@@ -83,12 +109,38 @@ function NewRequest(props) {
               key={props.key}
               name={props.name}
               label={props.label}
-              readonly={props.readonly}
+              readOnly={props.readonly}
               hidden={props.hidden}
               instructionalText={props.instructionalText}
               display={props.autoproperties.refvaluedesc}
-              defaultvalue={props.autoproperties.defaultvalue}
-            />
+              defaultValue={props.autoproperties.defaultvalue}
+              onPopupScroll={() => {
+                console.log("window.innerHeight: ", window.innerHeight);
+                console.log(
+                  "document.documentElement.scrollTop: ",
+                  document.documentElement.scrollTop
+                );
+                console.log(
+                  "document.scrollingElement.scrollHeight: ",
+                  window.innerHeight
+                );
+                console.log("hihihi:", page);
+                if (
+                  hasMore !== false &&
+                  window.innerHeight + document.documentElement.scrollTop ===
+                    document.scrollingElement.scrollHeight
+                ) {
+                  setScrollPosition(window.pageYOffset);
+                  setPage(page + 1);
+                }
+              }}
+            >
+              {selectData.map((elem) => (
+                <Select.Option key={elem.id} value={elem.id}>
+                  <div className="demo-infinite-container">{elem.name}</div>
+                </Select.Option>
+              ))}
+            </Field>
           );
         //formatDate(inputValue, props.format)
         case "D":
@@ -100,7 +152,7 @@ function NewRequest(props) {
               key={props.key}
               name={props.name}
               label={props.label}
-              readonly={props.readonly}
+              readOnly={props.readonly}
               hidden={props.hidden}
               instructionalText={props.instructionalText}
               showTime
@@ -121,10 +173,10 @@ function NewRequest(props) {
               key={props.key}
               name={props.name}
               label={props.label}
-              readonly={props.readonly}
+              readOnly={props.readonly}
               hidden={props.hidden}
               instructionalText={props.instructionalText}
-              defaultvalue={props.autoproperties.defaultvalue}
+              defaultValue={props.autoproperties.defaultvalue}
             />
           );
         default:
@@ -136,20 +188,21 @@ function NewRequest(props) {
       if (values[props.dependsOnField].trim() !== "") {
         console.log("dependonF", values[props.dependsOnField]);
         redaxios
-          .get(
-            `http://localhost:8080/EuclideV2/api/getDependFields?sdcId=${
-              props.fromSDC
-            }&displayValueColumnid=${props.displayValueColumnid}&fieldValue=${
-              values[props.dependsOnField]
-            }&type=${props.type}`,
-            { withCredentials: true }
-          )
+          .get("http://localhost:8080/EuclideV2/api/getDependFields", {
+            params: {
+              sdcId: props.fromSDC,
+              displayValueColumnid: props.displayValueColumnid,
+              fieldValue: values[props.dependsOnField],
+              type: props.type,
+            },
+            withCredentials: true,
+          })
           .then((res) =>
             props.type === "C" || props.type === "N" || props.type === "D"
               ? setFieldValue(props.name, res.data)
               : props.type === "R" || props.type === "V" || props.type === "F"
               ? setFieldValue(props.name, res.data.id)
-              : "error"
+              : null
           );
       }
     }, [values[props.dependsOnField]]);
@@ -157,9 +210,8 @@ function NewRequest(props) {
     // style display none if props.hidden true
     return (
       <>
-        <div >
-          <label htmlFor={props.name} >{props.label}</label>
-
+        <div>
+          <label htmlFor={props.name}>{props.label}</label>
           {renderAutoFields()}
           <p style={{ margin: 0 }}>{props.instructionalText}</p>
           <ErrorMessage
@@ -213,6 +265,7 @@ function NewRequest(props) {
               fieldId={field.autoproperties.fieldId}
               type={field.autoproperties.type}
               autoproperties={field.autoproperties}
+              refsdcid={field.autoproperties.refsdcid}
               displayValueColumnid={
                 field.autoproperties.criteriaColumns[0].displayValueColumnid
               }
@@ -303,6 +356,10 @@ function NewRequest(props) {
 
     setValidationObject(validationObj);
   }, []);
+React.useEffect(()=>{
+  console.log("current",current)
+}, [current]);
+  
 
   return (
     <>
@@ -318,13 +375,13 @@ function NewRequest(props) {
                     onSubmit={(val) => {
                       console.log("submitting.......");
                       console.log(val);
-                      props.setCurrent(props.current + 1);
+                      setCurrent(current + 1);
                     }}
                   >
                     {(formikProps) => (
                       <Form>
                         {renderFields(formikProps)}
-                        {props.current > 0 && props.current < 2 && (
+                        
                           <>
                             <Portlet
                               className="kt-portlet--height-fluid kt-portlet--border-bottom-brand"
@@ -336,7 +393,7 @@ function NewRequest(props) {
                                     <TransferSample />
                                   </div>
                                   <div className="col-md-12">
-                                    <DatatableRequest
+                                    <EditableTable
                                       columns={props.step.fields}
                                     />
                                   </div>
@@ -344,16 +401,17 @@ function NewRequest(props) {
                               </PortletBody>
                             </Portlet>
                           </>
-                        )}
+                        
                         {props.current > 0 && (
                           <Button
                             type="secondary"
-                            onClick={() => props.setCurrent(props.current - 1)}
+                            style={{float:"right"}}
+                            onClick={() => setCurrent(current - 1)}
                           >
                             Prev
                           </Button>
                         )}
-                        <Button htmlType="submit" type="primary">
+                        <Button type="primary" onClick={() => setCurrent(current + 1)}>
                           Next
                         </Button>
                       </Form>
