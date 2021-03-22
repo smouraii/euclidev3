@@ -8,7 +8,7 @@ export const REQUEST_PASSWORD_URL = "api/auth/forgot-password";
 
 export const ME_URL = "api/me";
 
-export const USER_INFO_URL = process.env.REACT_APP_HOST + "/EuclideV2/api/user";
+export const USER_API_URL = process.env.REACT_APP_HOST + "/EuclideV2/api/user";
 export const USER_FORGOTPASSWORD_URL = process.env.REACT_APP_HOST + "/EuclideV2/api/user/forgot-password";
 
 export function login(username, password, remember = true) {
@@ -22,8 +22,8 @@ export function login(username, password, remember = true) {
   )
 }
 
-export function register(email, firstname, lastname, username, address, country, password) {
-  return axios.post(REGISTER_URL, { email, firstname, lastname, username, address, country, password });
+export function register({email, firstname, lastname, username, ...otherUserValues}) {
+  return axios.post(USER_API_URL+'/register',  qs.stringify({ email, firstname, lastname, username, ...otherUserValues }));
 }
 
 export function forgotPassword(email) {
@@ -36,5 +36,5 @@ export function requestPassword(email) {
 
 export function getUserByToken() {
   // Authorization head should be fulfilled in interceptor.
-  return axios.get(USER_INFO_URL);
+  return axios.get(USER_API_URL);
 }
