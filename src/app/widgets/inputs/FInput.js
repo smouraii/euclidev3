@@ -1,10 +1,11 @@
 import React from "react";
 import { Field, ErrorMessage } from "formik";
-import { Input } from "antd";
+import { Input, Typography } from "antd";
+const { Text } = Typography;
 
 export default function FInput(props) {
   return (
-    <>
+    <div className="inputContainer">
       <label htmlFor={props.name}>{props.label}</label>
       <Field
         as={Input}
@@ -16,8 +17,8 @@ export default function FInput(props) {
       <p style={{ margin: 0 }}>{props.instructionalText}</p>
       <ErrorMessage
         name={props.name}
-        render={(msg) => <span style={{ color: "red" }}>{msg}</span>}
+        render={(msg) => <Text type="danger">{msg}</Text>}
       />
-    </>
+    </div>
   );
 }

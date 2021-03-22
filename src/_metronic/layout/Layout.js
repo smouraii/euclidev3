@@ -11,7 +11,6 @@ import ScrollTop from "../../app/partials/layout/ScrollTop";
 // import StickyToolbar from "../../app/partials/layout/StickyToolbar";
 import HTMLClassService from "./HTMLClassService";
 import LayoutConfig from "./LayoutConfig";
-import MenuConfig from "./MenuConfig";
 import LayoutInitializer from "./LayoutInitializer";
 import KtContent from "./KtContent";
 import QuickPanel from "../../app/partials/layout/QuickPanel";
@@ -27,107 +26,55 @@ function Layout({
   selfLayout,
   layoutConfig,
 }) {
-  const [customMenuConfig, setcustomMenuConfig] = useState(null);
+  const [customMenuConfig, setcustomMenuConfig] = useState({
+    header: {
+      self: {},
+      items: []
+    },
+  });
 
   useEffect(() => {
     redaxios
-      .get("https://run.mocky.io/v3/91f074c8-b503-406f-94aa-b934a2119c2f")
+      .get( process.env.REACT_APP_HOST + "/EuclideV2/api/flux/menu",
+      {
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        withCredentials: true,
+      })
       .then((res) => {
-        const mapData = res.data.data.map((datarow) => ({
-          title: datarow.fluxname,
-          root: true,
-          alignement: "left",
-          toggle: "click",
-          page: datarow.fluxid,
-          submenu: datarow.pagelists
-            .map((page) => ({
-              title: page.pagelisttitle,
-              page: `folderlist?pagelistid=${page.pagelistid}&fluxId=${datarow.fluxid}`,
-            }))
-            .concat(
-              datarow.fluxwizard.map((flux) => ({
-                title: flux.name,
-                page: `newrequest?pagelistid=${flux.id}&fluxId=${datarow.fluxid}`,
-              }))
-            ),
-        }));
-        const extraMenuItems = [
-          {
-            title: "Euclide",
-            root: true,
-            alignment: "left",
-            toggle: "click",
-            page: "builder",
-            submenu: [
-              {
-                title: "Lims",
-                icon: "flaticon2-expand",
-                page: "Lims",
-              },
-              {
-                title: "Mail Server",
-                icon: "flaticon2-envelope",
-                page: "MailServer",
-              },
-              {
-                title: "DB Configuration",
-                icon: "flaticon-coins",
-                page: "DB-Configuration",
-              },
-              {
-                title: "Security Roles",
-                icon: "flaticon-lock",
-                page: "Security-Roles",
-              },
-              {
-                title: "Users Configuration",
-                icon: "flaticon-users",
-                page: "User-Configuration",
-              },
-              {
-                title: "Audit Configuration",
-                icon: "flaticon-visible",
-                page: "Audit-Configuration",
-              },
-              {
-                title: "eFiles Configuration",
-                icon: "flaticon-upload",
-                page: "eFiles-Configuration",
-              },
-            ],
-          },
-          {
-            title: "Issue Admin",
-            root: true,
-            alignment: "left",
-            toggle: "click",
-            page: "builder",
-            submenu: [
-              {
-                title: "Bug report",
-                page: "BugReport",
-              },
-              {
-                title: "Error Log",
-                page: "ErrorLog",
-              },
-              {
-                title: "Audit Log",
-                page: "AuditLog",
-              },
-            ],
-          },
-        ];
         setcustomMenuConfig({
-          ...MenuConfig,
           header: {
-            ...MenuConfig.header,
-            items: [...MenuConfig.header.items, ...mapData, ...extraMenuItems],
+            items: res.data.map((component) => ({
+              title: component.title,
+              root: true,
+              alignement: "left",
+              toggle: "click",
+              page: component.id,
+              icon: component.icon && (component.icon.includes('flaticon') ? component.icon : `fa fa-${component.icon}`),
+              submenu: component.type != 'dashboard' && component.children
+                .map((child) => (
+                  {
+                    title: child.title,
+                    icon: child.icon && (child.icon.includes('flaticon') ? child.icon : `fa fa-${child.icon}`),
+                    page: ((child) => {
+                      switch(child.type) {
+                        case 'list':
+                          return `folderlist?pagelistid=${child.id}&fluxId=${component.id}`
+                        case 'wizard':
+                          return `newrequest?pagelistid=${child.id}&fluxId=${component.fluxid}`
+                        case 'admin':
+                          return `admin/${child.id}`
+                      }
+                    })(child),
+                  }
+                ))
+            })),
           },
         });
       });
   }, []);
-  console.log(MenuConfig);
   htmlClassService.setConfig(layoutConfig);
   // scroll to top after location changes
   window.scrollTo(0, 0);

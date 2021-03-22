@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Field, ErrorMessage } from "formik";
-import { Select } from "antd";
+import { Select, Typography } from "antd";
 import redaxios from "redaxios";
 import useSWR from "swr";
 import queryString from "query-string";
 import { withRouter } from "react-router-dom";
 
+const { Text } = Typography;
 
 function FSelect(props) {
 const [data, setData] = useState([])
@@ -24,7 +25,7 @@ const [data, setData] = useState([])
   return (
     <>
       {data && (
-        <div>
+        <div className="inputContainer">
           <label htmlFor={props.name}>{props.label}</label>
           <Field
             component={Select}
@@ -43,7 +44,7 @@ const [data, setData] = useState([])
           <p style={{ margin: 0 }}>{props.instructionalText}</p>
           <ErrorMessage
             name={props.name}
-            render={(msg) => <span style={{ color: "red" }}>{msg}</span>}
+            render={(msg) => <Text type="danger">{msg}</Text>}
           />
         </div>
       )}
