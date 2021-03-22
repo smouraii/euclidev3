@@ -24,6 +24,7 @@ import 'primeicons/primeicons.css';
 import 'react-awesome-query-builder/css/styles.scss';
 import 'react-awesome-query-builder/css/compact_styles.scss';
 import 'react-awesome-query-builder/css/antd.less';
+
 /**
  * Base URL of the website.
  *
@@ -37,7 +38,7 @@ const { PUBLIC_URL } = process.env;
  *
  * @see https://github.com/ctimmerm/axios-mock-adapter
  */
-/* const mock = */ mockAxios(axios);
+/* const mock = */ /*mockAxios(axios);*/
 
 /**
  * Inject metronic interceptors for axios.
