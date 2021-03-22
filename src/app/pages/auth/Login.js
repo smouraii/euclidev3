@@ -81,8 +81,13 @@ function Login(props) {
                 .then ((res) => {
                   console.log((res))
                   disableLoading();
+                  setSubmitting(false);
                   if (res.data.success && res.data.success === true) {
                     props.login(res.data.username);
+                  } else if (res.data.error) {
+                    setStatus(
+                      res.data.error
+                    );
                   }
                 })
                 .catch(() => {
