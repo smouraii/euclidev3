@@ -12,7 +12,7 @@ import {
 } from "antd";
 import { Portlet, PortletBody } from "../../partials/content/Portlet";
 import InputComp from "../../widgets/InputComp";
-import redaxios from "redaxios";
+import axios from "axios";
 import qs from "qs";
 
 const { Option } = Select;
@@ -27,7 +27,7 @@ class Lims extends React.Component {
   componentDidMount() {
     const { form } = this.props
 
-    redaxios.get(
+    axios.get(
       process.env.REACT_APP_HOST + "/EuclideV2/api/admin/syslims",
       {
         headers: {
@@ -56,7 +56,7 @@ class Lims extends React.Component {
 
     message.loading({ content: 'Testing connection', key: 'limsSave', duration: 0 });
 
-    redaxios.get(
+    axios.get(
       process.env.REACT_APP_HOST + "/EuclideV2/api/admin/syslims/checkConnection",
       {
         params: {
@@ -85,7 +85,7 @@ class Lims extends React.Component {
         message.success({ content: 'Connection valide', key: 'limsSave', duration: 0 });
       }
 
-      return redaxios.post(
+      return axios.post(
         process.env.REACT_APP_HOST + "/EuclideV2/api/admin/syslims",qs.stringify({
           id: values.id,
           restdatabaseId: values.limsDatabase,

@@ -15,7 +15,7 @@ import LayoutInitializer from "./LayoutInitializer";
 import KtContent from "./KtContent";
 import QuickPanel from "../../app/partials/layout/QuickPanel";
 import "./assets/Base.scss";
-import redaxios from "redaxios";
+import axios from "axios";
 
 const htmlClassService = new HTMLClassService();
 
@@ -34,15 +34,8 @@ function Layout({
   });
 
   useEffect(() => {
-    redaxios
-      .get( process.env.REACT_APP_HOST + "/EuclideV2/api/flux/menu",
-      {
-        headers: {
-          "content-type": "application/x-www-form-urlencoded",
-          "X-Requested-With": "XMLHttpRequest",
-        },
-        withCredentials: true,
-      })
+    axios
+      .get( process.env.REACT_APP_HOST + "/EuclideV2/api/flux/menu")
       .then((res) => {
         setcustomMenuConfig({
           header: {

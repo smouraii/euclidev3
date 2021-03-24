@@ -1,5 +1,4 @@
 import axios from "axios";
-import redaxios from "redaxios";
 import qs from "qs";
 
 

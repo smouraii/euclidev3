@@ -6,7 +6,7 @@ import {
   Utils as QbUtils,
 } from "react-awesome-query-builder";
 import { Modal, Button, Input, Menu, Dropdown } from "antd";
-import redaxios from "redaxios";
+import axios from "axios";
 import qs from "qs";
 import SelectQuery from "./SelectQuery";
 
@@ -146,7 +146,7 @@ if(!columnsData) return;
 
   //GetSavedQuery
   getQuery() {
-    redaxios
+    axios
       .get(
         `http://localhost:8080/EuclideV2/api/querybuilder?domain=com.euclide.sdc.${this.props.columnsData.sdcid}&pagelist=${this.props.columnsData.pagelistid}`,
         { withCredentials: true }
@@ -254,7 +254,7 @@ if(!columnsData) return;
               onClick={() => {
                 console.log("querydata edit", queryData, this.state.selectedItem)
                 
-                redaxios
+                axios
                   .post(
                     `http://localhost:8080/EuclideV2/api/querybuilder`,
                     {
@@ -306,7 +306,7 @@ if(!columnsData) return;
           visible={this.state.visible}
           onOk={() => {
             console.log("columnsDataPost", this.props.columnsData);
-            redaxios
+            axios
               .post(
                 `http://localhost:8080/EuclideV2/api/querybuilder`,
                 {
@@ -345,7 +345,7 @@ if(!columnsData) return;
           visible={this.state.visibleDelete}
           onOk={() => {
             console.log("Deletequerydata",queryData);
-            redaxios
+            axios
               .delete(
                 `http://localhost:8080/EuclideV2/api/querybuilder?id=${elem.id}`,
                 { withCredentials: true }
@@ -415,7 +415,7 @@ if(!columnsData) return;
               style={{ marginRight: 10 }}
               key={elem.name}
               onClick={() => {
-                redaxios
+                axios
                   .post(
                     `http://localhost:8080/EuclideV2/api/querybuilder/search?domain=com.euclide.sdc.${this.props.columnsData.sdcid}&pagelist=${this.props.columnsData.pagelistid}&attachement=${this.props.columnsData.attachment}`,
                     {

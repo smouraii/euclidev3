@@ -5,7 +5,7 @@ import {
   Portlet,
   PortletHeader,
 } from "../partials/content/Portlet";
-import redaxios from "redaxios";
+import axios from "axios";
 
 export default function PageDetails(props) {
   console.log("props detail", props);
@@ -29,7 +29,7 @@ export default function PageDetails(props) {
       props.sdcid !== null &&
       props.selectedRow !== null
     )
-      redaxios
+      axios
         .get(
           `http://localhost:8080/EuclideV2/api/getList`,
           {
@@ -83,7 +83,7 @@ export default function PageDetails(props) {
     (async () => {
       const results = await Promise.all(
         dataSample.data.map(async (datarow) => {
-          const res = await redaxios.get(
+          const res = await axios.get(
             `http://localhost:8080/EuclideV2/api/getResults`,
             {
                 params: {

@@ -9,7 +9,7 @@ import {
   PortletHeader,
 } from "../partials/content/Portlet";
 import ModalAttachementList from "./ModalAttachement";
-import redaxios from "redaxios";
+import axios from "axios";
 import queryString from "query-string";
 import PageDetails from "./PageDetails";
 
@@ -40,7 +40,7 @@ function Datatable(props) {
 
   // API for Columns generation
   React.useEffect(() => {
-    redaxios
+    axios
       .get(`http://localhost:8080/EuclideV2/api/getPageList`, {
         params: {
           pagelistid: parsed.pagelistid,
@@ -58,7 +58,7 @@ function Datatable(props) {
 
   React.useEffect(() => {
     if (columnsData !== null)
-      redaxios
+      axios
         .get(`http://localhost:8080/EuclideV2/api/getList`, {
           params: {
             dc: `com.euclide.sdc.${columnsData.sdcid}`,
@@ -82,7 +82,7 @@ function Datatable(props) {
   //Search Input
   const onSearch = (value) =>{
   console.log("value",value)
-    redaxios
+    axios
       .get(`http://localhost:8080/EuclideV2/api/getList`, {
         params: {
           dc: `com.euclide.sdc.${columnsData.sdcid}`,
@@ -98,7 +98,7 @@ function Datatable(props) {
   const handleClick = () => setShowQuerybuilder(!showQuerybuilder);
 
   const handleResetSearch = () =>
-    redaxios
+    axios
       .get(`http://localhost:8080/EuclideV2/api/getList`, {
         params: {
           dc: `com.euclide.sdc.${columnsData.sdcid}`,

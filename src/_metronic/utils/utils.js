@@ -16,9 +16,9 @@ export function setupAxios(axios, store) {
     config => {
       // Add Euclide portal headers
       config.headers = {
-        ...config.headers,
         "content-type": "application/x-www-form-urlencoded",
         "X-Requested-With": "XMLHttpRequest",
+        ...config.headers,
       }
 
       // Add credentials (SessionID) to each request
@@ -35,9 +35,10 @@ export function setupAxios(axios, store) {
     // Do something with response data
     return response;
   }, function (error) {
+    console.log({error})
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
-    if (error.request.status == '401') {
+    if (error.request.status === 401 || error.request.status === 403) {
       store.dispatch(actions.logout())
     }
     return Promise.reject(error);

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Field, ErrorMessage } from "formik";
 import { Select, Typography } from "antd";
-import redaxios from "redaxios";
+import axios from "axios";
 import useSWR from "swr";
 import queryString from "query-string";
 import { withRouter } from "react-router-dom";
@@ -14,7 +14,7 @@ const [data, setData] = useState([])
     console.log("props", props);
     const parsed = queryString.parse(props.location.search);
     console.log(parsed);
-    redaxios
+    axios
       .get(`http://localhost:8080/EuclideV2/api/getSelectOptions?dc=com.euclide.sdc.${parsed.pagelistid}&display=${props.display}`)
       // .get( "https://run.mocky.io/v3/49335da3-1de5-40b9-83f5-464140dff9be")
       .then((res) => setData(res.data));

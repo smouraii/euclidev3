@@ -13,7 +13,7 @@ export default function DatatableTest() {
   // );
   // React.useEffect(() => {
   //   // console.log("props", props);
-  //   // redaxios
+  //   // axios
   //   //   .get(
   //   //     `http://localhost:8088/EuclideV2/api/getSelectOptions?dc=com.euclide.sdc.RequestStatus&display=${display}`
   //   //   )

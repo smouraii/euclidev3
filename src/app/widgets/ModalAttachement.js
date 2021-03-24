@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Button, Icon, List, Skeleton } from "antd";
 import { Formik, Form } from "formik";
-import redaxios from "redaxios";
+import axios from "axios";
 import { Link } from "react-router-dom";
 
 export default function ModalAttachementList(props) {
