@@ -262,40 +262,6 @@ function Datatable(props) {
   //     ),
   // });
 
-  //Attachement Column
-
-  const columnAttachement = [
-    {
-      title: "Attachement",
-      dataIndex: "test",
-      key: "test",
-      render: (id, val) => (
-        <ModalAttachementList recordId={[val.attachments]} />
-      ),
-    },
-  ];
-
-  //map data in columns
-  // React.useEffect(() => {
-  //   if (!data) return;
-  //   const mapData = data.data.map((datarow) => ({
-  //     id: datarow.id,
-  //     createdt: datarow.createdt != null ? datarow.createdt : "N/A",
-  //     moddt: datarow.moddt != null ? datarow.moddt : "N/A",
-  //     por_addressid: datarow.por_addressid != null ? datarow.por_addressid : "N/A",
-  //     por_addresstype: datarow.por_addresstype != null ? datarow.por_addresstype : "N/A",
-  //     requestclass: datarow.requestclass != null ? datarow.requestclass : "N/A",
-  //     requestdesc: datarow.requestdesc != null ? datarow.requestdesc : "N/A",
-  //     requeststatus: datarow.requeststatus != null ? datarow.requeststatus : "N/A",
-  //     requesttext: datarow.requesttext != null ? datarow.requesttext : "N/A",
-  //     s_requestid: datarow.s_requestid != null ? datarow.s_requestid : "N/A",
-  //     templateflag: datarow.templateflag != null ? datarow.templateflag : "N/A",
-  //     attachments: datarow.attachments,
-  //   }));
-  //   setDataSource(mapData);
-  //   console.log("mapData", mapData);
-  // }, [data]);
-
   React.useEffect(() => {}, []);
 
   //map columns for generating columns and search and sort and redirect to details
@@ -328,6 +294,16 @@ function Datatable(props) {
         render: (data) => (data != null ? data : "N/A"),
       })),
     ];
+    if (columnsData.attachment) {
+      mapColumns.push({
+        title: "Attachement",
+        dataIndex: "test",
+        key: "test",
+        render: (id, val) => (
+          <ModalAttachementList recordId={[val.attachments]} />
+        ),
+      })
+    }
     setColumnsApi(mapColumns);
     console.log("selectedRow", selectedRow);
     console.log("mapColumns", mapColumns);
@@ -369,7 +345,7 @@ function Datatable(props) {
       {!selectedRow && (
         <Table
           style={{ backgroundColor: "white" }}
-          columns={[...columnsApi, ...columnAttachement]}
+          columns={columnsApi}
           dataSource={data.data}
         />
       )}
