@@ -42,7 +42,7 @@ export default function ModalAttachementList(props) {
           <Button
             type="ghost"
             onClick={() =>
-              (window.location.href = `http://localhost:8080/EuclideV2/api/getAttachment?attachment=${row[0].id}`)
+              (window.location.href = `${process.env.REACT_APP_HOST}/EuclideV2/api/getAttachment?attachment=${row[0].id}`)
             }
           >
             <Icon type="file" />
@@ -74,7 +74,7 @@ export default function ModalAttachementList(props) {
                   actions={[
                     <a
                       target="blank"
-                      href={`http://localhost:8080/EuclideV2/api/getAttachment?attachment=${elem.id}`}
+                      href={`${process.env.REACT_APP_HOST}/EuclideV2/api/getAttachment?attachment=${elem.id}`}
                     >
                       {elem.attachmentdesc}
                     </a>,

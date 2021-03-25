@@ -15,7 +15,7 @@ const [data, setData] = useState([])
     const parsed = queryString.parse(props.location.search);
     console.log(parsed);
     axios
-      .get(`http://localhost:8080/EuclideV2/api/getSelectOptions?dc=com.euclide.sdc.${parsed.pagelistid}&display=${props.display}`)
+      .get(`${process.env.REACT_APP_HOST}/EuclideV2/api/getSelectOptions?dc=com.euclide.sdc.${parsed.pagelistid}&display=${props.display}`)
       // .get( "https://run.mocky.io/v3/49335da3-1de5-40b9-83f5-464140dff9be")
       .then((res) => setData(res.data));
 

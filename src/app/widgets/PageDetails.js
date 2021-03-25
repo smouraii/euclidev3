@@ -31,7 +31,7 @@ export default function PageDetails(props) {
     )
       axios
         .get(
-          `http://localhost:8080/EuclideV2/api/getList`,
+          `${process.env.REACT_APP_HOST}/EuclideV2/api/getList`,
           {
             params: {
               dc: `com.euclide.sdc.${props.detail.sdcid}`,
@@ -84,7 +84,7 @@ export default function PageDetails(props) {
       const results = await Promise.all(
         dataSample.data.map(async (datarow) => {
           const res = await axios.get(
-            `http://localhost:8080/EuclideV2/api/getResults`,
+            `${process.env.REACT_APP_HOST}/EuclideV2/api/getResults`,
             {
                 params: {
                   dc: `com.euclide.sdc.${props.detail.sdcid}`,

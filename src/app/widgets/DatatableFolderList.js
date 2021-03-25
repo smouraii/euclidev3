@@ -41,7 +41,7 @@ function Datatable(props) {
   // API for Columns generation
   React.useEffect(() => {
     axios
-      .get(`http://localhost:8080/EuclideV2/api/getPageList`, {
+      .get(`${process.env.REACT_APP_HOST}/EuclideV2/api/getPageList`, {
         params: {
           pagelistid: parsed.pagelistid,
           fluxId: parsed.fluxId,
@@ -59,7 +59,7 @@ function Datatable(props) {
   React.useEffect(() => {
     if (columnsData !== null)
       axios
-        .get(`http://localhost:8080/EuclideV2/api/getList`, {
+        .get(`${process.env.REACT_APP_HOST}/EuclideV2/api/getList`, {
           params: {
             dc: `com.euclide.sdc.${columnsData.sdcid}`,
             masterdata: columnsData.sdcid,
@@ -83,7 +83,7 @@ function Datatable(props) {
   const onSearch = (value) =>{
   console.log("value",value)
     axios
-      .get(`http://localhost:8080/EuclideV2/api/getList`, {
+      .get(`${process.env.REACT_APP_HOST}/EuclideV2/api/getList`, {
         params: {
           dc: `com.euclide.sdc.${columnsData.sdcid}`,
           masterdata: columnsData.sdcid,
@@ -99,7 +99,7 @@ function Datatable(props) {
 
   const handleResetSearch = () =>
     axios
-      .get(`http://localhost:8080/EuclideV2/api/getList`, {
+      .get(`${process.env.REACT_APP_HOST}/EuclideV2/api/getList`, {
         params: {
           dc: `com.euclide.sdc.${columnsData.sdcid}`,
           masterdata: columnsData.sdcid,

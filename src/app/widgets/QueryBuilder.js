@@ -148,7 +148,7 @@ if(!columnsData) return;
   getQuery() {
     axios
       .get(
-        `http://localhost:8080/EuclideV2/api/querybuilder?domain=com.euclide.sdc.${this.props.columnsData.sdcid}&pagelist=${this.props.columnsData.pagelistid}`,
+        `${process.env.REACT_APP_HOST}/EuclideV2/api/querybuilder?domain=com.euclide.sdc.${this.props.columnsData.sdcid}&pagelist=${this.props.columnsData.pagelistid}`,
         { withCredentials: true }
       )
       .then((res) => {
@@ -162,6 +162,14 @@ if(!columnsData) return;
     }));
     this.setState({ queryRules: mapData });
     console.log("queryRules", mapData);
+  }
+
+  componentDidMount() {
+    if (this.props.columnsData) {
+      this.setState({ config: this.getConfig(this.props.columnsData) });
+      this.getQuery();
+      this.mapData();
+    }
   }
 
   //change the config State and GetQuery on update
@@ -256,7 +264,7 @@ if(!columnsData) return;
                 
                 axios
                   .post(
-                    `http://localhost:8080/EuclideV2/api/querybuilder`,
+                    `${process.env.REACT_APP_HOST}/EuclideV2/api/querybuilder`,
                     {
                       domain: `com.euclide.sdc.${this.props.columnsData.sdcid}`,
                       pagelist: `${this.props.columnsData.pagelistid}`,
@@ -308,7 +316,7 @@ if(!columnsData) return;
             console.log("columnsDataPost", this.props.columnsData);
             axios
               .post(
-                `http://localhost:8080/EuclideV2/api/querybuilder`,
+                `${process.env.REACT_APP_HOST}/EuclideV2/api/querybuilder`,
                 {
                   domain: `com.euclide.sdc.${this.props.columnsData.sdcid}`,
                   pagelist: `${this.props.columnsData.pagelistid}`,
@@ -347,7 +355,7 @@ if(!columnsData) return;
             console.log("Deletequerydata",queryData);
             axios
               .delete(
-                `http://localhost:8080/EuclideV2/api/querybuilder?id=${elem.id}`,
+                `${process.env.REACT_APP_HOST}/EuclideV2/api/querybuilder?id=${elem.id}`,
                 { withCredentials: true }
               )
               .then(function(response) {
@@ -417,7 +425,7 @@ if(!columnsData) return;
               onClick={() => {
                 axios
                   .post(
-                    `http://localhost:8080/EuclideV2/api/querybuilder/search?domain=com.euclide.sdc.${this.props.columnsData.sdcid}&pagelist=${this.props.columnsData.pagelistid}&attachement=${this.props.columnsData.attachment}`,
+                    `${process.env.REACT_APP_HOST}/EuclideV2/api/querybuilder/search?domain=com.euclide.sdc.${this.props.columnsData.sdcid}&pagelist=${this.props.columnsData.pagelistid}&attachement=${this.props.columnsData.attachment}`,
                     {
                       savedQueryId:elem.id                    
                     },
