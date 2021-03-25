@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Table, Input, Button, Icon, DatePicker } from "antd";
-import reqwest from "reqwest";
-import { useLocation, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import QueryBuilder from "./QueryBuilder";
 import Highlighter from "react-highlight-words";
 import {
@@ -10,112 +9,113 @@ import {
   PortletHeader,
 } from "../partials/content/Portlet";
 import ModalAttachementList from "./ModalAttachement";
-import redaxios from "redaxios";
+import axios from "axios";
 import queryString from "query-string";
-import AttachementList from "./AttachementList";
+import PageDetails from "./PageDetails";
 
- function Datatable(props) {
+function Datatable(props) {
+  //parsed
+  const [parsed, setParsed] = useState(
+    queryString.parse(props.location.search)
+  );
+  //main Table
   const [columnsApi, setColumnsApi] = useState([]);
   const [columnsData, setColumsData] = useState(null);
-  const [data, setData] = useState(null);
+  const [data, setData] = useState({ data: [] });
   const [dataSource, setDataSource] = useState(null);
 
+  //Table's functionality
   const [pagination, setPagination] = useState({});
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchColumn] = useState("");
-  const [userInfo, setUserInfo] = useState(null);
+  //data of the row
+  const [selectedRow, setSelectedRow] = useState(null);
 
-  const [columnsSampleApi, setColumnsSampleApi] = useState([]);
-  const [dataSample, setDataSample] = useState(null);
-  const [dataSourceSample, setDataSourceSample] = useState(null);
-  const [columnsDataSample, setColumnsDataSample] = useState(null);
+  const [columnsId, setColumnsId] = useState(null);
 
-  const [columnsResultsApi, setColumnsResultsApi] = useState([]);
-  const [dataResults, setDataResults] = useState(null);
-  const [dataSourceResults, setDataSourceResults] = useState(null);  
-  const [columnsDataResults, setColumnsDataResults] = useState(null);
+  const [showQuerybuilder, setShowQuerybuilder] = React.useState(false);
 
-
-
+  const { Search } = Input;
 
   // API for Columns generation
   React.useEffect(() => {
-    const parsed = queryString.parse(props.location.search);
-    redaxios
-    // .get(`http://localhost:8080/EuclideV2/api/getPageList?pageListid=${parsed.pagelistid}&fluxId=${parsed.fluxId}`)
-      .get("https://run.mocky.io/v3/86b418dc-085b-415d-8c2d-bee469ac5b82")
+    axios
+      .get(`${process.env.REACT_APP_HOST}/EuclideV2/api/getPageList`, {
+        params: {
+          pagelistid: parsed.pagelistid,
+          fluxId: parsed.fluxId,
+        },
+        withCredentials: true,
+      })
       .then((res) => setColumsData(res.data));
-      console.log(parsed);
-      console.log("props",props);
-  }, []);
+    console.log("parsed", parsed);
+    console.log("props", props);
+    console.log("columnsData", columnsData);
 
+    //API for Data in Datatable
+  }, [parsed]);
 
-  //API for Data in Datatable
   React.useEffect(() => {
-    redaxios
-      .get("https://run.mocky.io/v3/d5be868e-8209-40b6-a1be-be19ae4c778d")
+    if (columnsData !== null)
+      axios
+        .get(`${process.env.REACT_APP_HOST}/EuclideV2/api/getList`, {
+          params: {
+            dc: `com.euclide.sdc.${columnsData.sdcid}`,
+            masterdata: columnsData.sdcid,
+            attachments: columnsData.attachment,
+          },
+          withCredentials: true,
+        })
+        .then((res) => setData(res.data));
+  }, [columnsData]);
+
+  React.useEffect(()=>{
+    console.log("Alldata", data);
+  },[data])
+
+  React.useEffect(() => {
+    if (!selectedRow) return;
+    console.log("selectedRow", selectedRow);
+  }, [selectedRow]);
+
+  //Search Input
+  const onSearch = (value) =>{
+  console.log("value",value)
+    axios
+      .get(`${process.env.REACT_APP_HOST}/EuclideV2/api/getList`, {
+        params: {
+          dc: `com.euclide.sdc.${columnsData.sdcid}`,
+          masterdata: columnsData.sdcid,
+          attachments: columnsData.attachment,
+          "search[value]": value,
+        },
+        withCredentials: true,
+      })
       .then((res) => setData(res.data));
-  }, []);
+    }
 
-  console.log("Data",data)
+  const handleClick = () => setShowQuerybuilder(!showQuerybuilder);
 
-  React.useEffect(() => {
-    if (!userInfo) return;
-    console.log(userInfo, "userinfo");
-  }, [userInfo]);
+  const handleResetSearch = () =>
+    axios
+      .get(`${process.env.REACT_APP_HOST}/EuclideV2/api/getList`, {
+        params: {
+          dc: `com.euclide.sdc.${columnsData.sdcid}`,
+          masterdata: columnsData.sdcid,
+          attachments: columnsData.attachment,
+        },
+        withCredentials: true,
+      })
+      .then((res) => setData(res.data));
 
-  const handleChangeId = (val) => {
-    setUserInfo(val);
-  };
-
-  const showModal = () => {
-    this.setState({
-      visible: true,
-    });
-  };
-
-  const handleOk = e => {
-    console.log(e);
-    this.setState({
-      visible: false,
-    });
-  };
-
-  const handleCancel = e => {
-    console.log(e);
-    this.setState({
-      visible: false,
-    });
-  };
-
+  //Table
   const handleTableChange = (pagination, filters, sorter) => {
     const pager = { ...pagination };
     pager.current = pagination.current;
     setPagination(pager);
   };
 
-  // React.useEffect(() => {
-  //   redaxios
-  //     .get("https://run.mocky.io/v3/2e2cda70-42f6-4790-be2b-83f92dbe5019")
-  //     .then((res) => setDataSample(res.data));
-  // }, []);
-  // console.log("SampleData",dataSample)
-
-  React.useEffect(() => {
-    redaxios
-      .get("https://run.mocky.io/v3/f1c80d87-5475-4e44-9edf-fd2bb00b809d")
-      .then((res) => setDataSample(res.data));
-  }, []);
-  console.log("SampleData",dataSample)
-
-
-  React.useEffect(() => {
-    redaxios
-      .get("https://run.mocky.io/v3/0c67f526-ea93-4e06-b4e4-71f4da3c5917")
-      .then((res) => setDataResults(res.data));
-  }, []);
-  console.log("DataResults", dataResults)
   const searchInput = useRef(null);
 
   //Search Function for text Areas
@@ -127,7 +127,6 @@ import AttachementList from "./AttachementList";
       clearFilters,
     }) => (
       <div style={{ padding: 8 }}>
-
         <Input
           ref={searchInput}
           placeholder={`Search ${dataIndex}`}
@@ -262,122 +261,96 @@ import AttachementList from "./AttachementList";
   //       text
   //     ),
   // });
-  const columnAttachement = [{
-    title:"Attachement",
-    dataindex:"test",
-    key:"test",
-    render: (id, val) =>(
-         <ModalAttachementList/>
-          )
-  }
-  ];
 
-  //map data in columns
-  React.useEffect(() => {
-    if (!data) return;
-    const mapData = data.data.map((datarow) => ({
-      createdt: datarow.createdt,
-      moddt: datarow.moddt,
-      por_addressid: datarow.por_addressid,
-      por_addresstype: datarow.por_addresstype,
-      requestclass: datarow.requestclass,
-      requestdesc: datarow.requestdesc,
-      requeststatus: datarow.requeststatus,
-      requesttext: datarow.requesttext,
-      s_requestid: datarow.s_requestid,
-      templateflag: datarow.templateflag,
-      attachments:datarow.attachments,
-    }));
-    setDataSource(mapData);
-    console.log("mapData",mapData);
-  }, [data]);
-
-  React.useEffect(() => {
-    if (!dataSample) return;
-    const mapDataSample = dataSample.data.map((datarow) => ({
-      id:datarow.id,
-      "s_sampleid": datarow.s_sampleid,
-      "sampledesc": datarow.sampledesc,
-      "samplestatus": datarow.samplestatus,
-      "templateflag": datarow.templateflag
-    }));
-    setDataSourceSample(mapDataSample);
-    console.log("mapDataSample",mapDataSample);
-  }, [dataSample]);
+  React.useEffect(() => {}, []);
 
   //map columns for generating columns and search and sort and redirect to details
   React.useEffect(() => {
     if (!columnsData) return;
-    const mapColumns = columnsData.columns.map((column, index) => ({
-      title: column.title,
-      dataIndex: column.data,
-      key: column.name,
-      ...getColumnSearchProps(column.data),
-      sorter: (a, b) =>
-        a instanceof String || null
-          ? a.userInfo.localeCompare(b.userInfo)
-          : a.userInfo - b.userInfo,
-      render: (id, val) =>
-        index === 0 && !userInfo ? (
-          <Button type="link" onClick={() => handleChangeId(val)}>
+    const mapColumns = [
+      {
+        title: "Id",
+        dataIndex: "id",
+        key: "id",
+        sorter: (a, b) => a.id - b.id,
+        render: (id, val) => (
+          <Button type="link" onClick={() => setSelectedRow(val)}>
             {id}
           </Button>
-        ) : (
-          id
         ),
-    }));
+      },
+      ...columnsData.columns.map((column, index) => ({
+        title: column.title,
+        dataIndex: column.data,
+        key: column.name,
+        ...getColumnSearchProps(column.data),
+        sorter: (a, b) => {
+          console.log("a1", a, "b1", b);
+          console.log("a", a[column.data], "b", b[column.data]);
+          return a[column.data] !== null
+            ? a[column.data].localeCompare(b[column.data])
+            : a[column.data] - b[column.data];
+        },
+        render: (data) => (data != null ? data : "N/A"),
+      })),
+    ];
+    if (columnsData.attachment) {
+      mapColumns.push({
+        title: "Attachement",
+        dataIndex: "test",
+        key: "test",
+        render: (id, val) => (
+          <ModalAttachementList recordId={[val.attachments]} />
+        ),
+      })
+    }
     setColumnsApi(mapColumns);
-    console.log("userinfo",userInfo)
+    console.log("selectedRow", selectedRow);
     console.log("mapColumns", mapColumns);
-  }, [columnsData, userInfo]);
-
-
-  
-  React.useEffect(() => {
-    if (!columnsData) return;
-    const mapColumnsSample = columnsData.pagedetails[0].pagedetailscolumns.map((column, index) => ({
-      title: column.title,
-      dataIndex: column.data,
-      key: column.name,
-      ...getColumnSearchProps(column.data),
-      sorter: (a, b) =>
-        a instanceof String || null
-          ? a.userInfo.localeCompare(b.userInfo)
-          : a.userInfo - b.userInfo,
-    }));
-    setColumnsSampleApi(mapColumnsSample);
-    console.log("userinfoSample",userInfo)
-    console.log("mapColumnsSample", mapColumnsSample);
-  }, [columnsData, userInfo]);
-
-
+  }, [columnsData, selectedRow]);
 
   React.useEffect(() => {
-    if (!columnsData) return;
-    const mapColumnsResults = columnsData.pagedetails[0].datasetcolumns.map((column, index) => ({
-      title: column.title,
-      dataIndex: column.name,
-      key: column.data,
-      ...getColumnSearchProps(column.data),
-      sorter: (a, b) =>
-        a instanceof String || null
-          ? a.userInfo.localeCompare(b.userInfo)
-          : a.userInfo - b.userInfo,
-    }));
-    setColumnsResultsApi(mapColumnsResults);
-    console.log("userinfo",userInfo)
-    console.log("mapColumns", mapColumnsResults);
-  }, [columnsData, userInfo]);
+    console.log("columnsApi", columnsApi);
+  }, [columnsApi]);
 
   return (
     <>
-      <QueryBuilder data={data} />
-     {!userInfo&& <Table
-        style={{ backgroundColor: "white" }}
-        columns={[...columnsApi,...columnAttachement]}
-        dataSource={dataSource}
-      />}
-      {userInfo &&  <div className="row row-no-padding row-col-separator-x1">
+      <div className="row d-flex flex-space-evenly " style={{  margin: 10}}>
+        <div className="col-6">
+          <Search
+            placeholder="input search text"
+            allowClear
+            enterButton="Search"
+            size="large"
+            onSearch={onSearch}
+          />
+        </div>
+        <div className="row d-flex flex-space-around col-6">
+          <div className="col-6">
+            <Button size={"large"} style={{width:'100%'}} onClick={handleResetSearch}>
+              Reset Search
+            </Button>
+          </div>
+          <div className="col-6">
+            <Button size={"large"} style={{width:'100%'}} onClick={handleClick}>
+              Advanced
+            </Button>
+          </div>
+        </div>
+      </div>
+      <div className="col-12">
+        {showQuerybuilder ? <QueryBuilder columnsData={columnsData} /> : null}
+      </div>
+
+      {!selectedRow && (
+        <Table
+          style={{ backgroundColor: "white" }}
+          columns={columnsApi}
+          dataSource={data.data}
+        />
+      )}
+      {selectedRow && (
+        <div className="row row-no-padding row-col-separator-x1">
           <div className="col-xl-12">
             <Portlet>
               <PortletBody fit={true}>
@@ -385,45 +358,26 @@ import AttachementList from "./AttachementList";
                 <Table
                   style={{ backgroundColor: "white", padding: 20 }}
                   columns={columnsApi}
-                  dataSource={[userInfo]}
+                  dataSource={[selectedRow]}
                   // pagination={pagination}
                   onChange={handleTableChange}
                 />
               </PortletBody>
             </Portlet>
-            <Portlet>
-              <PortletBody fit={true}>
-                <PortletHeader title="Sample" />
-                <Table
-                  style={{ backgroundColor: "white" }}
-                  columns={columnsSampleApi}
-                  dataSource={dataSourceSample}
-                  // pagination={pagination}
-               
-                />
-              </PortletBody>
-            </Portlet>
-            <Portlet>
-              <PortletBody fit={true}>
-              <PortletHeader title="Results" />
-                <Table
-                  style={{ backgroundColor: "white" }}
-                  columns={columnsResultsApi}
-                  dataSource={dataSourceSample}
-                  // pagination={pagination}
-                  onChange={handleTableChange}
-                />
-              </PortletBody>
-
-              {console.log(data)}
-            </Portlet>
-  </div>
-  </div>}
+            {columnsData.pagedetails.map((detail) => (
+              <PageDetails
+                detail={detail}
+                selectedRow={selectedRow}
+                sdcid={columnsData.sdcid}
+              />
+            ))}
+          </div>
+        </div>
+      )}
 
       {console.log(dataSource)}
     </>
   );
- 
 }
 
 export default withRouter(Datatable);

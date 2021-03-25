@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import redaxios from "redaxios";
+import axios from "axios";
 
 export default function MenuGenerator() {
   const [data, setData] = useState([]);
@@ -7,7 +7,7 @@ export default function MenuGenerator() {
 
 
   useEffect(() => {
-    redaxios
+    axios
       .get("https://run.mocky.io/v3/91f074c8-b503-406f-94aa-b934a2119c2f")
       .then((res) => setData(res.data));
   }, []);

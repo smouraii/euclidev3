@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table, Icon, Tag, Tooltip, Typography, Button, Popconfirm, Popover, Modal, Select, Input, message } from "antd";
 import FInput from "../../widgets/inputs/FInput";
-import redaxios from "redaxios";
+import axios from "axios";
 import { withRouter } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage, useField, useFormikContext } from "formik";
 import Highlighter from "react-highlight-words";
@@ -25,17 +25,12 @@ const ModalAddUser = () => {
     username: Yup.string()
       .required('Required')
       .test('checkUsernameUnique', 'This username is already registered.', value =>
-        redaxios.get(
+        axios.get(
           process.env.REACT_APP_HOST + "/EuclideV2/api/admin/user/usercheck",
           {
             params: {
               username: value
-            },
-            headers: {
-              "content-type": "application/x-www-form-urlencoded",
-              "X-Requested-With": "XMLHttpRequest",
-            },
-            withCredentials: true,
+            }
           }
         )
         .then(res => {
@@ -46,17 +41,12 @@ const ModalAddUser = () => {
       .email('Invalid email')
       .required('Required')
       .test('checkEmailUnique', 'This email is already registered.', value =>
-        redaxios.get(
+        axios.get(
           process.env.REACT_APP_HOST + "/EuclideV2/api/admin/user/usercheck",
           {
             params: {
               email: value
-            },
-            headers: {
-              "content-type": "application/x-www-form-urlencoded",
-              "X-Requested-With": "XMLHttpRequest",
-            },
-            withCredentials: true,
+            }
           }
         )
         .then(res => {
@@ -90,18 +80,11 @@ const ModalAddUser = () => {
   };
 
   const getAddresses = () => {
-    redaxios.get(
-      process.env.REACT_APP_HOST + "/EuclideV2/api/admin/user/addresses",
-      {
-        headers: {
-          "content-type": "application/x-www-form-urlencoded",
-          "X-Requested-With": "XMLHttpRequest",
-        },
-        withCredentials: true,
-      }
+    axios.get(
+      process.env.REACT_APP_HOST + "/EuclideV2/api/admin/user/addresses"
     )
     .then((res) => {
-      if (res.ok) {
+      if (res.statusText == "OK") {
         setAddresses(res.data);
       }
     })
@@ -145,7 +128,7 @@ const ModalAddUser = () => {
           }}
           onSubmit={(data, { setSubmitting, resetForm }) => {
             setSubmitting(true);
-            redaxios.post(
+            axios.post(
               process.env.REACT_APP_HOST + "/EuclideV2/api/admin/user",qs.stringify({
                 name:data.name,
                 surname:data.surname,
@@ -153,14 +136,7 @@ const ModalAddUser = () => {
                 email:data.email,
                 // select_all:data.select_all,
                 adress_selected:JSON.stringify(selectedAddresses.map((address) => address.id))
-              }),
-              {
-                headers: {
-                  "content-type": "application/x-www-form-urlencoded",
-                  "X-Requested-With": "XMLHttpRequest",
-                },
-                withCredentials: true,
-              }
+              })
             )
             .then((res) => {
               setSubmitting(false);
@@ -283,18 +259,11 @@ function UserRole(props) {
   const { role, record, actionCallback } = props;
 
   useEffect(() => {
-    redaxios.get(
-      process.env.REACT_APP_HOST + "/EuclideV2/api/admin/roles",
-      {
-        headers: {
-          "content-type": "application/x-www-form-urlencoded",
-          "X-Requested-With": "XMLHttpRequest",
-        },
-        withCredentials: true,
-      }
+    axios.get(
+      process.env.REACT_APP_HOST + "/EuclideV2/api/admin/roles"
     )
     .then((res) => {
-      if (res.ok) {
+      if (res.statusText === "OK") {
         setRoles(res.data);
       }
     })
@@ -335,18 +304,11 @@ function UserRole(props) {
             }}
             onSubmit={(data, { setSubmitting, resetForm }) => {
               setSubmitting(true);
-              redaxios.post(
+              axios.post(
                 process.env.REACT_APP_HOST + "/EuclideV2/api/admin/user/role",qs.stringify({
                   userRow: record.id,
                   newRole:selectedRole.id,
-                }),
-                {
-                  headers: {
-                    "content-type": "application/x-www-form-urlencoded",
-                    "X-Requested-With": "XMLHttpRequest",
-                  },
-                  withCredentials: true,
-                }
+                })
               )
               .then((res) => {
                 setSubmitting(false);
@@ -444,18 +406,11 @@ function UserClientLims(props) {
   }, [clientLims])
 
   const getAddresses = () => {
-    redaxios.get(
-      process.env.REACT_APP_HOST + "/EuclideV2/api/admin/user/addresses",
-      {
-        headers: {
-          "content-type": "application/x-www-form-urlencoded",
-          "X-Requested-With": "XMLHttpRequest",
-        },
-        withCredentials: true,
-      }
+    axios.get(
+      process.env.REACT_APP_HOST + "/EuclideV2/api/admin/user/addresses"
     )
     .then((res) => {
-      if (res.ok) {
+      if (res.statusText === "OK") {
         setAddresses(res.data);
       }
     })
@@ -509,18 +464,11 @@ function UserClientLims(props) {
           Comments: ""
         }}
         onSubmit={(data, { setSubmitting, resetForm }) => {setSubmitting(true);
-          redaxios.post(
+          axios.post(
             process.env.REACT_APP_HOST + "/EuclideV2/api/admin/user/addresses",qs.stringify({
               user: record.id,
               selected_add: JSON.stringify(selectedAddresses.map((address) => address.id)),
-            }),
-            {
-              headers: {
-                "content-type": "application/x-www-form-urlencoded",
-                "X-Requested-With": "XMLHttpRequest",
-              },
-              withCredentials: true,
-            }
+            })
           )
           .then((res) => {
             setSubmitting(false);
@@ -618,17 +566,10 @@ function MoreActions(props) {
   });
 
   const activateUser = (id) => {
-    redaxios.post(
+    axios.post(
       process.env.REACT_APP_HOST + "/EuclideV2/api/admin/user/activate",qs.stringify({
         userRow:id,
-      }),
-      {
-        headers: {
-          "content-type": "application/x-www-form-urlencoded",
-          "X-Requested-With": "XMLHttpRequest",
-        },
-        withCredentials: true,
-      }
+      })
     )
     .then((res) => {
       if (res.data.success) {
@@ -645,17 +586,10 @@ function MoreActions(props) {
   }
 
   const disableUser = (id) => {
-    redaxios.post(
+    axios.post(
       process.env.REACT_APP_HOST + "/EuclideV2/api/admin/user/disable",qs.stringify({
         userRow:id,
-      }),
-      {
-        headers: {
-          "content-type": "application/x-www-form-urlencoded",
-          "X-Requested-With": "XMLHttpRequest",
-        },
-        withCredentials: true,
-      }
+      })
     )
     .then((res) => {
       if (res.data.success) {
@@ -672,17 +606,10 @@ function MoreActions(props) {
   }
 
   const resetUserPassword = (id) => {
-    redaxios.post(
+    axios.post(
       process.env.REACT_APP_HOST + "/EuclideV2/api/admin/user/resetPassword",qs.stringify({
         userRow:id,
-      }),
-      {
-        headers: {
-          "content-type": "application/x-www-form-urlencoded",
-          "X-Requested-With": "XMLHttpRequest",
-        },
-        withCredentials: true,
-      }
+      })
     )
     .then((res) => {
       if (res.data.success) {
@@ -750,18 +677,11 @@ function MoreActions(props) {
         }}
         onSubmit={(data, { setSubmitting, resetForm }) => {
           setSubmitting(true);
-          redaxios.post(
+          axios.post(
             process.env.REACT_APP_HOST + "/EuclideV2/api/admin/user/changePassword",qs.stringify({
               lutilisateur: record.id,
               newPassword:data.newPassword,
-            }),
-            {
-              headers: {
-                "content-type": "application/x-www-form-urlencoded",
-                "X-Requested-With": "XMLHttpRequest",
-              },
-              withCredentials: true,
-            }
+            })
           )
           .then((res) => {
             setSubmitting(false);
@@ -831,18 +751,11 @@ function MoreActions(props) {
         }}
         onSubmit={(data, { setSubmitting, resetForm }) => {
           setSubmitting(true);
-          redaxios.post(
+          axios.post(
             process.env.REACT_APP_HOST + "/EuclideV2/api/admin/user/suspend",qs.stringify({
               userRow: record.id,
               reason:data.reason,
-            }),
-            {
-              headers: {
-                "content-type": "application/x-www-form-urlencoded",
-                "X-Requested-With": "XMLHttpRequest",
-              },
-              withCredentials: true,
-            }
+            })
           )
           .then((res) => {
             setSubmitting(false);
@@ -967,7 +880,7 @@ class DatatableUserConfig extends React.Component {
   fetch = ({search = null} = {}) => {
     const { pagination, sorter } = this.state;
     this.setState({ loading: true });
-    redaxios.get(
+    axios.get(
       process.env.REACT_APP_HOST + "/EuclideV2/api/admin/user",
       {
         params: {
@@ -976,16 +889,11 @@ class DatatableUserConfig extends React.Component {
           field: sorter.field,
           order: sorter.order,
           search: search || ''
-        },
-        headers: {
-          "content-type": "application/x-www-form-urlencoded",
-          "X-Requested-With": "XMLHttpRequest",
-        },
-        withCredentials: true,
+        }
       }
     )
     .then((res) => {
-      if (res.ok) {
+      if (res.statusText === "OK") {
         const pagination = { ...this.state.pagination };
         pagination.total = res.data.recordsFiltered;
         this.setState({
@@ -1008,17 +916,10 @@ class DatatableUserConfig extends React.Component {
   };
 
   activateUser = (id) => {
-    redaxios.post(
+    axios.post(
       process.env.REACT_APP_HOST + "/EuclideV2/api/admin/user/activate",qs.stringify({
         userRow:id,
-      }),
-      {
-        headers: {
-          "content-type": "application/x-www-form-urlencoded",
-          "X-Requested-With": "XMLHttpRequest",
-        },
-        withCredentials: true,
-      }
+      })
     )
     .then((res) => {
       if (res.data.success) {
@@ -1035,17 +936,10 @@ class DatatableUserConfig extends React.Component {
   }
 
   disableUser = (id) => {
-    redaxios.post(
+    axios.post(
       process.env.REACT_APP_HOST + "/EuclideV2/api/admin/user/disable",qs.stringify({
         userRow:id,
-      }),
-      {
-        headers: {
-          "content-type": "application/x-www-form-urlencoded",
-          "X-Requested-With": "XMLHttpRequest",
-        },
-        withCredentials: true,
-      }
+      })
     )
     .then((res) => {
       if (res.data.success) {
@@ -1062,17 +956,10 @@ class DatatableUserConfig extends React.Component {
   }
 
   resetUserPassword = (id) => {
-    redaxios.post(
+    axios.post(
       process.env.REACT_APP_HOST + "/EuclideV2/api/admin/user/resetPassword",qs.stringify({
         userRow:id,
-      }),
-      {
-        headers: {
-          "content-type": "application/x-www-form-urlencoded",
-          "X-Requested-With": "XMLHttpRequest",
-        },
-        withCredentials: true,
-      }
+      })
     )
     .then((res) => {
       if (res.data.success) {

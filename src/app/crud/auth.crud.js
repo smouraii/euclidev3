@@ -1,6 +1,6 @@
 import axios from "axios";
-import redaxios from "redaxios";
 import qs from "qs";
+
 
 export const LOGIN_URL = "api/auth/login";
 export const REGISTER_URL = "api/auth/register";

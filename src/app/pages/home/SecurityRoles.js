@@ -8,7 +8,7 @@ import {
   PortletHeader,
 } from "../../partials/content/Portlet";
 import FInput from "../../widgets/inputs/FInput";
-import redaxios from "redaxios";
+import axios from "axios";
 import qs from "qs";
 
 const euclideData = [
@@ -81,17 +81,12 @@ const ModalAddRole = (props) => {
     authority: Yup.string()
       .required('Required')
       .test('checkRoleUnique', 'This role already exist.', value =>
-        redaxios.get(
+        axios.get(
           process.env.REACT_APP_HOST + "/EuclideV2/api/admin/roles/check",
           {
             params: {
               authority: value
-            },
-            headers: {
-              "content-type": "application/x-www-form-urlencoded",
-              "X-Requested-With": "XMLHttpRequest",
-            },
-            withCredentials: true,
+            }
           }
         )
         .then(res => {
@@ -113,18 +108,11 @@ const ModalAddRole = (props) => {
         validationSchema={roleSchema}
         onSubmit={(data, { setSubmitting, resetForm }) => {
           setSubmitting(true);
-          redaxios.post(
+          axios.post(
             process.env.REACT_APP_HOST + "/EuclideV2/api/admin/roles",qs.stringify({
               role_description:data.role,
               role_authority:data.authority,
-            }),
-            {
-              headers: {
-                "content-type": "application/x-www-form-urlencoded",
-                "X-Requested-With": "XMLHttpRequest",
-              },
-              withCredentials: true,
-            }
+            })
           )
           .then((res) => {
             setSubmitting(false);
@@ -254,17 +242,15 @@ const ExpandedRowRender = (props) => {
   }, [components])
 
   const applyComponent = () => {
-      redaxios.post(
+      axios.post(
         process.env.REACT_APP_HOST + "/EuclideV2/api/admin/security/roles",{
           components : Object.keys(activeNodes).reduce((components, node) => [...components, ...activeNodes[node]], []),
           role: record.id
         },
         {
           headers: {
-            "content-type": "application/x-www-form-urlencoded",
-            "X-Requested-With": "XMLHttpRequest",
-          },
-          withCredentials: true,
+            "content-type": "application/json",
+          }
         }
       )
       .then((res) => {
@@ -325,18 +311,11 @@ const Role = (props) => {
         })}
         onSubmit={(data, { setSubmitting, resetForm }) => {
           setSubmitting(true);
-          redaxios.put(
+          axios.put(
             process.env.REACT_APP_HOST + "/EuclideV2/api/admin/roles",qs.stringify({
               pk: record.id,
               value:data.role,
-            }),
-            {
-              headers: {
-                "content-type": "application/x-www-form-urlencoded",
-                "X-Requested-With": "XMLHttpRequest",
-              },
-              withCredentials: true,
-            }
+            })
           )
           .then((res) => {
             setSubmitting(false);
@@ -401,18 +380,11 @@ export default function SecurityRoles() {
 
   // Get DDC list at component mount
   useEffect(() => {
-    redaxios.get(
-      process.env.REACT_APP_HOST + "/EuclideV2/api/admin/security/components",
-      {
-        headers: {
-          "content-type": "application/x-www-form-urlencoded",
-          "X-Requested-With": "XMLHttpRequest",
-        },
-        withCredentials: true,
-      }
+    axios.get(
+      process.env.REACT_APP_HOST + "/EuclideV2/api/admin/security/components"
     )
     .then((res) => {
-      if (res.ok) {
+      if (res.statusText === "OK") {
 
         setColumns([
           roleColumn,
@@ -450,18 +422,11 @@ export default function SecurityRoles() {
   };
 
   const fetchRoles = () => {
-    redaxios.get(
-      process.env.REACT_APP_HOST + "/EuclideV2/api/admin/security/roles",
-      {
-        headers: {
-          "content-type": "application/x-www-form-urlencoded",
-          "X-Requested-With": "XMLHttpRequest",
-        },
-        withCredentials: true,
-      }
+    axios.get(
+      process.env.REACT_APP_HOST + "/EuclideV2/api/admin/security/roles"
     )
     .then((res) => {
-      if (res.ok) {
+      if (res.statusText === "OK") {
         setRoles(res.data.roles);
       }
     })

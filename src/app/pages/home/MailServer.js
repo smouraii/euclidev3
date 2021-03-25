@@ -17,7 +17,7 @@ import {
   PortletHeader
 } from "../../partials/content/Portlet";
 import InputComp from "../../widgets/InputComp";
-import redaxios from "redaxios";
+import axios from "axios";
 import qs from "qs";
 
 const { Option } = Select;
@@ -43,18 +43,11 @@ class MailServer extends React.Component {
   componentDidMount() {
     const { form } = this.props
 
-    redaxios.get(
-      process.env.REACT_APP_HOST + "/EuclideV2/api/admin/sysmail",
-      {
-        headers: {
-          "content-type": "application/x-www-form-urlencoded",
-          "X-Requested-With": "XMLHttpRequest",
-        },
-        withCredentials: true,
-      }
+    axios.get(
+      process.env.REACT_APP_HOST + "/EuclideV2/api/admin/sysmail"
     )
     .then((res) => {
-      if (res.ok) {
+      if (res.statusText == "OK") {
         form.setFieldsValue({
           id: res.data.id,
           username: res.data.username,
@@ -76,7 +69,7 @@ class MailServer extends React.Component {
     const { form } = this.props
 
     message.loading({ content: 'Saving mail onfiguration...', key: 'mailSave', duration: 0 });
-    redaxios.post(
+    axios.post(
       process.env.REACT_APP_HOST + "/EuclideV2/api/admin/sysmail",qs.stringify({
         id: values.id,
         email: values.username,
@@ -88,14 +81,7 @@ class MailServer extends React.Component {
         smtpSocketFactoryFallback: values.SocketFactoryFallbackgit,
         mailpassword: values.password,
         smtpSocketFactoryClass: values.socketFatoryClass,
-      }),
-      {
-        headers: {
-          "content-type": "application/x-www-form-urlencoded",
-          "X-Requested-With": "XMLHttpRequest",
-        },
-        withCredentials: true,
-      }
+      })
     )
     .then((res) => {
       if (res && res.status == '200') {
@@ -118,7 +104,6 @@ class MailServer extends React.Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         this.mailServerSave(values);
-        console.log("Received values of form: ", values);
       }
     });
   };

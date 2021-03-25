@@ -6,62 +6,58 @@ import {
   Utils as QbUtils,
 } from "react-awesome-query-builder";
 import { Modal, Button, Input, Menu, Dropdown } from "antd";
-import redaxios from "redaxios";
+import axios from "axios";
+import qs from "qs";
+import SelectQuery from "./SelectQuery";
 
 
-
-//Modify type to object object
-  // // API for Columns generation
-  // React.useEffect(() => {
-  //   const parsed = queryString.parse(props.location.search);
-  //   redaxios
-  //   // .get(`http://localhost:8080/EuclideV2/api/getPageList?pageListid=${parsed.pagelistid}&fluxId=${parsed.fluxId}`)
-  //     .get("https://run.mocky.io/v3/86b418dc-085b-415d-8c2d-bee469ac5b82")
-  //     .then((res) => setColumsData(res.data));
-  //     console.log(parsed);
-  //     console.log("props",props);
-  // }, []);
-
-
-//ADD COLUMN ID + NA IF DATA IS NULL or Unindefined
-// You need to provide your own config. See below 'Config format'
 const config = {
   ...BasicConfig,
-  fields: {
-    Name: {
-      label: "Name",
-      type: "text",
-      valueSources: ["value"],
+  fields: {},
+  widgets: {
+    ...BasicConfig.widgets,
+    selectQuery: {
+      ...BasicConfig.widgets.select,
+      factory: ({
+        value,
+        setValue,
+        allowCustomValues,
+        placeholder,
+        customProps,
+      }) => {
+        const onChange = (e, data) => {
+          setValue(data?.value?.value || "");
+        };
+        return (
+          <SelectQuery
+            // selectedValuesData={this.state.selectedValuesData}
+            placeholder="Select value"
+            selectedValue={value}
+            onChange={onChange}
+            customProps={customProps}
+          />
+        );
+      },
     },
-    gender: {
-      label: "Gender",
-      type: "text",
-      valueSources: ["value"],
-    },
-    email: {
-      label: "Email",
-      type: "text",
-      valueSources: ["value"],
-    },
-    location: {
-      label: "Location",
-      type: "text",
-      valueSources: ["value"],
-    },
-    number: {
-      label: "Number",
-      type: "number",
-      valueSources: ["value"],
-      preferWidgets: ["number"],
-      fieldSettings: {
-        min: 0,
-        max: 9999999,
+  },
+  types: {
+    ...BasicConfig.types,
+    selectQuery: {
+      valueSources: ["value", "field", "func"],
+      defaultOperator: "equal",
+      widgets: {
+        selectQuery: {
+          operators: ["equal", "between"],
+        },
       },
     },
   },
 };
 
-// You can load query value from your backend storage (for saving see `Query.onChange()`)
+// You need to provide your own config. See below 'Config format'
+
+// You can load query value from your backend storage (for saving see ,`Query.onChange()`)
+console.log("BasicConfig", BasicConfig.types.select);
 const queryValue = { id: QbUtils.uuid(), type: "group" };
 
 export default class QueryBuilder extends Component {
@@ -72,21 +68,132 @@ export default class QueryBuilder extends Component {
     input: "",
     visible: false,
     selectedItem: null,
+    selectedValuesData: [],
+    queryData: [],
+    queryRules: [],
+    visibleDelete:false,
   };
 
-  // add a componentDidMount to Map Data for QueryBuilder
-// componentDidMount
-// console.log('componentDidMount() lifecycle');
+  //function to call data in QueryBuilder
 
-// // Trigger update
-// this.setState({ foo: !this.state.foo });
-// }
+  getConfig = (columnsData) => {
+    const getType = (elem) => {
+      if (elem.type === "String") {
+        return "text";
+      } else if (elem.type === "Number") {
+        return "number";
+      } else if (elem.type === "Date") {
+        return "date";
+      } else if (elem.association.hasAssociation && elem.association.values) {
+        return "select";
+      } else if (elem.association.hasAssociation && !elem.association.values) {
+        return "selectQuery";
+      }
+    };
+
+    //
+if(!columnsData) return;
+    const convertedColumnsData = columnsData.columns.reduce((fields, elem) => {
+      return {
+        ...fields,
+        [elem.title]: {
+          label: elem.title,
+          type: getType(elem),
+          widgets:
+            getType(elem) === "selectQuery"
+              ? {
+                  selectQuery: {
+                    widgetProps: {
+                      customProps: {
+                        package: elem.association.package,
+                        domain: elem.association.domain,
+                        displayValue: elem.association.displayValue,
+                      },
+                    },
+                  },
+                }
+              : null,
+          valueSources: ["value"],
+          fieldSettings:
+            elem.association.hasAssociation && elem.association.values
+              ? {
+                  listValues: elem.association.values.map((val) => ({
+                    value: val.defaultvalue,
+                    title: val.defaultvalue,
+                  })),
+                }
+              : elem.association.hasAssociation && !elem.association.values
+              ? {
+                  listValues: this.state.selectedValuesData.map((val) => ({
+                    value: val.id,
+                    title: val.name,
+                  })),
+                }
+              : null,
+        },
+      };
+    }, {});
+    console.log("querybuilderRes", this.selectedValuesData);
+    console.log("QueryBuilderData", convertedColumnsData);
+    console.log("columnsQuery", columnsData.columns);
+    return {
+      ...config,
+      fields: {
+        ...convertedColumnsData,
+      },
+    };
+  };
+
+  //GetSavedQuery
+  getQuery() {
+    axios
+      .get(
+        `${process.env.REACT_APP_HOST}/EuclideV2/api/querybuilder?domain=com.euclide.sdc.${this.props.columnsData.sdcid}&pagelist=${this.props.columnsData.pagelistid}`,
+        { withCredentials: true }
+      )
+      .then((res) => {
+        this.setState({ queryData: res.data });
+        console.log("queryData", res.data);
+      });
+  }
+  mapData() {
+    const mapData = this.state.queryData.map((datarow) => ({
+      rules: JSON.parse(datarow.rules),
+    }));
+    this.setState({ queryRules: mapData });
+    console.log("queryRules", mapData);
+  }
+
+  componentDidMount() {
+    if (this.props.columnsData) {
+      this.setState({ config: this.getConfig(this.props.columnsData) });
+      this.getQuery();
+      this.mapData();
+    }
+  }
+
+  //change the config State and GetQuery on update
+  componentDidUpdate(prevProps, prevState, queryData) {
+    console.log("prevProps", prevProps);
+    if (prevProps.columnsData !== this.props.columnsData) {
+      this.setState({ config: this.getConfig(this.props.columnsData) });
+      this.getQuery();
+      this.mapData();
+    }
+  }
 
   showModal = () => {
     this.setState({
       visible: true,
     });
   };
+
+  showDeleteModal = () => {
+    this.setState({
+      visibleDelete: true,
+    });
+  };
+  
 
   handleOk = (e) => {
     console.log(this.elem);
@@ -101,6 +208,12 @@ export default class QueryBuilder extends Component {
       visible: false,
     });
   };
+  handleDeleteCancel = (e) => {
+    console.log(e);
+    this.setState({
+      visibleDelete: false,
+    });
+  };
 
   onChangeModal = ({ target: { value } }) => {
     this.setState({ input: value });
@@ -108,8 +221,10 @@ export default class QueryBuilder extends Component {
 
   render = () => (
     <div>
+      {console.log("SelectedValuesData", this.state.selectedValuesData)}
+      {console.log("config", this.state.config)}
       <Query
-        {...config}
+        {...this.state.config}
         value={this.state.tree}
         onChange={this.onChange}
         renderBuilder={this.renderBuilder}
@@ -126,7 +241,7 @@ export default class QueryBuilder extends Component {
     </div>
   );
 
-  renderResult = ({ tree, tree: immutableTree, config }) => (
+  renderResult = ({ tree, tree: immutableTree, config, queryData }) => (
     <div className="query-builder-result" style={{ padding: "10px" }}>
       {/* <div>
         SQL where:{" "}
@@ -137,7 +252,7 @@ export default class QueryBuilder extends Component {
         <pre>
           {JSON.stringify(QbUtils.jsonLogicFormat(immutableTree, config))}
         </pre>
-      </div> 
+      </div>
 
       <div>
         {this.state.selectedItem ? (
@@ -145,26 +260,29 @@ export default class QueryBuilder extends Component {
             <Button
               style={{ marginBottom: 10 }}
               onClick={() => {
-                const jsonTree = QbUtils.getTree(immutableTree);
-                const queryStoredValue = localStorage.getItem(
-                  "queryStoredValue"
-                );
-                if (queryStoredValue) {
-                  console.log("test");
-                  const queryStoredArray = JSON.parse(queryStoredValue);
-                  const filteredArray = queryStoredArray.filter(
-                    (arrayelem) => arrayelem.name !== this.state.selectedItem
-                  );
-
-                  filteredArray.push({
-                    ...jsonTree,
-                    name: this.state.selectedItem,
+                console.log("querydata edit", queryData, this.state.selectedItem)
+                
+                axios
+                  .post(
+                    `${process.env.REACT_APP_HOST}/EuclideV2/api/querybuilder`,
+                    {
+                      domain: `com.euclide.sdc.${this.props.columnsData.sdcid}`,
+                      pagelist: `${this.props.columnsData.pagelistid}`,
+                      rules: QbUtils.jsonLogicFormat(immutableTree, config).logic,
+                      name: this.state.selectedItem.name,
+                      id: this.state.selectedItem.id,
+                    },
+                    {
+                      withCredentials: true,
+                    }
+                  )
+                  .then(function(response) {
+                    console.log("response", response);
+                    window.location.reload();
+                  })
+                  .catch(function(error) {
+                    console.log("error", error);
                   });
-                  localStorage.setItem(
-                    "queryStoredValue",
-                    JSON.stringify(filteredArray)
-                  );
-                }
                 this.setState({ selectedItem: null });
               }}
             >
@@ -177,38 +295,49 @@ export default class QueryBuilder extends Component {
               Cancel
             </Button>
           </>
-        ) : (<div>
-          <Button style={{ marginBottom: 10 }} onClick={this.showModal}>
-            Save
-          </Button>
-          <Button style={{ marginBottom: 10 }} >
-            Lancer la requete
-          </Button>
+        ) : (
+          <div>
+            <Button style={{ marginBottom: 10 }} onClick={this.showModal}>
+              Save
+            </Button>
+            <Button
+              style={{ marginBottom: 10 }}
+              onClick={() => console.log("lancer la requete")}
+            >
+              Lancer la requete
+            </Button>
           </div>
         )}
 
         <Modal
-          title="Basic Modal"
+          title="Add a new Query"
           visible={this.state.visible}
           onOk={() => {
-            const jsonTree = QbUtils.getTree(immutableTree);
-            const queryStoredValue = localStorage.getItem("queryStoredValue");
-            const array = JSON.parse(queryStoredValue);
-            if (queryStoredValue) {
-              console.log("testModal");
-              localStorage.setItem(
-                "queryStoredValue",
-                JSON.stringify([
-                  ...array,
-                  { ...jsonTree, name: this.state.input },
-                ])
-              );
-            } else {
-              localStorage.setItem(
-                "queryStoredValue",
-                JSON.stringify([{ ...jsonTree, name: this.state.input }])
-              );
-            }
+            console.log("columnsDataPost", this.props.columnsData);
+            axios
+              .post(
+                `${process.env.REACT_APP_HOST}/EuclideV2/api/querybuilder`,
+                {
+                  domain: `com.euclide.sdc.${this.props.columnsData.sdcid}`,
+                  pagelist: `${this.props.columnsData.pagelistid}`,
+                  rules: QbUtils.jsonLogicFormat(immutableTree, config).logic,
+                  name: this.state.input,
+                },
+                {
+                  headers: {
+                    "content-type": "application/x-www-form-urlencoded",
+                    "X-Requested-With": "XMLHttpRequest",
+                  },
+                  withCredentials: true,
+                }
+              )
+              .then(function(response) {
+                console.log("response", response);
+                window.location.reload();
+              })
+              .catch(function(error) {
+                console.log("error", error);
+              });
             this.setState({ visible: false, input: "" });
           }}
           onCancel={this.handleCancel}
@@ -217,46 +346,70 @@ export default class QueryBuilder extends Component {
         </Modal>
       </div>
 
-      {localStorage.getItem("queryStoredValue") &&
-        JSON.parse(localStorage.getItem("queryStoredValue")).map((elem) => (
+      {queryData &&
+        queryData.map((elem) => (<>
+          <Modal
+          title="Delete a Query"
+          visible={this.state.visibleDelete}
+          onOk={() => {
+            console.log("Deletequerydata",queryData);
+            axios
+              .delete(
+                `${process.env.REACT_APP_HOST}/EuclideV2/api/querybuilder?id=${elem.id}`,
+                { withCredentials: true }
+              )
+              .then(function(response) {
+                console.log("delete", response);
+                window.location.reload();
+              });
+            this.setState({ visibleDelete: false });
+          }}
+          onCancel={this.handleDeleteCancel}
+        >
+          <p>Do you really want to delete this Query</p>
+        </Modal>
           <Dropdown
             style={{ marginRight: 10 }}
+            onDropDownChange={() => console.log(elem)}
             overlay={
               <Menu>
                 <Menu.Item
                   onClick={() => {
+                    console.log(
+                      "elements in config liste",
+                      JSON.parse(elem.rules),
+                      elem,
+                      QbUtils.loadFromJsonLogic(
+                        JSON.parse(elem.rules),
+                        this.state.config
+                      )
+                    );
+
                     this.setState({
-                      tree: QbUtils.loadTree(elem, config),
-                      selectedItem: elem.name,
+                      tree: QbUtils.loadFromJsonLogic(
+                        JSON.parse(elem.rules),
+                        this.state.config
+                      ),
+                      selectedItem: {"name":elem.name,"id":elem.id}
                     });
-                    console.log(elem, config)
                   }}
                   key="edit"
                 >
                   Edit
                 </Menu.Item>
-                <Menu.Item
-                  onClick={() => {
-                    const queryStoredValue = localStorage.getItem(
-                      "queryStoredValue"
-                    );
-                    const queryStoredArray = JSON.parse(queryStoredValue);
-                    const filteredArray = queryStoredArray.filter(
-                      (arrayelem) => arrayelem.name !== elem.name
-                    );
-                    localStorage.setItem(
-                      "queryStoredValue",
-                      JSON.stringify(filteredArray)
-                    );
-                    this.setState({ visible: false });
-                  }}
-                  key="delete"
-                >
+                <Menu.Item 
+                onClick={this.showDeleteModal} key="delete">
                   Delete
                 </Menu.Item>
                 <Menu.Item
                   onClick={() =>
-                    this.setState({ tree: QbUtils.loadTree(elem, config) })
+                    this.setState({
+                      tree: QbUtils.loadFromJsonLogic(
+                        JSON.parse(elem.rules),
+                        this.state.config
+                      ),
+                      selectedItem: null,
+                    })
                   }
                   key="copy"
                 >
@@ -266,42 +419,44 @@ export default class QueryBuilder extends Component {
             }
             trigger={["contextMenu"]}
           >
-            <Button style={{ marginRight: 10 }} key={elem.name}>
+            <Button
+              style={{ marginRight: 10 }}
+              key={elem.name}
+              onClick={() => {
+                axios
+                  .post(
+                    `${process.env.REACT_APP_HOST}/EuclideV2/api/querybuilder/search?domain=com.euclide.sdc.${this.props.columnsData.sdcid}&pagelist=${this.props.columnsData.pagelistid}&attachement=${this.props.columnsData.attachment}`,
+                    {
+                      savedQueryId:elem.id                    
+                    },
+                    {
+                      headers: {
+                        "content-type": "application/x-www-form-urlencoded",
+                        "X-Requested-With": "XMLHttpRequest",
+                      },
+                      withCredentials: true,
+                    }
+                  )
+                  .then(function(response) {
+                    console.log("search", response);
+                    window.location.reload();
+                  })
+                  .catch(function(error) {
+                    console.log(error);
+                  });
+              }}
+            >
               {elem.name}
             </Button>
           </Dropdown>
+          </>
         ))}
     </div>
   );
 
   onChange = (immutableTree, config) => {
     // Tip: for better performance you can apply `throttle` - see `examples/demo`
+    console.log("onchageQuery", immutableTree, config);
     this.setState({ tree: immutableTree, config: config });
-
-    // const jsonTree = QbUtils.getTree(immutableTree);
-    // console.log(jsonTree);
-    // `jsonTree` can be saved to backend, and later loaded to `queryValue`
   };
-  componentDidMount() {
-    const QueryStoredValue = localStorage.getItem("QueryStoredValue");
-    this.setState({ QueryStoredValue });
-  }
-
-  //    QuerySaveButton =({jsonTree})=>{
-  //   const querySaved = jsonTree.length ?( jsonTree.map(jsonTree =>{
-  //     return(
-  //       <div className="querySaveButton" key={jsonTree.id}>
-  //         <Button onclick={()=>{this.handleClick(jsonTree.id)}}>{jsonTree.content}</Button>
-  //       </div>
-  //     )
-  //   }
-  //     )): (<p> you have no saved query </p>)
-  //     return(
-  //       <div>
-  //       <Button>test</Button>
-  //         {querySaved}
-  //       </div>
-
-  //     )
-  // }
 }

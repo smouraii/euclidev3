@@ -8,7 +8,6 @@ import FAuto from "../../widgets/inputs/FAuto";
 import * as Yup from "yup";
 import { Button } from "antd";
 import useSWR from "swr";
-import Api from "../home/data/Api.json";
 import {
   Portlet,
   PortletBody,
@@ -18,9 +17,12 @@ import TransferSample from "../../widgets/TransferSample"
 import DatatableRequest from "../../widgets/DatatableRequest";
 
 export default function NewRequest(props) {
+  
   const [fieldsNamesObject, setFieldsNameObject] = React.useState(null);
   const [validationObject, setValidationObject] = React.useState(null);
   const fieldsNames = props.step.fields.map((field) => field.sdccolumnid);
+
+  console.log(props);
 
   const renderFields = (formik) => {
     return props.step.fields.map((field) => {
@@ -129,7 +131,7 @@ export default function NewRequest(props) {
             //     name: field.sdccolumnid,
             //     validation: field.mandatory
             //     ? Yup.FSelect("Must choose a value").required("Mandatory Field")
-            //      : Yup.FSelect("")
+            //      : Yup.FSelect("Must choose a value")
             //   }
 
           default:

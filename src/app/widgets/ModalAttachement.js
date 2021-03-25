@@ -1,63 +1,90 @@
-import React from "react";
-import { Modal, Button, Icon } from "antd";
+import React, { useEffect, useState } from "react";
+import { Modal, Button, Icon, List, Skeleton } from "antd";
 import { Formik, Form } from "formik";
-import AttachementList from "./AttachementList";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
-class ModalAttachementList extends React.Component {
-  state = {
-    loading: false,
-    visible: false,
+export default function ModalAttachementList(props) {
+  //Attachements States
+  const [list, setList] = useState([]);
+
+  //Modal States
+  const [visible, setVisible] = useState(false);
+
+  React.useEffect(() => {
+    setList(props.recordId.filter((elem, i) => i < 2));
+  }, [props.recordId]);
+
+  useEffect(() => {
+    console.log("list", list);
+    console.log("props attachement", props);
+  }, [list]);
+
+  const showModal = () => {
+    setVisible(true);
   };
 
-  showModal = () => {
-    this.setState({
-      visible: true,
-    });
+  const handleOk = () => {
+    setVisible(false);
   };
 
-  handleOk = () => {
-    this.setState({ loading: true });
-    setTimeout(() => {
-      this.setState({ loading: false, visible: false });
-    }, 3000);
-  };
+  console.log("recordId", props.recordId);
+  console.log("recordListLength", list.length);
 
-  handleCancel = () => {
-    this.setState({ visible: false });
-  };
-
-  render() {
-    const { visible, loading } = this.state;
-    return (
-      <div>
-        <Button type="ghost" onClick={this.showModal}>
-          <Icon type="file" />
-        </Button>
-        <Modal
-          visible={visible}
-          title="Attachement list"
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
-          footer={[
-            <Button key="back" onClick={this.handleCancel}>
-              Return
-            </Button>,
-            <Button
-              key="submit"
-              type="primary"
-              loading={loading}
-              onClick={this.handleOk}
-            >
-              Submit
-            </Button>,
-          ]}
-        >
-          <div className="inputContainer">
-            <AttachementList />
-          </div>
-        </Modal>
-      </div>
-    );
-  }
+  return (
+    <>
+      {props.recordId.map((row) =>
+        row.length > 1 ? (
+          <Button type="ghost" onClick={showModal}>
+            <Icon type="file" />
+          </Button>
+        ) : 0 < row.length && row.length < 2 ? (
+          <Button
+            type="ghost"
+            onClick={() =>
+              (window.location.href = `${process.env.REACT_APP_HOST}/EuclideV2/api/getAttachment?attachment=${row[0].id}`)
+            }
+          >
+            <Icon type="file" />
+          </Button>
+        ) : (
+          <Button type="ghost" disabled={true}>
+            <Icon type="file" />
+          </Button>
+        )
+      )}
+      <Modal
+        visible={visible}
+        title="Attachement"
+        onOk={handleOk}
+        footer={[
+          <Button key="back" type="primary" onClick={handleOk}>
+            Return
+          </Button>,
+        ]}
+      >
+        <div className="inputContainer">
+          <List
+            className="demo-loadmore-list"
+            itemLayout="horizontal"
+            dataSource={list.filter((item) => item && item.length)}
+            renderItem={(item) =>
+              item.map((elem) => (
+                <List.Item
+                  actions={[
+                    <a
+                      target="blank"
+                      href={`${process.env.REACT_APP_HOST}/EuclideV2/api/getAttachment?attachment=${elem.id}`}
+                    >
+                      {elem.attachmentdesc}
+                    </a>,
+                  ]}
+                ></List.Item>
+              ))
+            }
+          />
+        </div>
+      </Modal>
+    </>
+  );
 }
-export default ModalAttachementList;
