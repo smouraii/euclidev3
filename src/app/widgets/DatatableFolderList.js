@@ -81,16 +81,16 @@ function Datatable(props) {
 
   //Search Input
   const onSearch = (value) =>{
-  console.log("value",value)
     axios
       .get(`${process.env.REACT_APP_HOST}/EuclideV2/api/getList`, {
         params: {
           dc: `com.euclide.sdc.${columnsData.sdcid}`,
           masterdata: columnsData.sdcid,
           attachments: columnsData.attachment,
+          flux: parsed.fluxId,
+          pagelist: parsed.pagelistid,
           "search[value]": value,
-        },
-        withCredentials: true,
+        }
       })
       .then((res) => setData(res.data));
     }
