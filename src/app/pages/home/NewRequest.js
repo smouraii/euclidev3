@@ -22,16 +22,16 @@ import {
 import redaxios from "redaxios";
 import TransferSample from "../../widgets/TransferSample";
 import DatatableRequest from "../../widgets/DatatableRequest";
-import DatatableWizard from "../../widgets/DatatableWizard";
 import queryString from "query-string";
 import { withRouter } from "react-router-dom";
 import moment from "moment";
 import EditableTable from "../../widgets/DatatableRequest";
+import DatatableWizard from "../../widgets/DatatableWizard";
 
 function NewRequest(props) {
   const [fieldsNamesObject, setFieldsNameObject] = useState(null);
   const [validationObject, setValidationObject] = useState(null);
-  const [current,setCurrent]=useState(props.current);
+  const [current, setCurrent] = useState(props.current);
 
   const fieldsNames = props.step.fields.map((field) => field.sdccolumnid);
 
@@ -124,7 +124,7 @@ function NewRequest(props) {
                   "document.scrollingElement.scrollHeight: ",
                   window.innerHeight
                 );
-                console.log("hihihi:", page);
+                console.log("PageNumber:", page);
                 if (
                   hasMore !== false &&
                   window.innerHeight + document.documentElement.scrollTop ===
@@ -185,8 +185,8 @@ function NewRequest(props) {
     };
     React.useEffect(() => {
       // set the value of textC, based on textA and textB
-      if (values[props.dependsOnField].trim() !== "") {
-        console.log("dependonF", values[props.dependsOnField]);
+      if (values[props.dependsOnField] && values[props.dependsOnField].trim() !== "") {
+        console.log("dependonField:", values[props.dependsOnField]);
         redaxios
           .get("http://localhost:8080/EuclideV2/api/getDependFields", {
             params: {
@@ -204,6 +204,9 @@ function NewRequest(props) {
               ? setFieldValue(props.name, res.data.id)
               : null
           );
+      }
+      else{
+        return null
       }
     }, [values[props.dependsOnField]]);
 
@@ -299,8 +302,9 @@ function NewRequest(props) {
     });
   };
 
-  // input, select, auto, numeric, date
+  // input, select, auto, numeric, date 
 
+  //validation
   React.useEffect(() => {
     const objToFill = {};
     fieldsNames.forEach((fieldName) => (objToFill[fieldName] = ""));
@@ -356,10 +360,9 @@ function NewRequest(props) {
 
     setValidationObject(validationObj);
   }, []);
-React.useEffect(()=>{
-  console.log("current",current)
-}, [current]);
-  
+  React.useEffect(() => {
+    console.log("current", current);
+  }, [current]);
 
   return (
     <>
@@ -380,38 +383,46 @@ React.useEffect(()=>{
                   >
                     {(formikProps) => (
                       <Form>
+                      {/* if step.dataset==null  */}
                         {renderFields(formikProps)}
-                        
-                          <>
-                            <Portlet
-                              className="kt-portlet--height-fluid kt-portlet--border-bottom-brand"
-                              fluidHeight={true}
-                            >
-                              <PortletBody>
-                                <div className="row d-flex justify content-center">
-                                  <div className="col-md-6">
-                                    <TransferSample />
-                                  </div>
-                                  <div className="col-md-12">
-                                    <EditableTable
-                                      columns={props.step.fields}
-                                    />
-                                  </div>
+
+                        <>
+                               {/* if step.dataset !==null show  && sdcid !==null show TransferSample*/}
+                          <Portlet
+                            className="kt-portlet--height-fluid kt-portlet--border-bottom-brand"
+                            fluidHeight={true}
+                          >
+                            <PortletBody>
+                              <div className="row d-flex justify content-center">
+                                <div className="col-md-6">
+                                  <TransferSample />
                                 </div>
-                              </PortletBody>
-                            </Portlet>
-                          </>
-                        
+                                <div className="col-md-12">
+                         
+                                  <DatatableWizard
+                                    columns={props.step.fields}
+                                    step ={props.step.id}
+                                    FAuto={FAuto}
+                                  />
+                                </div>
+                              </div>
+                            </PortletBody>
+                          </Portlet>
+                        </>
+
                         {props.current > 0 && (
                           <Button
                             type="secondary"
-                            style={{float:"right"}}
+                            style={{ float: "right" }}
                             onClick={() => setCurrent(current - 1)}
                           >
                             Prev
                           </Button>
                         )}
-                        <Button type="primary" onClick={() => setCurrent(current + 1)}>
+                        <Button
+                          type="primary"
+                          onClick={() => setCurrent(current + 1)}
+                        >
                           Next
                         </Button>
                       </Form>

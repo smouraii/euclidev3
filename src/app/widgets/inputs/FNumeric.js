@@ -2,7 +2,7 @@ import React from "react";
 import { Field, ErrorMessage } from "formik";
 import { Input } from "antd";
 
-export default function FNumberic(props) {
+export default function FNumeric(props) {
   return (
     <div>
       <p style={{ margin: 0 }}>{props.label || props.name}</p>

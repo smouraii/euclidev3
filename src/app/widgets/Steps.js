@@ -26,6 +26,10 @@ export default function StepsNewRequest(props) {
       .then((res) => setData(res.data));
   }, []);
 
+  // const prev()=>{
+  //   setCurrent(current -1)
+  // }
+
   const { Step } = Steps;
   React.useEffect(()=>{
     if (data === null) return;
