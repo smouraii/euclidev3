@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Table, Icon, Switch } from "antd";
 import { Portlet, PortletBody } from "../partials/content/Portlet";
-import ModalAddRole from "./ModalAddRole";
+// import ModalAddRole from "./ModalAddRole";
 import DatatableAuditConfig from "./DatatableAuditConfig";
 
 
@@ -88,7 +88,7 @@ export default  () => {
     <Portlet>
       <PortletBody>
         <div className="d-flex justify-content-end">
-          <ModalAddRole />
+          {/* <ModalAddRole /> */}
         </div>
         <Table
           className="components-table-demo-nested"

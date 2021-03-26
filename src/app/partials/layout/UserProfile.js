@@ -33,7 +33,7 @@ class UserProfile extends React.Component {
 
             {showHi && (
               <span className="kt-header__topbar-username kt-hidden-mobile">
-                {user.fullname}
+                {user}
               </span>
             )}
 
@@ -42,7 +42,7 @@ class UserProfile extends React.Component {
             {showBadge && (
               <span className="kt-header__topbar-icon">
                 {/* TODO: Should get from currentUser */}
-                <b>{user && user.fullname[0]}</b>
+                <b>{user && user[0]}</b>
               </span>
             )}
           </div>
@@ -58,10 +58,10 @@ class UserProfile extends React.Component {
             <div className="kt-user-card__avatar">
               <img alt="Pic" className="kt-hidden" src={user.pic} />
               <span className="kt-badge kt-badge--lg kt-badge--rounded kt-badge--bold kt-font-success">
-                U
+                {user && user[0]}
               </span>
             </div>
-            <div className="kt-user-card__name">{user.fullname}</div>
+            <div className="kt-user-card__name">{user}</div>
           </div>
           <div className="kt-notification">
             <a className="kt-notification__item" href="/myprofile">

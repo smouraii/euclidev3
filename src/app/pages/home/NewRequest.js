@@ -21,11 +21,9 @@ import {
 } from "../../partials/content/Portlet";
 import redaxios from "redaxios";
 import TransferSample from "../../widgets/TransferSample";
-import DatatableRequest from "../../widgets/DatatableRequest";
 import queryString from "query-string";
 import { withRouter } from "react-router-dom";
 import moment from "moment";
-import EditableTable from "../../widgets/DatatableRequest";
 import DatatableWizard from "../../widgets/DatatableWizard";
 
 function NewRequest(props) {

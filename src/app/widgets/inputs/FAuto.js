@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Field, ErrorMessage } from "formik";
 import { Select, Input, DatePicker } from "antd";
-import redaxios from "redaxios";
-import queryString from "query-string";
 import { withRouter } from "react-router-dom";
 
 function FAuto(props) {

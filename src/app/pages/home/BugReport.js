@@ -1,10 +1,7 @@
 import React from "react";
 import { Portlet, PortletBody } from "../../partials/content/Portlet";
 import ModalForm from "../../widgets/ModalForm";
-import Datatable from "../../widgets/DatatableFolderList";
 import RefreshButton from "../../widgets/RefreshButton";
-import EditableFormTable from "../../widgets/DatatableRequest";
-import FullscreenButton from "../../widgets/FullscreenButton";
 import { Tabs, Icon } from "antd";
 import DatatableBugReport from "../../widgets/DatatableBugReport";
 

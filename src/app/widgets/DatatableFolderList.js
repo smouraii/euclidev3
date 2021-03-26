@@ -9,7 +9,7 @@ import {
   PortletHeader,
 } from "../partials/content/Portlet";
 import ModalAttachementList from "./ModalAttachement";
-import redaxios from "redaxios";
+import axios from "axios";
 import queryString from "query-string";
 import PageDetails from "./PageDetails";
 
@@ -40,8 +40,8 @@ function Datatable(props) {
 
   // API for Columns generation
   React.useEffect(() => {
-    redaxios
-      .get(`http://localhost:8080/EuclideV2/api/getPageList`, {
+    axios
+      .get(`${process.env.REACT_APP_HOST}/EuclideV2/api/getPageList`, {
         params: {
           pagelistid: parsed.pagelistid,
           fluxId: parsed.fluxId,
@@ -58,8 +58,8 @@ function Datatable(props) {
 
   React.useEffect(() => {
     if (columnsData !== null)
-      redaxios
-        .get(`http://localhost:8080/EuclideV2/api/getList`, {
+      axios
+        .get(`${process.env.REACT_APP_HOST}/EuclideV2/api/getList`, {
           params: {
             dc: `com.euclide.sdc.${columnsData.sdcid}`,
             masterdata: columnsData.sdcid,
@@ -80,17 +80,17 @@ function Datatable(props) {
   }, [selectedRow]);
 
   //Search Input
-  const onSearch = (value) => {
-    console.log("value", value);
-    redaxios
-      .get(`http://localhost:8080/EuclideV2/api/getList`, {
+  const onSearch = (value) =>{
+    axios
+      .get(`${process.env.REACT_APP_HOST}/EuclideV2/api/getList`, {
         params: {
           dc: `com.euclide.sdc.${columnsData.sdcid}`,
           masterdata: columnsData.sdcid,
           attachments: columnsData.attachment,
+          flux: parsed.fluxId,
+          pagelist: parsed.pagelistid,
           "search[value]": value,
-        },
-        withCredentials: true,
+        }
       })
       .then((res) => setData(res.data));
   };
@@ -98,8 +98,8 @@ function Datatable(props) {
   const handleClick = () => setShowQuerybuilder(!showQuerybuilder);
 
   const handleResetSearch = () =>
-    redaxios
-      .get(`http://localhost:8080/EuclideV2/api/getList`, {
+    axios
+      .get(`${process.env.REACT_APP_HOST}/EuclideV2/api/getList`, {
         params: {
           dc: `com.euclide.sdc.${columnsData.sdcid}`,
           masterdata: columnsData.sdcid,
@@ -193,18 +193,74 @@ function Datatable(props) {
     setSearchText("");
   };
 
-  //Attachement Column
-
-  const columnAttachement = [
-    {
-      title: "Attachement",
-      dataIndex: "test",
-      key: "test",
-      render: (id, val) => (
-        <ModalAttachementList recordId={[val.attachments]} />
-      ),
-    },
-  ];
+  //SearchFunction For Date
+  // const getColumnSearchPropsDate = (dataIndex) => ({
+  //   filterDropdown: ({
+  //     setSelectedKeys,
+  //     selectedKeys,
+  //     confirm,
+  //     clearFilters,
+  //     autoFocus,
+  //     handleChange,
+  //     placeholder,
+  //     value,
+  //     format,
+  //     handleSearch,
+  //     handleClear,
+  //   }) => (
+  //     <div style={{ padding: 8 }}>
+  //       <DatePicker.RangePicker
+  //         autoFocus={autoFocus}
+  //         onChange={handleChange}
+  //         placeholder={placeholder}
+  //         value={value}
+  //         format={format}
+  //         style={{ marginBottom: 8 }}
+  //       />
+  //       <Button
+  //         type="primary"
+  //         role="search"
+  //         onClick={handleSearch}
+  //         style={{ width: 90 }}
+  //         size="small"
+  //       >
+  //         search
+  //       </Button>
+  //       <Button
+  //         role="reset"
+  //         style={{ width: 90 }}
+  //         onClick={handleClear}
+  //         size="small"
+  //       >
+  //         reset
+  //       </Button>
+  //     </div>
+  //   ),
+  //   filterIcon: (filtered) => (
+  //     <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
+  //   ),
+  //   onFilter: (value, record) =>
+  //     record[dataIndex]
+  //       .toString()
+  //       .toLowerCase()
+  //       .includes(value.toLowerCase()),
+  //   onFilterDropdownVisibleChange: (visible) => {
+  //     if (visible) {
+  //       setTimeout(() => searchInput.current.select());
+  //     }
+  //   },
+  //   render: (text) =>
+  //     searchedColumn === dataIndex ? (
+  //       <Highlighter
+  //         highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
+  //         searchWords={[searchText]}
+  //         autoEscape
+  //         textToHighlight={text.toString()}
+  //       />
+  //     ) : (
+  //       text
+  //     ),
+  // });
 
   React.useEffect(() => {}, []);
 
@@ -239,18 +295,16 @@ function Datatable(props) {
       })),
       
     ];
-    if(columnsData.attachment===true){
-     mapColumns.push( {
+    if (columnsData.attachment) {
+      mapColumns.push({
         title: "Attachement",
         dataIndex: "test",
         key: "test",
         render: (id, val) => (
           <ModalAttachementList recordId={[val.attachments]} />
         ),
-      });
+      })
     }
-   
-     
     setColumnsApi(mapColumns);
     console.log("selectedRow", selectedRow);
     console.log("mapColumns", mapColumns);
@@ -300,7 +354,7 @@ function Datatable(props) {
       {!selectedRow && (
         <Table
           style={{ backgroundColor: "white" }}
-          columns={[...columnsApi]}
+          columns={columnsApi}
           dataSource={data.data}
         />
       )}

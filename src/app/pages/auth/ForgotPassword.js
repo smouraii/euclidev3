@@ -6,29 +6,11 @@ import { Link, Redirect } from "react-router-dom";
 import { FormattedMessage, injectIntl } from "react-intl";
 import * as auth from "../../store/ducks/auth.duck";
 import { requestPassword } from "../../crud/auth.crud";
-import redaxios from "redaxios";
+import axios from "axios";
+import { forgotPassword } from "../../crud/auth.crud";
 
 class ForgotPassword extends Component {
   state = { isRequested: false };
-
-  forgotPasswordAPI = (value) => {
-    redaxios.post(
-      "http://localhost:8080/EuclideV2/forgotPassword",({
-        email:value.email
-      }),
-      {
-        headers: {
-          "content-type": "application/x-www-form-urlencoded",
-          "X-Requested-With": "XMLHttpRequest",
-        },
-        withCredentials: true,
-      }
-    )
-    .then((res) => console.log("reponse",res))
-    .catch((error) => console.log("error", error));
-    console.log("addUserAPI");
-  };
-
 
   render() {
     const { intl } = this.props;
@@ -68,19 +50,20 @@ class ForgotPassword extends Component {
                     return errors;
                   }}
                   onSubmit={(values, { setStatus, setSubmitting }) => {
-                    this.forgotPasswordAPI();
-                    requestPassword(values.email)
-                        .then(() => {
-                          this.setState({ isRequested: true });
+                    forgotPassword(values.email)
+                        .then((res) => {
+                          setSubmitting(false);
+                          setStatus({type: 'alert-info', message: "Password reset request sent."});
                         })
                         .catch(() => {
                           setSubmitting(false);
-                          setStatus(
-                              intl.formatMessage(
+                          setStatus({
+                            type: 'alert-danger',
+                            message: intl.formatMessage(
                                   { id: "AUTH.VALIDATION.NOT_FOUND" },
                                   { name: values.email }
                               )
-                          );
+                          });
                         });
                   }}
               >
@@ -96,8 +79,8 @@ class ForgotPassword extends Component {
                   }) => (
                     <form onSubmit={handleSubmit} className="kt-form">
                       {status && (
-                          <div role="alert" className="alert alert-danger">
-                            <div className="alert-text">{status}</div>
+                          <div role="alert" className={`alert ${status.type}`}>
+                            <div className="alert-text">{status.message}</div>
                           </div>
                       )}
 

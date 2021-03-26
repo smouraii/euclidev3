@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Select } from "antd";
-import redaxios from "redaxios";
+import axios from "axios";
 
 const { Option } = Select;
 
@@ -11,14 +11,14 @@ export default class SelectQuery extends Component {
   };
 
   componentDidMount() {
-    redaxios
+    axios
       .get(
-        `http://localhost:8080/EuclideV2/api/getSelectOptions?dc=${this.props.customProps.package}.${this.props.customProps.domain}&display=${this.props.customProps.displayValue}`,
+        `${process.env.REACT_APP_HOST}/EuclideV2/api/getSelectOptions?dc=${this.props.customProps.package}.${this.props.customProps.domain}&display=${this.props.customProps.displayValue}`,
         { withCredentials: true}
       )
       .then((res) => {
         this.setState(
-          { selectedValuesData: res.data },
+          { selectedValuesData: res.data.results },
           console.log("SelecOptions", this.state.selectedValuesData)
         );
       });

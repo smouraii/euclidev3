@@ -1,3 +1,5 @@
+import { actions } from "../../app/store/ducks/auth.duck";
+
 export function removeCSSClass(ele, cls) {
   const reg = new RegExp("(\\s|^)" + cls + "(\\s|$)");
   ele.className = ele.className.replace(reg, " ");
@@ -12,18 +14,35 @@ export const toAbsoluteUrl = pathname => process.env.PUBLIC_URL + pathname;
 export function setupAxios(axios, store) {
   axios.interceptors.request.use(
     config => {
-      const {
-        auth: { authToken }
-      } = store.getState();
-
-      if (authToken) {
-        config.headers.Authorization = `Bearer ${authToken}`;
+      // Add Euclide portal headers
+      config.headers = {
+        "content-type": "application/x-www-form-urlencoded",
+        "X-Requested-With": "XMLHttpRequest",
+        ...config.headers,
       }
+
+      // Add credentials (SessionID) to each request
+      config.withCredentials = true;
 
       return config;
     },
     err => Promise.reject(err)
   );
+
+  // Intercept Unauthorized to automaticly logout a unauthorized user
+  axios.interceptors.response.use(function (response) {
+    // Any status code that lie within the range of 2xx cause this function to trigger
+    // Do something with response data
+    return response;
+  }, function (error) {
+    console.log({error})
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    // Do something with response error
+    if (error.request.status === 401 || error.request.status === 403) {
+      store.dispatch(actions.logout())
+    }
+    return Promise.reject(error);
+  });
 }
 
 

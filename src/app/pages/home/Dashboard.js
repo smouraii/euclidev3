@@ -23,7 +23,7 @@ import LatestUpdates from "../../widgets/LatestUpdates";
 import BestSellers from "../../widgets/BestSellers";
 import RecentActivities from "../../widgets/RecentActivities";
 import PortletHeaderDropdown from "../../partials/content/CustomDropdowns/PortletHeaderDropdown";
-import redaxios from "redaxios";
+import axios from "axios";
 
 export default function Dashboard() {
   const [data, setData] = useState(null);
@@ -35,21 +35,21 @@ export default function Dashboard() {
 
     //API GET HISTOGRAMME (BARCHART)
   React.useEffect(() => {
-    redaxios
-      .get("https://run.mocky.io/v3/a9305026-5281-4d60-8d7f-3b06f6b28988")
-      .then((res) => setData(res.data));
+    // axios
+    //   .get("https://run.mocky.io/v3/a9305026-5281-4d60-8d7f-3b06f6b28988")
+    //   .then((res) => setData(res.data));
   }, []);
 
   // API GET PIECHART
   // React.useEffect(() => {
-  //   redaxios
+  //   axios
   //     .get("https://run.mocky.io/v3/a9305026-5281-4d60-8d7f-3b06f6b28988")
   //     .then((res) => setDataPie(res.data));
   // }, []);
 
   //API REQUESTS TOTAL
     // React.useEffect(() => {
-  //   redaxios
+  //   axios
   //     .get("URL")
   //     .then((res) => setDataRequest(res.data));
   // }, []);
