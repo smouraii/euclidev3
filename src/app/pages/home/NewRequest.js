@@ -52,7 +52,7 @@ function NewRequest(props) {
     React.useEffect(() => {
       if (props.refsdcid === null) return;
       redaxios
-        .get("http://localhost:8080/EuclideV2/api/getSelectOptions", {
+        .get(`${process.env.REACT_APP_HOST}/EuclideV2/api/getSelectOptions`, {
           params: {
             dc: `com.euclide.sdc.${props.refsdcid}`,
             displayValueColumnid: props.displayValueColumnid,
@@ -112,26 +112,26 @@ function NewRequest(props) {
               instructionalText={props.instructionalText}
               display={props.autoproperties.refvaluedesc}
               defaultValue={props.autoproperties.defaultvalue}
-              onPopupScroll={() => {
-                console.log("window.innerHeight: ", window.innerHeight);
-                console.log(
-                  "document.documentElement.scrollTop: ",
-                  document.documentElement.scrollTop
-                );
-                console.log(
-                  "document.scrollingElement.scrollHeight: ",
-                  window.innerHeight
-                );
-                console.log("PageNumber:", page);
-                if (
-                  hasMore !== false &&
-                  window.innerHeight + document.documentElement.scrollTop ===
-                    document.scrollingElement.scrollHeight
-                ) {
-                  setScrollPosition(window.pageYOffset);
-                  setPage(page + 1);
-                }
-              }}
+              // onPopupScroll={() => {
+              //   console.log("window.innerHeight: ", window.innerHeight);
+              //   console.log(
+              //     "document.documentElement.scrollTop: ",
+              //     document.documentElement.scrollTop
+              //   );
+              //   console.log(
+              //     "document.scrollingElement.scrollHeight: ",
+              //     window.innerHeight
+              //   );
+              //   console.log("PageNumber:", page);
+              //   if (
+              //     hasMore !== false &&
+              //     window.innerHeight + document.documentElement.scrollTop ===
+              //       document.scrollingElement.scrollHeight
+              //   ) {
+              //     setScrollPosition(window.pageYOffset);
+              //     setPage(page + 1);
+              //   }
+              // }}
             >
               {selectData.map((elem) => (
                 <Select.Option key={elem.id} value={elem.id}>
@@ -183,7 +183,10 @@ function NewRequest(props) {
     };
     React.useEffect(() => {
       // set the value of textC, based on textA and textB
-      if (values[props.dependsOnField] && values[props.dependsOnField].trim() !== "") {
+      if (
+        values[props.dependsOnField] &&
+        values[props.dependsOnField].trim() !== ""
+      ) {
         console.log("dependonField:", values[props.dependsOnField]);
         redaxios
           .get("http://localhost:8080/EuclideV2/api/getDependFields", {
@@ -202,10 +205,7 @@ function NewRequest(props) {
               ? setFieldValue(props.name, res.data.id)
               : null
           );
-      }
-      else{
-        return null
-      }
+      } 
     }, [values[props.dependsOnField]]);
 
     // style display none if props.hidden true
@@ -267,9 +267,7 @@ function NewRequest(props) {
               type={field.autoproperties.type}
               autoproperties={field.autoproperties}
               refsdcid={field.autoproperties.refsdcid}
-              displayValueColumnid={
-                field.autoproperties.criteriaColumns[0].displayValueColumnid
-              }
+              displayValueColumnid={field.autoproperties.criteriaColumns[0].displayValueColumnid}
             />
           );
         case "date":
@@ -300,7 +298,7 @@ function NewRequest(props) {
     });
   };
 
-  // input, select, auto, numeric, date 
+  // input, select, auto, numeric, date
 
   //validation
   React.useEffect(() => {
@@ -381,11 +379,11 @@ function NewRequest(props) {
                   >
                     {(formikProps) => (
                       <Form>
-                      {/* if step.dataset==null  */}
+                        {/* if step.dataset==null  */}
                         {renderFields(formikProps)}
 
                         <>
-                               {/* if step.dataset !==null show  && sdcid !==null show TransferSample*/}
+                          {/* if step.dataset !==null show  && sdcid !==null show TransferSample*/}
                           <Portlet
                             className="kt-portlet--height-fluid kt-portlet--border-bottom-brand"
                             fluidHeight={true}
@@ -396,10 +394,9 @@ function NewRequest(props) {
                                   <TransferSample />
                                 </div>
                                 <div className="col-md-12">
-                         
                                   <DatatableWizard
                                     columns={props.step.fields}
-                                    step ={props.step.id}
+                                    step={props.step.id}
                                     FAuto={FAuto}
                                   />
                                 </div>

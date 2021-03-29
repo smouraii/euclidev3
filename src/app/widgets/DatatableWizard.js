@@ -83,8 +83,9 @@ export default function DatatableWizard(props) {
   };
 
   React.useEffect(() => {
-    if (!props.columns ) return;
+    if (!props.columns) return;
     const mapColumns = props.columns.map((field, index) => ({
+      key: field.sdccolumnid,
       title: field.columntitle || field.sdccolumnid,
       dataIndex: field.sdccolumnid,
       render: (text, record) => renderswitch(field),

@@ -12,11 +12,12 @@ export default function StepsNewRequest(props) {
   const [stepsData,setStepsData]=useState(null);
   const parsed = queryString.parse(props.location.search);
   console.log("parsedsteps", parsed);
+  console.log("Location:",props.location.search)
 
 
   React.useEffect(() => {
     redaxios
-      .get("http://localhost:8080/EuclideV2/api/getWizard", {
+      .get(`${process.env.REACT_APP_HOST}/EuclideV2/api/getWizard`, {
         params: {
           wizardId: parsed.pagelistid,
           fluxId: parsed.fluxId,

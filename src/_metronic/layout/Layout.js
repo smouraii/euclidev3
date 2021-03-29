@@ -35,7 +35,7 @@ function Layout({
 
   useEffect(() => {
     axios
-      .get( process.env.REACT_APP_HOST + "/EuclideV2/api/flux/menu")
+      .get( `${process.env.REACT_APP_HOST}/EuclideV2/api/flux/menu`)
       .then((res) => {
         setcustomMenuConfig({
           header: {
@@ -46,7 +46,7 @@ function Layout({
               toggle: "click",
               page: component.id,
               icon: component.icon && (component.icon.includes('flaticon') ? component.icon : `fa fa-${component.icon}`),
-              submenu: component.type != 'dashboard' && component.children
+              submenu: component.type !== 'dashboard' && component.children
                 .map((child) => (
                   {
                     title: child.title,
@@ -56,7 +56,7 @@ function Layout({
                         case 'list':
                           return `folderlist?pagelistid=${child.id}&fluxId=${component.id}`
                         case 'wizard':
-                          return `newrequest?pagelistid=${child.id}&fluxId=${component.fluxid}`
+                          return `newrequest?pagelistid=${child.id}&fluxId=${component.id}`
                         case 'admin':
                           return `admin/${child.id}`
                       }
