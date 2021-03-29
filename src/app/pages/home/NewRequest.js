@@ -25,6 +25,7 @@ import queryString from "query-string";
 import { withRouter } from "react-router-dom";
 import moment from "moment";
 import DatatableWizard from "../../widgets/DatatableWizard";
+import MultipleSelect from "../../widgets/MultipleSelect.js";
 
 function NewRequest(props) {
   const [fieldsNamesObject, setFieldsNameObject] = useState(null);
@@ -391,14 +392,16 @@ function NewRequest(props) {
                             <PortletBody>
                               <div className="row d-flex justify content-center">
                                 <div className="col-md-6">
-                                  <TransferSample />
+                                  <MultipleSelect 
+                                    dataset={props.step.dataset}
+                                  />
                                 </div>
                                 <div className="col-md-12">
-                                  <DatatableWizard
+                                  {/* <DatatableWizard
                                     columns={props.step.fields}
                                     step={props.step.id}
                                     FAuto={FAuto}
-                                  />
+                                  /> */}
                                 </div>
                               </div>
                             </PortletBody>
@@ -409,14 +412,14 @@ function NewRequest(props) {
                           <Button
                             type="secondary"
                             style={{ float: "right" }}
-                            onClick={() => setCurrent(current - 1)}
+                            onClick={() => props.setCurrent(props.current - 1)}
                           >
                             Prev
                           </Button>
                         )}
                         <Button
                           type="primary"
-                          onClick={() => setCurrent(current + 1)}
+                          onClick={() => props.setCurrent(props.current + 1)}
                         >
                           Next
                         </Button>
