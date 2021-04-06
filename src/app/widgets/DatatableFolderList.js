@@ -107,7 +107,7 @@ function Datatable(props) {
         },
         withCredentials: true,
       })
-      .then((res) => setData(res.data));
+      .then((res) => setData(res.data),setSelectedRow(null));
 
   //Table
   const handleTableChange = (pagination, filters, sorter) => {

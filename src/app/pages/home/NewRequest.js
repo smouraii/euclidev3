@@ -26,11 +26,12 @@ import { withRouter } from "react-router-dom";
 import moment from "moment";
 import DatatableWizard from "../../widgets/DatatableWizard";
 import MultipleSelect from "../../widgets/MultipleSelect.js";
+import axios from "axios";
 
 function NewRequest(props) {
   const [fieldsNamesObject, setFieldsNameObject] = useState(null);
   const [validationObject, setValidationObject] = useState(null);
-  const [current, setCurrent] = useState(props.current);
+  // const [current, setCurrent] = useState(0);
 
   const fieldsNames = props.step.fields.map((field) => field.sdccolumnid);
 
@@ -67,6 +68,7 @@ function NewRequest(props) {
         });
       console.log("selectData", selectData);
     }, [props, page]);
+
     console.log("selectData", selectData);
     console.log("MYFIELDprops", props);
     const dateFormat = "YYYY-MM-DD hh:mm:ss.S";
@@ -113,26 +115,26 @@ function NewRequest(props) {
               instructionalText={props.instructionalText}
               display={props.autoproperties.refvaluedesc}
               defaultValue={props.autoproperties.defaultvalue}
-              // onPopupScroll={() => {
-              //   console.log("window.innerHeight: ", window.innerHeight);
-              //   console.log(
-              //     "document.documentElement.scrollTop: ",
-              //     document.documentElement.scrollTop
-              //   );
-              //   console.log(
-              //     "document.scrollingElement.scrollHeight: ",
-              //     window.innerHeight
-              //   );
-              //   console.log("PageNumber:", page);
-              //   if (
-              //     hasMore !== false &&
-              //     window.innerHeight + document.documentElement.scrollTop ===
-              //       document.scrollingElement.scrollHeight
-              //   ) {
-              //     setScrollPosition(window.pageYOffset);
-              //     setPage(page + 1);
-              //   }
-              // }}
+              onPopupScroll={() => {
+                console.log("window.innerHeight: ", window.innerHeight);
+                console.log(
+                  "document.documentElement.scrollTop: ",
+                  document.documentElement.scrollTop
+                );
+                console.log(
+                  "document.scrollingElement.scrollHeight: ",
+                  window.innerHeight
+                );
+                console.log("PageNumber:", page);
+                if (
+                  hasMore !== false &&
+                  window.innerHeight + document.documentElement.scrollTop ===
+                    document.scrollingElement.scrollHeight
+                ) {
+                  setScrollPosition(window.pageYOffset);
+                  setPage(page + 1);
+                }
+              }}
             >
               {selectData.map((elem) => (
                 <Select.Option key={elem.id} value={elem.id}>
@@ -148,6 +150,7 @@ function NewRequest(props) {
               {...props}
               {...field}
               component={DatePicker}
+              placeholder="please add date"
               key={props.key}
               name={props.name}
               label={props.label}
@@ -160,7 +163,6 @@ function NewRequest(props) {
                   ? moment(values[props.name], dateFormat)
                   : null
               }
-              format={dateFormat}
             />
           );
         case "N":
@@ -206,7 +208,7 @@ function NewRequest(props) {
               ? setFieldValue(props.name, res.data.id)
               : null
           );
-      } 
+      }
     }, [values[props.dependsOnField]]);
 
     // style display none if props.hidden true
@@ -232,8 +234,8 @@ function NewRequest(props) {
         case "input":
           return (
             <FInput
-              key={field.sdccolumnid}
-              name={field.sdccolumnid}
+              key={props.step + "_" + field.sdccolumnid}
+              name={props.step + "_" + field.sdccolumnid}
               label={field.columntitle || field.sdccolumnid}
               readonly={field.readonly}
               hidden={field.hidden}
@@ -243,7 +245,8 @@ function NewRequest(props) {
         case "select":
           return (
             <FSelect
-              name={field.sdccolumnid}
+              key={props.step + "_" + field.sdccolumnid}
+              name={props.step + "_" + field.sdccolumnid}
               label={field.columntitle || field.sdccolumnid}
               readonly={field.readonly}
               hidden={field.hidden}
@@ -256,8 +259,8 @@ function NewRequest(props) {
         case "auto":
           return (
             <FAuto
-              key={field.sdccolumnid}
-              name={field.sdccolumnid}
+              key={props.step + "_" + field.sdccolumnidp}
+              name={props.step + "_" + field.sdccolumnid}
               label={field.columntitle || field.sdccolumnid}
               readonly={field.readonly}
               hidden={field.hidden}
@@ -268,14 +271,16 @@ function NewRequest(props) {
               type={field.autoproperties.type}
               autoproperties={field.autoproperties}
               refsdcid={field.autoproperties.refsdcid}
-              displayValueColumnid={field.autoproperties.criteriaColumns[0].displayValueColumnid}
+              displayValueColumnid={
+                field.autoproperties.criteriaColumns[0].displayValueColumnid
+              }
             />
           );
         case "date":
           return (
             <FDate
               key={field.sdccolumnid}
-              name={field.sdccolumnid}
+              name={props.step + "_" + field.sdccolumnid}
               label={field.columntitle || field.sdccolumnid}
               readonly={field.readonly}
               hidden={field.hidden}
@@ -286,7 +291,7 @@ function NewRequest(props) {
           return (
             <FNumeric
               key={field.sdccolumnid}
-              name={field.sdccolumnid}
+              name={props.step + "_" + field.sdccolumnid}
               label={field.columntitle || field.sdccolumnid}
               readonly={field.readonly}
               hidden={field.hidden}
@@ -307,66 +312,67 @@ function NewRequest(props) {
     fieldsNames.forEach((fieldName) => (objToFill[fieldName] = ""));
     setFieldsNameObject(objToFill);
 
-    const validationObj = {};
+    // const validationObj = {};
 
-    props.step.fields
-      .map((field) => {
-        switch (field.columntype) {
-          case "input":
-            // case "auto":
-            return {
-              name: field.sdccolumnid,
-              validation: field.mandatory
-                ? Yup.string().required("Mandatory Field")
-                : Yup.string(),
-            };
-          case "numeric":
-            return {
-              name: field.sdccolumnid,
-              validation: field.mandatory
-                ? Yup.number("Must be a number")
-                    .required("Mandatory Field")
-                    .typeError("Must be a number")
-                : Yup.number("Must be a number").typeError("Must be a number"),
-            };
+    // props.step.fields
+    //   .map((field) => {
+    //     switch (field.columntype) {
+    //       case "input":
+    //         // case "auto":
+    //         return {
+    //           name: field.sdccolumnid,
+    //           validation: field.mandatory
+    //             ? Yup.string().required("Mandatory Field")
+    //             : Yup.string(),
+    //         };
+    //       case "numeric":
+    //         return {
+    //           name: field.sdccolumnid,
+    //           validation: field.mandatory
+    //             ? Yup.number("Must be a number")
+    //                 .required("Mandatory Field")
+    //                 .typeError("Must be a number")
+    //             : Yup.number("Must be a number").typeError("Must be a number"),
+    //         };
 
-          case "date":
-            return {
-              name: field.sdccolumnid,
-              validation: field.mandatory
-                ? Yup.date("Must be a date").required("Mandatory Field")
-                : Yup.date("Must be a date"),
-            };
-          case "select":
-            return {
-              name: field.sdccolumnid,
-              validation: field.mandatory
-                ? Yup.string("Must choose a value").required("Mandatory Field")
-                : Yup.string("Must choose a value"),
-            };
+    //       case "date":
+    //         return {
+    //           name: field.sdccolumnid,
+    //           validation: field.mandatory
+    //             ? Yup.date("Must be a date").required("Mandatory Field")
+    //             : Yup.date("Must be a date"),
+    //         };
+    //       case "select":
+    //         return {
+    //           name: field.sdccolumnid,
+    //           validation: field.mandatory
+    //             ? Yup.string("Must choose a value").required("Mandatory Field")
+    //             : Yup.string("Must choose a value"),
+    //         };
 
-          default:
-            return null;
-        }
-      })
-      .forEach((elem) => {
-        if (elem) {
-          validationObj[elem.name] = elem.validation;
-        }
-      });
+    //       default:
+    //         return null;
+    //     }
+    //   })
+    //   .forEach((elem) => {
+    //     if (elem) {
+    //       validationObj[elem.name] = elem.validation;
+    //     }
+    //   });
 
-    setValidationObject(validationObj);
+    // setValidationObject(validationObj);
   }, []);
-  React.useEffect(() => {
-    console.log("current", current);
-  }, [current]);
+
+  React.useEffect(()=>{
+console.log("wizardData",props.wizardData)
+  },[props.wizardData])
 
   return (
     <>
       {props.hidden ||
         (fieldsNamesObject && (
           <div className="row d-flex justify-content-center">
-            <div className="col-sm-12 col-md-6 col-lg-6">
+            <div className="col-sm-12 col-md-12 col-lg-12">
               <div className="row d-flex justify-content-center">
                 <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
                   <Formik
@@ -375,53 +381,66 @@ function NewRequest(props) {
                     onSubmit={(val) => {
                       console.log("submitting.......");
                       console.log(val);
-                      setCurrent(current + 1);
+                      props.setWizardData({...props.wizardData,...val})
+                      props.next()
                     }}
                   >
                     {(formikProps) => (
                       <Form>
-                        {/* if step.dataset==null  */}
-                        {renderFields(formikProps)}
+                        {props.step.dataset === null &&
+                          renderFields(formikProps)}
 
                         <>
-                          {/* if step.dataset !==null show  && sdcid !==null show TransferSample*/}
-                          <Portlet
-                            className="kt-portlet--height-fluid kt-portlet--border-bottom-brand"
-                            fluidHeight={true}
-                          >
-                            <PortletBody>
-                              <div className="row d-flex justify content-center">
-                                <div className="col-md-6">
-                                  <MultipleSelect 
-                                    dataset={props.step.dataset}
-                                  />
+                          {props.step.dataset !== null && (
+                            <Portlet
+                              className="kt-portlet--height-fluid kt-portlet--border-bottom-brand"
+                              fluidHeight={true}
+                            >
+                              <PortletBody>
+                                <div className="row d-flex justify content-center">
+                                  <div className="col-md-12">
+                                    <DatatableWizard
+                                      columns={props.step.fields}
+                                      step={props.step.id}
+                                      dataset={props.step.dataset}
+                                      FAuto={FAuto}
+                                    />
+                                  </div>
                                 </div>
-                                <div className="col-md-12">
-                                  {/* <DatatableWizard
-                                    columns={props.step.fields}
-                                    step={props.step.id}
-                                    FAuto={FAuto}
-                                  /> */}
-                                </div>
-                              </div>
-                            </PortletBody>
-                          </Portlet>
+                              </PortletBody>
+                            </Portlet>
+                          )}
                         </>
-
+                        <p>{props.current}</p>
                         {props.current > 0 && (
                           <Button
-                            type="secondary"
-                            style={{ float: "right" }}
-                            onClick={() => props.setCurrent(props.current - 1)}
+                            type="primary"
+                            style={{ float: "left" }}
+                            onClick={() => props.prev()}
                           >
                             Prev
                           </Button>
                         )}
+
                         <Button
                           type="primary"
-                          onClick={() => props.setCurrent(props.current + 1)}
+                          htmlType="submit"
+                          style={{ float: "right" }}
                         >
                           Next
+                        </Button>
+                        <Button
+                          type="primary"
+                          style={{ float: "right" }}
+                          onClick={() =>
+                            axios.post(
+                              process.env.REACT_APP_HOST +
+                                "/EuclideV2/Savelink",
+                              { param1: "param1", param2: "param2" }
+                            )
+                          }
+                        >
+                          Save
                         </Button>
                       </Form>
                     )}

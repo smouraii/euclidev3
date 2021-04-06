@@ -5,7 +5,7 @@ import { Input } from "antd";
 export default function FNumeric(props) {
   return (
     <div>
-      <p style={{ margin: 0 }}>{props.label || props.name}</p>
+      <label htmlFor={props.name}>{props.label}</label>
       <Field
         style={{ width: "100%" }}
         as={Input}

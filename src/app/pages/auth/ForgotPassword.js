@@ -5,8 +5,6 @@ import { TextField } from "@material-ui/core";
 import { Link, Redirect } from "react-router-dom";
 import { FormattedMessage, injectIntl } from "react-intl";
 import * as auth from "../../store/ducks/auth.duck";
-import { requestPassword } from "../../crud/auth.crud";
-import axios from "axios";
 import { forgotPassword } from "../../crud/auth.crud";
 
 class ForgotPassword extends Component {

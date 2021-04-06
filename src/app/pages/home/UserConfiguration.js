@@ -4,7 +4,6 @@ import FInput from "../../widgets/inputs/FInput";
 import axios from "axios";
 import { withRouter } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage, useField, useFormikContext } from "formik";
-import Highlighter from "react-highlight-words";
 import qs from "qs";
 import * as Yup from 'yup';
 import { Portlet, PortletBody } from "../../partials/content/Portlet";
@@ -34,7 +33,7 @@ const ModalAddUser = () => {
           }
         )
         .then(res => {
-          return res.data.status == 'OK'
+          return res.data.status === 'OK'
         }),
       ),
     email: Yup.string()
@@ -50,7 +49,7 @@ const ModalAddUser = () => {
           }
         )
         .then(res => {
-          return res.data.status == 'OK'
+          return res.data.status === 'OK'
         }),
       ),
   });
@@ -84,7 +83,7 @@ const ModalAddUser = () => {
       process.env.REACT_APP_HOST + "/EuclideV2/api/admin/user/addresses"
     )
     .then((res) => {
-      if (res.statusText == "OK") {
+      if (res.statusText === "OK") {
         setAddresses(res.data);
       }
     })
@@ -92,7 +91,7 @@ const ModalAddUser = () => {
   }
 
   const selectAddress = (id) => {
-    const selected = addresses.find(e => e.id == id);
+    const selected = addresses.find(e => e.id === id);
 
     if (selected) {
       setSelectedAddresses([
@@ -103,10 +102,10 @@ const ModalAddUser = () => {
   }
 
   const deselectAddress = (id) => {
-    const deselected = addresses.find(e => e.id == id)
+    const deselected = addresses.find(e => e.id === id)
 
     if (deselected) {
-      setSelectedAddresses(selectedAddresses.filter(e => e.id != deselected.id));
+      setSelectedAddresses(selectedAddresses.filter(e => e.id !== deselected.id));
     }
   }
 
@@ -140,7 +139,7 @@ const ModalAddUser = () => {
             )
             .then((res) => {
               setSubmitting(false);
-              if (res.data.message == 'success') {
+              if (res.data.message === 'success') {
                 setModalVisible(false);
                 resetForm();
                 clearSelectedAddresses();
@@ -271,14 +270,14 @@ function UserRole(props) {
   }, [])
 
   useEffect(() => {
-    const selected = roles.find(e => e.role == role);
+    const selected = roles.find(e => e.role === role);
     if (selected) {
       selectRole(selected.id)
     }
   }, [roles, role])
 
   const selectRole = (id) => {
-    const selected = roles.find(e => e.id == id);
+    const selected = roles.find(e => e.id === id);
 
     if (selected) {
       setSelectedRole(selected);
@@ -418,7 +417,7 @@ function UserClientLims(props) {
   }
 
   const selectAddress = (id) => {
-    const selected = addresses.find(e => e.id == id);
+    const selected = addresses.find(e => e.id === id);
 
     if (selected) {
       setSelectedAddresses([
@@ -429,10 +428,10 @@ function UserClientLims(props) {
   }
 
   const deselectAddress = (id) => {
-    const deselected = addresses.find(e => e.id == id)
+    const deselected = addresses.find(e => e.id === id)
 
     if (deselected) {
-      setSelectedAddresses(selectedAddresses.filter(e => e.id != deselected.id))
+      setSelectedAddresses(selectedAddresses.filter(e => e.id !== deselected.id))
     }
   }
 
@@ -628,7 +627,7 @@ function MoreActions(props) {
   return (
     <>
       <Button.Group size="small">
-        {record.status != 1 && <Popconfirm
+        {record.status !== 1 && <Popconfirm
           title="Are you sure you want to activate this User?"
           okText="Yes"
           cancelText="No"
@@ -639,7 +638,7 @@ function MoreActions(props) {
             <Button type="default" size="small" icon="like"/>
           </Tooltip>
         </Popconfirm>}
-        {record.status != "0" && <Popconfirm
+        {record.status !== "0" && <Popconfirm
           title="Are you sure you want to disable this User?"
           okText="Yes"
           cancelText="No"
@@ -650,7 +649,7 @@ function MoreActions(props) {
             <Button type="default" size="small" icon="dislike"/>
           </Tooltip>
         </Popconfirm>}
-        {record.status != "2" && record.status != "0" && <Tooltip title='Change Suspend'>
+        {record.status !== "2" && record.status !== "0" && <Tooltip title='Change Suspend'>
           <Button type="default" size="small" icon="stop" onClick={() => setSuspendModalVisible(true)}/>
         </Tooltip>}
         { record.internalAccount && <Tooltip title='Change password'>
@@ -685,7 +684,7 @@ function MoreActions(props) {
           )
           .then((res) => {
             setSubmitting(false);
-            if (res.data.status == 'success') {
+            if (res.data.status === 'success') {
               setchangePWModalVisible(false);
               resetForm();
               message.success({ content: res.data.msg, key: 'userPasswordChange', duration: 10 });
@@ -844,10 +843,10 @@ class DatatableUserConfig extends React.Component {
 
   componentDidUpdate(prevProps, prevState,) {
     if (
-      prevState.pagination.current != this.state.pagination.current ||
-      prevState.sorter.field != this.state.sorter.field ||
-      prevState.sorter.order != this.state.sorter.order||
-      prevState.search != this.state.search
+      prevState.pagination.current !== this.state.pagination.current ||
+      prevState.sorter.field !== this.state.sorter.field ||
+      prevState.sorter.order !== this.state.sorter.order||
+      prevState.search !== this.state.search
     ) {
       this.fetch({search: this.state.search});
     }
@@ -1009,8 +1008,8 @@ class DatatableUserConfig extends React.Component {
           sorter: true,
           align: 'center',
           render: status => (
-            <Tag color={status == 1 ? 'green' : status == 2 ? 'orange' : 'red'}>
-              {status == 1 ? 'activated' : status == 2 ? 'suspended' : 'disabled'}
+            <Tag color={status === 1 ? 'green' : status === 2 ? 'orange' : 'red'}>
+              {status === 1 ? 'activated' : status === 2 ? 'suspended' : 'disabled'}
             </Tag>
           ),
         },

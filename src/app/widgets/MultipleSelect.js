@@ -6,18 +6,15 @@ export default function MultipleSelect(props) {
   const [selectedItems, setSelectedItems] = useState([]);
   const [data, setData] = useState([]);
 
-  const OPTIONS = [{name:"Apples"},{name: "Nails"},{name: "Bananas"}, {name:"Helicopters"}];
-
-
   const handleChange = (selectedItems) => {
     setSelectedItems(selectedItems);
   };
 
   useEffect(() => {
-      if(props.dataset===null) return;
+      if(props.dataset===null && props.sdcid===null) return;
     Axios.get(`${process.env.REACT_APP_HOST}/EuclideV2/api/getDataSet`, {
       params: {
-        sdcid: props.dataset.sdcid,
+        sdcid: props.sdcid,
       },
     }).then((res) => setData(res.data));
   }, []);
@@ -26,7 +23,7 @@ export default function MultipleSelect(props) {
   return (
     <Select
       mode="multiple"
-      placeholder="Inserted are removed"
+      placeholder="Choose a Dataset"
       value={selectedItems}
       onChange={handleChange}
       style={{ width: "100%" }}
