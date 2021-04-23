@@ -106,7 +106,7 @@ function FSelect(props) {
               </Select.Option>
             ))}
           </Field>
-          <p style={{ margin: 0 }}>{props.instructionalText}</p>
+          <p style={{ margin: 0 }}>{props.instructionaltext}</p>
           <ErrorMessage
             name={props.name}
             render={(msg) => <Text type="danger">{msg}</Text>}

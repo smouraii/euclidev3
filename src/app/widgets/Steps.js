@@ -1,19 +1,51 @@
 import React, { useState } from "react";
 import Api from "../pages/home/data/Api.json";
-import { Steps } from "antd";
+import { Button, Steps, Table } from "antd";
 import NewRequest from "../pages/home/NewRequest";
 import { Portlet, PortletBody } from "../partials/content/Portlet";
 import queryString from "query-string";
 import redaxios from "redaxios";
+import { Form, Formik } from "formik";
+import Axios from "axios";
 
 export default function StepsNewRequest(props) {
   const [data, setData] = useState(null);
   const [current, setCurrent] = useState(0);
-  const [stepsData, setStepsData] = useState(null);
-  const [wizardData,setWizardData]= useState({});
+  const [wizardData, setWizardData] = useState([]);
+  const [columns, setColumns] = useState([]);
   const parsed = queryString.parse(props.location.search);
   console.log("parsedsteps", parsed);
   console.log("Location:", props.location.search);
+  console.log("wizardDataStep:", wizardData);
+
+  const Confirmation = () => {
+    React.useEffect(() => {
+      const mapColumns = wizardData.map((column) => ({
+        title: column.title,
+        dataIndex: column.data,
+        key: column.name,
+      }));
+      setColumns(mapColumns);
+    }, []);
+    return (
+      <Form>
+        <Table
+          rowKey={(row, index) => "" + index}
+          pagination={false}
+          rowSelection={{
+            columnWidth: 100,
+          }}
+          columns={columns}
+        />
+        <Button type="primary" onClick={() => prev()}>
+          Previous
+        </Button>
+        <Button type="submit" style={{ float: "left" }}>
+          Submit
+        </Button>
+      </Form>
+    );
+  };
 
   React.useEffect(() => {
     redaxios
@@ -36,12 +68,10 @@ export default function StepsNewRequest(props) {
 
   const { Step } = Steps;
 
-
   React.useEffect(() => {
     console.log("dataofSteps", data);
   }, [data]);
-console.log(data)
-
+  console.log(data);
   return (
     <div>
       {/* add step save (send a request with save API)  */}
@@ -54,16 +84,23 @@ console.log(data)
               ))}
               <Step title="confirmation" />
             </Steps>
-            <NewRequest
-              prev={prev}
-              next={next}
-              current={current}
-              wizardData={wizardData}
-              setWizardData={setWizardData}
-              key={data.steps[current].id}
-              step={data.steps[current]}
-              stepsLength={data.steps.length + 1}
-            />
+            {current !== data.steps.length && (
+              <NewRequest
+                prev={prev}
+                next={next}
+                current={current}
+                wizardData={wizardData}
+                pagelistid={parsed.pagelistid}
+                fluxId={parsed.fluxId}
+                setWizardData={setWizardData}
+                key={data.steps[current].id}
+                step={data.steps[current]}
+                sdcid={data.steps[current].sdcid}
+                stepsLength={data.steps.length}
+              />
+            )}
+
+            {current >= data.steps.length && wizardData && Confirmation()}
           </PortletBody>
         )}
       </Portlet>

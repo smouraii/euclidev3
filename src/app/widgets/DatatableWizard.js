@@ -1,5 +1,4 @@
 import { Table, AddRowButton, RemoveRowButton, Form } from "formik-antd";
-import { Formik } from "formik";
 import React, { useState } from "react";
 import { Icon, Popconfirm, Tooltip } from "antd";
 import FInput from "./inputs/FInput";
@@ -23,8 +22,8 @@ export default function DatatableWizard(props) {
             <FInput
               // onPressEnter={save}
               // onBlur={save}
-              key={field.sdccolumnid + index + props.step}
-              name={field.sdccolumnid + index + props.step}
+              key={props.step + "_" + field.sdccolumnid + "_" + index}
+              name={props.step + "_" + field.sdccolumnid + "_" + index}
               readonly={field.readonly}
               hidden={field.hidden}
               style={{ width: "100%" }}
@@ -165,13 +164,7 @@ export default function DatatableWizard(props) {
     console.log("mapColumns:", mapColumns);
   }, []);
   return (
-    <Formik
-      initialValues={{
-        tableData: [],
-      }}
-      onSubmit={() => {}}
-    >
-      <Form>
+     <>
         <AddRowButton
           name="tableData"
           style={{ marginBottom: 20 }}
@@ -188,7 +181,6 @@ export default function DatatableWizard(props) {
           }}
           columns={columns}
         />
-      </Form>
-    </Formik>
+    </>
   );
 }

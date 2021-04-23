@@ -14,7 +14,7 @@ export default function FNumeric(props) {
         disabled={props.readonly}
         hidden={props.hidden}
       ></Field>
-      <p style={{ margin: 0 }}>{props.instructionalText}</p>
+      <p style={{ margin: 0 }}>{props.instructionaltext}</p>
       <ErrorMessage
         name={props.name}
         render={(msg) => <span style={{ color: "red" }}>{msg}</span>}

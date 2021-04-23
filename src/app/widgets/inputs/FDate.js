@@ -18,7 +18,7 @@ export default function FDate(props) {
         hidden={props.hidden}
         onChange={(val) => console.log(val)}
       ></Field>
-      <p style={{ margin: 0 }}>{props.instructionalText}</p>
+      <p style={{ margin: 0 }}>{props.instructionaltext}</p>
       <ErrorMessage
         name={props.name}
         render={(msg) => <span style={{ color: "red" }}>{msg}</span>}
