@@ -8,6 +8,7 @@ export default function MultipleSelect(props) {
 
   const handleChange = (selectedItems) => {
     setSelectedItems(selectedItems);
+    console.log("selectedItemsMultiSelect",selectedItems)
   };
 
   useEffect(() => {

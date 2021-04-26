@@ -51,7 +51,7 @@ export default function StepsNewRequest(props) {
     redaxios
       .get(`${process.env.REACT_APP_HOST}/EuclideV2/api/getWizard`, {
         params: {
-          wizardId: parsed.pagelistid,
+          wizardId: parsed.wizardid,
           fluxId: parsed.fluxId,
         },
         withCredentials: true,
@@ -90,7 +90,7 @@ export default function StepsNewRequest(props) {
                 next={next}
                 current={current}
                 wizardData={wizardData}
-                pagelistid={parsed.pagelistid}
+                wizardid={parsed.wizardid}
                 fluxId={parsed.fluxId}
                 setWizardData={setWizardData}
                 key={data.steps[current].id}

@@ -56,7 +56,7 @@ function Layout({
                         case 'list':
                           return `folderlist?pagelistid=${child.id}&fluxId=${component.id}`
                         case 'wizard':
-                          return `newrequest?pagelistid=${child.id}&fluxId=${component.id}`
+                          return `newrequest?wizardid=${child.id}&fluxId=${component.id}`
                         case 'admin':
                           return `admin/${child.id}`
                       }

@@ -24,7 +24,8 @@ import axios from "axios";
 function NewRequest(props) {
   const [fieldsNamesObject, setFieldsNameObject] = useState(null);
   const [validationObject, setValidationObject] = useState(null);
-  // const [current, setCurrent] = useState(0);
+  const [data, setData] = useState(null);
+  const [templateData, setTemplateData] = useState(null);
 
   const fieldsNames = props.step.fields.map(
     (field) => props.step.id + "_" + field.sdccolumnid
@@ -33,54 +34,64 @@ function NewRequest(props) {
   console.log("propsNeWRequest", props);
 
   React.useEffect(() => {
-    console.log("props", props);
-    const parsed = queryString.parse(props.location.search);
-    console.log(parsed);
+    if (!props.pagelistid && !props.fluxId && !props.sdcid) return;
+    axios
+      .get(`${process.env.REACT_APP_HOST}/EuclideV2/api/getTemplates`, {
+        params: {
+          wizardId: props.pagelistid,
+          fluxId: props.fluxId,
+          sdcid: props.sdcid,
+        },
+        withCredentials: true,
+      })
+      .then((res) => setData(res.data));
+    console.log("templateData:", data);
   }, []);
 
-  const Template = (props) => {
-    const [data, setData] = useState(null);
-
+  const Template = () => {
+    const [selectedTemplate,setSelectedTemplate]= useState([])
     const { setFieldValue } = useFormikContext();
 
-    React.useEffect(() => {
-      if (!props.pagelistid && !props.fluxId && !props.sdcid) return;
-      axios
-        .get(`${process.env.REACT_APP_HOST}/EuclideV2/api/getTemplates`, {
-          params: {
-            wizardId: props.pagelistid,
-            fluxId: props.fluxId,
-            sdcid: props.sdcid,
-          },
-          withCredentials: true,
-        })
-        .then((res) => setData(res.data));
-        console.log("templateData:", data);
-    }, []);
-
-    console.log("templateData2:", data);
-    console.log("templateProps",props)
+    const handleChange = (selectedTemplate) => {
+    setSelectedTemplate(selectedTemplate);  
+      }
+      console.log("SelectedTemplate:",selectedTemplate)
+      console.log("templateData",templateData)
 
     return (
       <>
-     {data!==null &&(
-      <div className="inputContainer">
-        <label htmlFor={data.value}>{data.value}</label>
-        <Field
-          showSearch
-          component={Select}
-          onSelect={(val) => setFieldValue(data.value, val)}
-          name={data.value}
-          placeholder="Select a template"
-          style={{ width: "100%" }}
-        >
-          {data.map((elem) => (
-            <Select.Option key={elem.id} value={elem.id}>
-              <div className="demo-infinite-container">{elem.value}</div>
-            </Select.Option>
-          ))}
-        </Field>
-      </div>)}
+        {data !== null && (
+          <div className="inputContainer">
+            <label htmlFor="template">Template</label>
+            <Field
+              showSearch
+              component={Select}
+              onChange={handleChange}
+              onSelect={(val) => {
+                setFieldValue(data.value, val);
+                if (!props.pagelistid && !props.fluxId && data!==null) return;
+                axios
+                  .get(
+                    `${process.env.REACT_APP_HOST}/EuclideV2/api/flux/wizard/${props.fluxId}/${props.wizardid}/${selectedTemplate}`,
+                    {
+                      withCredentials: true,
+                    }
+                  )
+                  .then((res) => setTemplateData(res.data));
+              }}
+              name={data.value}
+              value={selectedTemplate}
+              placeholder="Select a template"
+              style={{ width: "100%" }}
+            >
+              {data.map((elem) => (
+                <Select.Option key={elem.id} value={elem.id}>
+                  <div className="demo-infinite-container">{elem.value}</div>
+                </Select.Option>
+              ))}
+            </Field>
+          </div>
+        )}
       </>
     );
   };
@@ -225,7 +236,7 @@ function NewRequest(props) {
       }
     };
     React.useEffect(() => {
-      // set the value of textC, based on textA and textB
+      // set the value of textB, based on textA
       if (
         values[props.dependsOnField] &&
         values[props.dependsOnField].trim() !== ""
@@ -271,7 +282,8 @@ function NewRequest(props) {
   const renderFields = () => {
     return (
       <>
-        <Template fluxId={props.fluxId} 
+        <Template
+          fluxId={props.fluxId}
           pagelistid={props.pagelistid}
           sdcid={props.sdcid}
         />
@@ -362,55 +374,55 @@ function NewRequest(props) {
     fieldsNames.forEach((fieldName) => (objToFill[fieldName] = ""));
     setFieldsNameObject(objToFill);
 
-    const validationObj = {};
+    // const validationObj = {};
 
-    props.step.fields
-      .map((field) => {
-        switch (field.columntype) {
-          case "input":
-            // case "auto":
-            return {
-              name: props.step.id + "_" + field.sdccolumnid,
-              validation: field.mandatory
-                ? Yup.string().required("Mandatory Field")
-                : Yup.string(),
-            };
-          case "numeric":
-            return {
-              name: props.step.id + "_" + field.sdccolumnid,
-              validation: field.mandatory
-                ? Yup.number("Must be a number")
-                    .required("Mandatory Field")
-                    .typeError("Must be a number")
-                : Yup.number("Must be a number").typeError("Must be a number"),
-            };
+    // props.step.fields
+    //   .map((field) => {
+    //     switch (field.columntype) {
+    //       case "input":
+    //         // case "auto":
+    //         return {
+    //           name: props.step.id + "_" + field.sdccolumnid,
+    //           validation: field.mandatory
+    //             ? Yup.string().required("Mandatory Field")
+    //             : Yup.string(),
+    //         };
+    //       case "numeric":
+    //         return {
+    //           name: props.step.id + "_" + field.sdccolumnid,
+    //           validation: field.mandatory
+    //             ? Yup.number("Must be a number")
+    //                 .required("Mandatory Field")
+    //                 .typeError("Must be a number")
+    //             : Yup.number("Must be a number").typeError("Must be a number"),
+    //         };
 
-          case "date":
-            return {
-              name: props.step.id + "_" + field.sdccolumnid,
-              validation: field.mandatory
-                ? Yup.date("Must be a date").required("Mandatory Field")
-                : Yup.date("Must be a date"),
-            };
-          case "select":
-            return {
-              name: props.step.id + "_" + field.sdccolumnid,
-              validation: field.mandatory
-                ? Yup.string("Must choose a value").required("Mandatory Field")
-                : Yup.string("Must choose a value"),
-            };
+    //       case "date":
+    //         return {
+    //           name: props.step.id + "_" + field.sdccolumnid,
+    //           validation: field.mandatory
+    //             ? Yup.date("Must be a date").required("Mandatory Field")
+    //             : Yup.date("Must be a date"),
+    //         };
+    //       case "select":
+    //         return {
+    //           name: props.step.id + "_" + field.sdccolumnid,
+    //           validation: field.mandatory
+    //             ? Yup.string("Must choose a value").required("Mandatory Field")
+    //             : Yup.string("Must choose a value"),
+    //         };
 
-          default:
-            return null;
-        }
-      })
-      .forEach((elem) => {
-        if (elem) {
-          validationObj[elem.name] = elem.validation;
-        }
-      });
+    //       default:
+    //         return null;
+    //     }
+    //   })
+    //   .forEach((elem) => {
+    //     if (elem) {
+    //       validationObj[elem.name] = elem.validation;
+    //     }
+    //   });
 
-    setValidationObject(validationObj);
+    // setValidationObject(validationObj);
   }, []);
 
   React.useEffect(() => {
