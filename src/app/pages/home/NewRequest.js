@@ -26,6 +26,8 @@ function NewRequest(props) {
   const [validationObject, setValidationObject] = useState(null);
   const [data, setData] = useState(null);
   const [templateData, setTemplateData] = useState(null);
+  const [mappedTemplate, setMappedTemplate]= useState(null);
+
 
   const fieldsNames = props.step.fields.map(
     (field) => props.step.id + "_" + field.sdccolumnid
@@ -34,11 +36,11 @@ function NewRequest(props) {
   console.log("propsNeWRequest", props);
 
   React.useEffect(() => {
-    if (!props.pagelistid && !props.fluxId && !props.sdcid) return;
+    if (!props.wizardid && !props.fluxId && !props.sdcid) return;
     axios
       .get(`${process.env.REACT_APP_HOST}/EuclideV2/api/getTemplates`, {
         params: {
-          wizardId: props.pagelistid,
+          wizardId: props.wizardid,
           fluxId: props.fluxId,
           sdcid: props.sdcid,
         },
@@ -46,9 +48,25 @@ function NewRequest(props) {
       })
       .then((res) => setData(res.data));
     console.log("templateData:", data);
+    console.log("templateData",templateData)
   }, []);
 
-  const Template = () => {
+  // React.useEffect(()=>{
+  //   if(!templateData)return;
+  //  const maptemplate= templateData.map((elem)=>(
+    // if elem !== [] return;
+  //     {
+  //       elem[props.step.id]:{
+    //     elem[props.step.id].props.sdcid:{
+  //      props.step.id_props.step.fields:elem.[props.step.id].props.sdcid.props.step.fields
+  // }
+  //}
+  //     }
+  //   ));
+ // setMappedTemplate(maptemplate)
+  // },[templateData])
+
+  const Template = (formikProps) => {
     const [selectedTemplate,setSelectedTemplate]= useState([])
     const { setFieldValue } = useFormikContext();
 
@@ -69,15 +87,16 @@ function NewRequest(props) {
               onChange={handleChange}
               onSelect={(val) => {
                 setFieldValue(data.value, val);
-                if (!props.pagelistid && !props.fluxId && data!==null) return;
-                axios
-                  .get(
-                    `${process.env.REACT_APP_HOST}/EuclideV2/api/flux/wizard/${props.fluxId}/${props.wizardid}/${selectedTemplate}`,
-                    {
-                      withCredentials: true,
-                    }
-                  )
-                  .then((res) => setTemplateData(res.data));
+                setTemplateData(" test");
+                // if (!props.wizardid && !props.fluxId && data!==null) return;
+                // axios
+                //   .get(
+                //     `${process.env.REACT_APP_HOST}/EuclideV2/api/flux/wizard/${props.fluxId}/${props.wizardid}/${selectedTemplate}`,
+                //     {
+                //       withCredentials: true,
+                //     }
+                //   )
+                //   .then((res) => setTemplateData(res.data));
               }}
               name={data.value}
               value={selectedTemplate}
@@ -284,7 +303,7 @@ function NewRequest(props) {
       <>
         <Template
           fluxId={props.fluxId}
-          pagelistid={props.pagelistid}
+          wizardid={props.wizardid}
           sdcid={props.sdcid}
         />
         {props.step.fields.map((field) => {
@@ -371,7 +390,7 @@ function NewRequest(props) {
   //validation
   React.useEffect(() => {
     const objToFill = {};
-    fieldsNames.forEach((fieldName) => (objToFill[fieldName] = ""));
+    fieldsNames.forEach((fieldName) => (objToFill[fieldName] = "test"));
     setFieldsNameObject(objToFill);
 
     // const validationObj = {};
@@ -438,8 +457,14 @@ function NewRequest(props) {
               <div className="row d-flex justify-content-center">
                 <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
                   <Formik
-                    enableReinitialize
-                    initialValues={fieldsNamesObject}
+                    enableReinitialize={true}
+                    initialValues={{
+          tableData: [
+            {
+             fieldsNamesObject
+            },
+          ],
+        }}
                     validationSchema={Yup.object(validationObject)}
                     onSubmit={(val) => {
                       console.log("submitting.......");
