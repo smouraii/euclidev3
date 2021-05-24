@@ -25,13 +25,8 @@ function NewRequest(props) {
   const [fieldsNamesObject, setFieldsNameObject] = useState(null);
   const [validationObject, setValidationObject] = useState(null);
   const [data, setData] = useState(null);
-  const [templateData, setTemplateData] = useState(null);
-  const [mappedTemplate, setMappedTemplate]= useState(null);
+  const [mappedTemplate, setMappedTemplate] = useState([]);
 
-
-  const fieldsNames = props.step.fields.map(
-    (field) => props.step.id + "_" + field.sdccolumnid
-  );
 
   console.log("propsNeWRequest", props);
 
@@ -47,34 +42,19 @@ function NewRequest(props) {
         withCredentials: true,
       })
       .then((res) => setData(res.data));
-    console.log("templateData:", data);
-    console.log("templateData",templateData)
+    console.log("Data:", data);
   }, []);
 
-  // React.useEffect(()=>{
-  //   if(!templateData)return;
-  //  const maptemplate= templateData.map((elem)=>(
-    // if elem !== [] return;
-  //     {
-  //       elem[props.step.id]:{
-    //     elem[props.step.id].props.sdcid:{
-  //      props.step.id_props.step.fields:elem.[props.step.id].props.sdcid.props.step.fields
-  // }
-  //}
-  //     }
-  //   ));
- // setMappedTemplate(maptemplate)
-  // },[templateData])
 
   const Template = (formikProps) => {
-    const [selectedTemplate,setSelectedTemplate]= useState([])
+    const [selectedTemplate, setSelectedTemplate] = useState([]);
     const { setFieldValue } = useFormikContext();
 
     const handleChange = (selectedTemplate) => {
-    setSelectedTemplate(selectedTemplate);  
-      }
-      console.log("SelectedTemplate:",selectedTemplate)
-      console.log("templateData",templateData)
+      setSelectedTemplate(selectedTemplate);
+    };
+    console.log("SelectedTemplate:", selectedTemplate);
+    console.log("templateData", props.templateData);
 
     return (
       <>
@@ -87,16 +67,15 @@ function NewRequest(props) {
               onChange={handleChange}
               onSelect={(val) => {
                 setFieldValue(data.value, val);
-                setTemplateData(" test");
-                // if (!props.wizardid && !props.fluxId && data!==null) return;
-                // axios
-                //   .get(
-                //     `${process.env.REACT_APP_HOST}/EuclideV2/api/flux/wizard/${props.fluxId}/${props.wizardid}/${selectedTemplate}`,
-                //     {
-                //       withCredentials: true,
-                //     }
-                //   )
-                //   .then((res) => setTemplateData(res.data));
+                if (!props.wizardid && !props.fluxId && data !== null) return;
+                axios
+                  .get(
+                    `${process.env.REACT_APP_HOST}/EuclideV2/api/flux/wizard/${props.fluxId}/${props.wizardid}/${selectedTemplate}`,
+                    {
+                      withCredentials: true,
+                    }
+                  )
+                  .then((res) => props.setTemplateData([res.data]));
               }}
               name={data.value}
               value={selectedTemplate}
@@ -390,59 +369,65 @@ function NewRequest(props) {
   //validation
   React.useEffect(() => {
     const objToFill = {};
-    fieldsNames.forEach((fieldName) => (objToFill[fieldName] = "test"));
+    props.step.fields
+      .map((field) => props.step.dataset ? props.step.id + "_" + field.sdccolumnid+"_"+0 : props.step.id+ "_"+field.sdccolumnid )
+      .forEach((fieldName) => (objToFill[fieldName] = "mappedTemplate"));
     setFieldsNameObject(objToFill);
+    console.log("PropsTemplateData:",props.templateData)
+  }, [props.templateData]);
 
-    // const validationObj = {};
 
-    // props.step.fields
-    //   .map((field) => {
-    //     switch (field.columntype) {
-    //       case "input":
-    //         // case "auto":
-    //         return {
-    //           name: props.step.id + "_" + field.sdccolumnid,
-    //           validation: field.mandatory
-    //             ? Yup.string().required("Mandatory Field")
-    //             : Yup.string(),
-    //         };
-    //       case "numeric":
-    //         return {
-    //           name: props.step.id + "_" + field.sdccolumnid,
-    //           validation: field.mandatory
-    //             ? Yup.number("Must be a number")
-    //                 .required("Mandatory Field")
-    //                 .typeError("Must be a number")
-    //             : Yup.number("Must be a number").typeError("Must be a number"),
-    //         };
+  React.useEffect(() => {
+  const validationObj = {};
 
-    //       case "date":
-    //         return {
-    //           name: props.step.id + "_" + field.sdccolumnid,
-    //           validation: field.mandatory
-    //             ? Yup.date("Must be a date").required("Mandatory Field")
-    //             : Yup.date("Must be a date"),
-    //         };
-    //       case "select":
-    //         return {
-    //           name: props.step.id + "_" + field.sdccolumnid,
-    //           validation: field.mandatory
-    //             ? Yup.string("Must choose a value").required("Mandatory Field")
-    //             : Yup.string("Must choose a value"),
-    //         };
+  props.step.fields
+    .map((field) => {
+      switch (field.columntype) {
+        case "input":
+          // case "auto":
+          return {
+            name: props.step.id + "_" + field.sdccolumnid,
+            validation: field.mandatory
+              ? Yup.string().required("Mandatory Field")
+              : Yup.string(),
+          };
+        case "numeric":
+          return {
+            name: props.step.id + "_" + field.sdccolumnid,
+            validation: field.mandatory
+              ? Yup.number("Must be a number")
+                  .required("Mandatory Field")
+                  .typeError("Must be a number")
+              : Yup.number("Must be a number").typeError("Must be a number"),
+          };
 
-    //       default:
-    //         return null;
-    //     }
-    //   })
-    //   .forEach((elem) => {
-    //     if (elem) {
-    //       validationObj[elem.name] = elem.validation;
-    //     }
-    //   });
+        case "date":
+          return {
+            name: props.step.id + "_" + field.sdccolumnid,
+            validation: field.mandatory
+              ? Yup.date("Must be a date").required("Mandatory Field")
+              : Yup.date("Must be a date"),
+          };
+        case "select":
+          return {
+            name: props.step.id + "_" + field.sdccolumnid,
+            validation: field.mandatory
+              ? Yup.string("Must choose a value").required("Mandatory Field")
+              : Yup.string("Must choose a value"),
+          };
 
-    // setValidationObject(validationObj);
-  }, []);
+        default:
+          return null;
+      }
+    })
+    .forEach((elem) => {
+      if (elem) {
+        validationObj[elem.name] = elem.validation;
+      }
+    });
+
+  setValidationObject(validationObj);
+}, []);
 
   React.useEffect(() => {
     console.log("wizardData", props.wizardData);
@@ -458,13 +443,7 @@ function NewRequest(props) {
                 <Portlet className="kt-portlet--height-fluid kt-portlet--border-bottom-brand">
                   <Formik
                     enableReinitialize={true}
-                    initialValues={{
-          tableData: [
-            {
-             fieldsNamesObject
-            },
-          ],
-        }}
+                    initialValues={fieldsNamesObject}
                     validationSchema={Yup.object(validationObject)}
                     onSubmit={(val) => {
                       console.log("submitting.......");
@@ -477,7 +456,6 @@ function NewRequest(props) {
                       <Form>
                         {props.step.dataset === null &&
                           renderFields(formikProps)}
-
                         <>
                           {props.step.dataset !== null && (
                             <Portlet

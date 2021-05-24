@@ -13,6 +13,7 @@ export default function StepsNewRequest(props) {
   const [current, setCurrent] = useState(0);
   const [wizardData, setWizardData] = useState([]);
   const [columns, setColumns] = useState([]);
+  const [templateData, setTemplateData] = useState(null);
   const parsed = queryString.parse(props.location.search);
   console.log("parsedsteps", parsed);
   console.log("Location:", props.location.search);
@@ -85,6 +86,7 @@ export default function StepsNewRequest(props) {
               <Step title="confirmation" />
             </Steps>
             {current !== data.steps.length && (
+              
               <NewRequest
                 prev={prev}
                 next={next}
@@ -97,6 +99,9 @@ export default function StepsNewRequest(props) {
                 step={data.steps[current]}
                 sdcid={data.steps[current].sdcid}
                 stepsLength={data.steps.length}
+                templateData={templateData}
+                setTemplateData={setTemplateData}
+                
               />
             )}
 

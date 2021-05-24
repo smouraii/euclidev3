@@ -193,7 +193,7 @@ function Datatable(props) {
     setSearchText("");
   };
 
-
+console.log("columnsData",columnsData);
   //map columns for generating columns and search and sort and redirect to details
   React.useEffect(() => {
     if (!columnsData) return;
@@ -209,7 +209,7 @@ function Datatable(props) {
           </Button>
         ),
       },
-      ...columnsData.columns.map((column, index) => ({
+      ...columnsData.pagelist.columns.map((column, index) => ({
         title: column.title,
         dataIndex: column.data,
         key: column.name,
