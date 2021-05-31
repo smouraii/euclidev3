@@ -17,8 +17,6 @@ function FSelect(props) {
   const [page, setPage] = useState(0);
   const [scrollPosition, setScrollPosition] = useState(window.pageYOffset);
   const parsed = queryString.parse(props.location.search);
-  console.log("propsSelect", props);
-  console.log("parsed", parsed);
   //setHasMore to false set page 0 set data null on closing dropdown
 
   const { setFieldValue } = useFormikContext();
@@ -32,7 +30,6 @@ function FSelect(props) {
   function onSearch(val) {
     setFilter(val);
     setPage(0);
-    console.log("search:", val);
   }
   React.useEffect(() => {
     if (props === null) return;
@@ -56,14 +53,13 @@ function FSelect(props) {
         setHasMore(response.data.more);
         setLoading(false);
       });
-    console.log("data", data);
   }, [props, page]);
+console.log(props.name)
 
-  React.useEffect(() => {
-    console.log("selectData", data);
-    console.log(hasMore);
-  }, [data]);
 
+//Initialize Selecte Component with default Value or preselected Value with Formik Value from Template
+//look for InitialValue of Component Select in Docs 
+//setData with TemplateData add Value with default Value
   return (
     <>
       {data && (
@@ -72,24 +68,16 @@ function FSelect(props) {
           <Field
             showSearch
             component={Select}
+            onChange={(val)=> console.log("Onchanged",props.name,val)}
             onSelect={(val) => setFieldValue(props.name, val)}
             name={props.name}
             placeholder={props.label}
+            
             disabled={props.readonly}
             hidden={props.hidden}
             onSearch={onSearch}
             style={{ width: "100%" }}
             onPopupScroll={() => {
-              console.log("window.innerHeight: ", window.innerHeight);
-              console.log(
-                "document.documentElement.scrollTop: ",
-                document.documentElement.scrollTop
-              );
-              console.log(
-                "document.scrollingElement.scrollHeight: ",
-                window.innerHeight
-              );
-              console.log("hihihi:", page);
               if (
                 hasMore !== false &&
                 window.innerHeight + document.documentElement.scrollTop ===

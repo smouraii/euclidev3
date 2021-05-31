@@ -15,9 +15,7 @@ export default function StepsNewRequest(props) {
   const [columns, setColumns] = useState([]);
   const [templateData, setTemplateData] = useState(null);
   const parsed = queryString.parse(props.location.search);
-  console.log("parsedsteps", parsed);
-  console.log("Location:", props.location.search);
-  console.log("wizardDataStep:", wizardData);
+
 
   const Confirmation = () => {
     React.useEffect(() => {
@@ -69,16 +67,13 @@ export default function StepsNewRequest(props) {
 
   const { Step } = Steps;
 
-  React.useEffect(() => {
-    console.log("dataofSteps", data);
-  }, [data]);
-  console.log(data);
   return (
     <div>
       {/* add step save (send a request with save API)  */}
       <Portlet>
         {data !== null && data.steps && (
-          <PortletBody heightfluid={true}>
+          <PortletBody  className="kt-portlet--height-fluid kt-portlet--border-bottom-dark"
+          fluidHeight={true}>
             <Steps style={{ margin: 5 }} current={current}>
               {data.steps.map((step) => (
                 <Steps.Step key={step.title} title={step.title} />

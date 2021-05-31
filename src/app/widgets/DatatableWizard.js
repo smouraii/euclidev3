@@ -161,7 +161,6 @@ export default function DatatableWizard(props) {
       ),
     });
     setColumns(mapColumns);
-    console.log("mapColumns:", mapColumns);
   }, []);
   return (
      <>
