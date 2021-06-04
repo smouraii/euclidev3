@@ -54,12 +54,18 @@ function FSelect(props) {
         setLoading(false);
       });
   }, [props, page]);
-console.log(props.name)
+
+  console.log("TemplateDatFSelect : ", props.templateData);
+  console.log("DataFSelect : ", data);
+  console.log("FormikValues", props.initialValues);
 
 
-//Initialize Selecte Component with default Value or preselected Value with Formik Value from Template
-//look for InitialValue of Component Select in Docs 
-//setData with TemplateData add Value with default Value
+  //Set templateData in Select for InitialValues
+  React.useEffect(() => {
+    if (!props.templateData && props.templateData !== props.initialValues) return;
+    setData([props.templateData]);
+  }, []);
+
   return (
     <>
       {data && (
@@ -68,11 +74,11 @@ console.log(props.name)
           <Field
             showSearch
             component={Select}
-            onChange={(val)=> console.log("Onchanged",props.name,val)}
+            onChange={(val) => console.log("Onchanged", props.name, val)}
             onSelect={(val) => setFieldValue(props.name, val)}
             name={props.name}
             placeholder={props.label}
-            
+            value={props.initialValues}
             disabled={props.readonly}
             hidden={props.hidden}
             onSearch={onSearch}

@@ -194,7 +194,7 @@ const FAuto = (props) => {
       values[props.dependsOnField] &&
       values[props.dependsOnField].trim() !== ""
     ) {
-      console.log("dependonField:", values[props.dependsOnField]);
+      console.log("dependsOnField:", values[props.dependsOnField]);
       redaxios
         .get("http://localhost:8080/EuclideV2/api/getDependFields", {
           params: {
@@ -233,7 +233,7 @@ const FAuto = (props) => {
 };
 
 function NewRequest(props) {
-  const [stepInitialValues, setStepInitialValues] = useState({});
+  const [stepInitialValues, setStepInitialValues] = useState([]);
   const [validationObject, setValidationObject] = useState(null);
   const [data, setData] = useState(null);
 
@@ -316,7 +316,7 @@ React.useEffect(()=>{
 
 
   React.useEffect(() => {
-    console.log("Templateconsole log",props.templateData,props.step,props.step.id,props.sdcid,props.step.id,props.step.fields)
+    console.log("Templateconsole log",props.templateData)
     if (
       !props.templateData ||
       !props.step ||
@@ -329,7 +329,7 @@ React.useEffect(()=>{
     let objToFill = {};
     const stepData = props.templateData[props.step.id];
     if (props.step.dataset) {
-      for (var index = 0; index < props.templateData[props.step.id]; index++) {
+      for (var index = 0; index < props.templateData[props.step.id].lenght; index++) {
         objToFill = props.step.fields.reduce(
           (accumulateur, field) => ({
             ...accumulateur,
@@ -350,8 +350,9 @@ React.useEffect(()=>{
     }
     setStepInitialValues(objToFill);
   }, [props.templateData, props.step]);
+  console.log("initialValues",stepInitialValues)
 
-  const renderFields = () => {
+  const renderFields = (formikProps) => {
     return (
       <>
         <Template
@@ -382,11 +383,13 @@ React.useEffect(()=>{
                   name={props.step.id + "_" + field.sdccolumnid}
                   label={field.columntitle || field.sdccolumnid}
                   readonly={field.readonly}
+                  templateData={props.templateData && props.templateData[props.step.id][props.sdcid][field.sdccolumnid]}
                   hidden={field.hidden}
                   instructionaltext={field.columnInstructionalText}
                   display={field.selectproperties.display}
                   step={props.step.id}
                   refsdcid={field.selectproperties.refsdcid}
+                  initialValues={formikProps.values[props.step.id + "_" + field.sdccolumnid]}
                 />
               );
             case "auto":
@@ -451,7 +454,6 @@ React.useEffect(()=>{
                 enableReinitialize={true}
                 initialValues={stepInitialValues}
                 validationSchema={Yup.object(validationObject)}
-                // setFieldValue={}
                 onSubmit={(val) => {
                   console.log("submitting.......");
                   console.log("val:", val);
@@ -461,7 +463,7 @@ React.useEffect(()=>{
               >
                 {(formikProps) => (
                   <Form>
-                    {props.step.dataset === null && renderFields(formikProps)}
+                    {props.step.dataset === null && renderFields(formikProps) }
                     <>
                       {props.step.dataset !== null && (
                         <Portlet
