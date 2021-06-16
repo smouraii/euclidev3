@@ -15,7 +15,8 @@ export default function StepsNewRequest(props) {
   const [wizardData, setWizardData] = useState([]);
   const [templateData, setTemplateData] = useState(null);
   const parsed = queryString.parse(props.location.search);
-  console.log("props",props)
+  console.log("propsStep",props)
+  console.log("StepWizardData",wizardData)
 
   React.useEffect(() => {
     redaxios

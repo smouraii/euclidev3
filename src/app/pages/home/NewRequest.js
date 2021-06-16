@@ -234,6 +234,8 @@ function NewRequest(props) {
   const [validationObject, setValidationObject] = useState(null);
   const [data, setData] = useState(null);
 
+console.log("propsNewRequest",props)
+
   React.useEffect(() => {
     if (!props.wizardid && !props.fluxId && !props.sdcid) return;
     axios
@@ -408,9 +410,8 @@ function NewRequest(props) {
                   readonly={field.readonly}
                   templateData={
                     props.templateData &&
-                    props.templateData[props.step.id][props.sdcid][
-                      field.sdccolumnid
-                    ]
+                    props.templateData[props.step.id][props.sdcid]
+                    [field.sdccolumnid]
                   }
                   hidden={field.hidden}
                   instructionaltext={field.columnInstructionalText}
@@ -484,10 +485,11 @@ function NewRequest(props) {
                 onSubmit={(val) => {
                   console.log("submitting.......");
                   console.log("val:", val);
-                  console.log("wizardData", props.wizardData);
                   props.setWizardData([{ ...props.wizardData, ...val }]);
+                  console.log("wizardData*", props.wizardData);
                   props.next();
-                }}
+                }
+                }
               >
                 {(formikProps) => (
                   <Form>

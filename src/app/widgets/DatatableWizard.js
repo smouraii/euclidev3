@@ -15,16 +15,15 @@ export default function DatatableWizard(props) {
   const [dataSource, setDataSource] = useState([]);
   const dateFormat = "YYYY-MM-DD hh:mm:ss.S";
 
-  const { setFieldValue, values } = useFormikContext();
-  
+  console.log("propsDatatableWizard",props.sdcid, props.templateData);
 
+  const { setFieldValue, values } = useFormikContext();
 
   const renderswitch = (field, index) => {
     switch (field.columntype) {
       case "input":
         return (
           <div className="d-flex align-baseline">
-
             <FInput
               // onPressEnter={save}
               // onBlur={save}
@@ -50,8 +49,9 @@ export default function DatatableWizard(props) {
               valueIndex={index}
               field={field.sdccolumnid}
               templateData={
-                props.templateData &&
-                props.templateData[props.step][index][props.sdcid][field.sdccolumnid]
+                props.templateData[props.step][index] &&
+                props.templateData[props.step][index][props.sdcid]
+                [field.sdccolumnid]
               }
               readonly={field.readonly}
               hidden={field.hidden}
@@ -149,9 +149,9 @@ export default function DatatableWizard(props) {
         title: "Dataset",
         dataIndex: "dataset",
         key: "multiSelect",
-        render: (text,record, index) => (
+        render: (text, record, index) => (
           <MultipleSelect
-          step={props.step}
+            step={props.step}
             dataset={props.dataset}
             sdcid={props.sdcid}
             valueIndex={index}

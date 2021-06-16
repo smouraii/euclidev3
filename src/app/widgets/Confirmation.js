@@ -4,6 +4,7 @@ import { Form } from "formik";
 
 export default function Confirmation(props) {
   const [columns, setColumns] = useState([]);
+  
 
   React.useEffect(() => {
     const mapColumns = props.wizardData.map((column) => ({

@@ -9,9 +9,7 @@ export default function MultipleSelect(props) {
 
   const { values } = useFormikContext();
   console.log(
-    "MultipleSelectValues",
-    values[props.step],
-    values[props.step][props.valueIndex][props.dataset.sdcid]
+    "MultipleSelectValues",values,
   );
 
   const handleChange = (selectedItems) => {
@@ -34,12 +32,12 @@ export default function MultipleSelect(props) {
       mode="multiple"
       placeholder="Choose a Dataset"
       value={
-        values[props.step] &&
+        values[props.step][props.valueIndex][props.dataset.sdcid] &&
         values[props.step][props.valueIndex][props.dataset.sdcid] !== []
           ? values[props.step][props.valueIndex][props.dataset.sdcid].map(
               (elem, index) => elem.datasetName
             )
-          : values[props.step][props.valueIndex][props.dataset.sdcid]
+          : []
       }
       onChange={handleChange}
       style={{ width: "100%" }}
