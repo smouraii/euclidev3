@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import { Field, ErrorMessage, useFormikContext } from "formik";
 import { Select, message, Spin, Typography } from "antd";
 import axios from "axios";
 import useSWR from "swr";
 import queryString from "query-string";
 import { withRouter } from "react-router-dom";
-import InfiniteScroll from "react-infinite-scroller";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const { Text } = Typography;
 
@@ -19,13 +19,7 @@ function FSelect(props) {
   const parsed = queryString.parse(props.location.search);
   //setHasMore to false set page 0 set data null on closing dropdown
 
-  const { setFieldValue } = useFormikContext();
-
-  const handleScrollPosition = () => {
-    if (scrollPosition) {
-      window.scrollTo(0, scrollPosition);
-    }
-  };
+  const { setFieldValue, values } = useFormikContext();
 
   function onSearch(val) {
     setFilter(val);
@@ -55,16 +49,16 @@ function FSelect(props) {
       });
   }, [props, page]);
 
-  console.log("TemplateDatFSelect : ", props.templateData);
-  console.log("DataFSelect : ", data);
-  console.log("FormikValues", props.initialValues);
+
+  const morePage = () => {
+    setPage(page + 1);
+  };
 
 
-  //Set templateData in Select for InitialValues
   React.useEffect(() => {
-    if (!props.templateData && props.templateData !== props.initialValues) return;
+    if (!props.templateData) return;
     setData([props.templateData]);
-  }, []);
+  }, [props.templateData]);
 
   return (
     <>
@@ -74,22 +68,26 @@ function FSelect(props) {
           <Field
             showSearch
             component={Select}
-            onChange={(val) => console.log("Onchanged", props.name, val)}
+            onChange={(val) => (values[props.name] = val)}
             onSelect={(val) => setFieldValue(props.name, val)}
             name={props.name}
             placeholder={props.label}
-            value={props.initialValues}
+            value={
+              Array.isArray(values[props.step])
+                ? values[props.step][props.valueIndex][props.field]
+                : values[props.name]
+            }
             disabled={props.readonly}
             hidden={props.hidden}
             onSearch={onSearch}
             style={{ width: "100%" }}
-            onPopupScroll={() => {
+            onPopupScroll={(element, useWindow) => {
+              //try to fix this with native JS or a library if i fail to
               if (
                 hasMore !== false &&
                 window.innerHeight + document.documentElement.scrollTop ===
                   document.scrollingElement.scrollHeight
               ) {
-                setScrollPosition(window.pageYOffset);
                 setPage(page + 1);
               }
             }}

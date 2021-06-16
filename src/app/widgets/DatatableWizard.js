@@ -7,23 +7,29 @@ import FDate from "./inputs/FDate";
 import FNumeric from "./inputs/FNumeric";
 import "../../component.css";
 import MultipleSelect from "./MultipleSelect";
+import { useFormikContext } from "formik";
 
 export default function DatatableWizard(props) {
   const [columns, setColumns] = useState([]);
   const [count, setCount] = useState(0);
   const [dataSource, setDataSource] = useState([]);
   const dateFormat = "YYYY-MM-DD hh:mm:ss.S";
-  //
+
+  const { setFieldValue, values } = useFormikContext();
+  
+
+
   const renderswitch = (field, index) => {
     switch (field.columntype) {
       case "input":
         return (
           <div className="d-flex align-baseline">
+
             <FInput
               // onPressEnter={save}
               // onBlur={save}
-              key={props.step + "_" + field.sdccolumnid + "_" + index}
-              name={props.step + "_" + field.sdccolumnid + "_" + index}
+              key={`${props.step}.${index}.${field.sdccolumnid}`}
+              name={`${props.step}.${index}.${field.sdccolumnid}`}
               readonly={field.readonly}
               hidden={field.hidden}
               style={{ width: "100%" }}
@@ -39,8 +45,14 @@ export default function DatatableWizard(props) {
         return (
           <>
             <FSelect
-              key={props.step + "_" + field.sdccolumnid + "_" + index}
-              name={props.step + "_" + field.sdccolumnid + "_" + index}
+              key={`${props.step}.${index}.${field.sdccolumnid}`}
+              name={`${props.step}.${index}.${field.sdccolumnid}`}
+              valueIndex={index}
+              field={field.sdccolumnid}
+              templateData={
+                props.templateData &&
+                props.templateData[props.step][index][props.sdcid][field.sdccolumnid]
+              }
               readonly={field.readonly}
               hidden={field.hidden}
               display={field.selectproperties.display}
@@ -59,8 +71,8 @@ export default function DatatableWizard(props) {
         return (
           <>
             <props.FAuto
-              key={props.step + "_" + field.sdccolumnid + "_" + index}
-              name={props.step + "_" + field.sdccolumnid + "_" + index}
+              key={`${props.step}.${index}.${field.sdccolumnid}`}
+              name={`${props.step}.${index}.${field.sdccolumnid}`}
               readOnly={field.readonly}
               hidden={field.hidden}
               dependsOnField={
@@ -87,8 +99,8 @@ export default function DatatableWizard(props) {
         return (
           <div className="d-flex justify-content-end">
             <FDate
-              key={props.step + "_" + field.sdccolumnid + "_" + index}
-              name={props.step + "_" + field.sdccolumnid + "_" + index}
+              key={`${props.step}.${index}.${field.sdccolumnid}`}
+              name={`${props.step}.${index}.${field.sdccolumnid}`}
               readonly={field.readonly}
               hidden={field.hidden}
               placeholder="please add date"
@@ -106,8 +118,8 @@ export default function DatatableWizard(props) {
         return (
           <div className="d-flex justify-content-end">
             <FNumeric
-              key={props.step + "_" + field.sdccolumnid + "_" + index}
-              name={props.step + "_" + field.sdccolumnid + "_" + index}
+              key={`${props.step}.${index}.${field.sdccolumnid}`}
+              name={`${props.step}.${index}.${field.sdccolumnid}`}
               readonly={field.readonly}
               hidden={field.hidden}
               style={{ width: "100%" }}
@@ -137,11 +149,17 @@ export default function DatatableWizard(props) {
         title: "Dataset",
         dataIndex: "dataset",
         key: "multiSelect",
-        render: (record, index) => (
+        render: (text,record, index) => (
           <MultipleSelect
-            index={index}
+          step={props.step}
             dataset={props.dataset}
-            sdcid={props.dataset.sdcid}
+            sdcid={props.sdcid}
+            valueIndex={index}
+            record={record}
+            // templateData={
+            //     props.templateData &&
+            //     props.templateData[props.step][index][props.sdcid][field.sdccolumnid]
+            //   }
           />
         ),
       });
@@ -155,7 +173,7 @@ export default function DatatableWizard(props) {
         <RemoveRowButton
           style={{ border: "none" }}
           icon="delete"
-          name="tableData"
+          name={props.step}
           index={index}
         />
       ),
@@ -163,23 +181,23 @@ export default function DatatableWizard(props) {
     setColumns(mapColumns);
   }, []);
   return (
-     <>
-        <AddRowButton
-          name="tableData"
-          style={{ marginBottom: 20 }}
-          createNewRow={() => ({})}
-        >
-          Add
-        </AddRowButton>
-        <Table
-          name="tableData"
-          rowKey={(row, index) => "" + index}
-          pagination={false}
-          rowSelection={{
-            columnWidth: 100,
-          }}
-          columns={columns}
-        />
+    <>
+      <AddRowButton
+        name={props.step}
+        style={{ marginBottom: 20 }}
+        createNewRow={() => ({})}
+      >
+        Add
+      </AddRowButton>
+      <Table
+        name={props.step}
+        rowKey={(row, index) => "" + index}
+        pagination={false}
+        rowSelection={{
+          columnWidth: 100,
+        }}
+        columns={columns}
+      />
     </>
   );
 }

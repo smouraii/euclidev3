@@ -1,9 +1,15 @@
 import React from "react";
-import { Field, ErrorMessage } from "formik";
+import { Field, ErrorMessage, useFormikContext } from "formik";
 import { Input } from "antd";
 import { DatePicker } from "antd";
+import moment from "moment";
+
 
 export default function FDate(props) {
+  const { values } = useFormikContext();
+  const dateFormat = "YYYY-MM-DD hh:mm:ss.S";
+
+console.log("date",values[props.name])
   return (
     <div>
       <p htmlFor={props.name} style={{ margin: 0 }}>
@@ -16,6 +22,9 @@ export default function FDate(props) {
         placeholder={props.label}
         disabled={props.readonly}
         hidden={props.hidden}
+        value={values[props.name] && values[props.name] !== "" 
+                ? moment(values[props.name], dateFormat)
+                : null}
         onChange={(val) => console.log(val)}
       ></Field>
       <p style={{ margin: 0 }}>{props.instructionaltext}</p>

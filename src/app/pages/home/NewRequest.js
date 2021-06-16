@@ -14,7 +14,6 @@ import FNumeric from "../../widgets/inputs/FNumeric";
 import * as Yup from "yup";
 import { Button, Select, Input, DatePicker, Typography } from "antd";
 import { Portlet, PortletBody } from "../../partials/content/Portlet";
-import redaxios from "redaxios";
 import queryString from "query-string";
 import { withRouter } from "react-router-dom";
 import moment from "moment";
@@ -31,8 +30,7 @@ const Template = (props) => {
   };
 
   useEffect(() => {
-    if (!props.wizardid || !props.fluxId || !selectedTemplate ) return;
-    console.log("test",selectedTemplate)
+    if (!props.wizardid || !props.fluxId || !selectedTemplate) return;
     axios
       .get(
         `${process.env.REACT_APP_HOST}/EuclideV2/api/flux/wizard/${props.fluxId}/${props.wizardid}/${selectedTemplate}`,
@@ -82,7 +80,7 @@ const FAuto = (props) => {
 
   React.useEffect(() => {
     if (!props.refsdcid) return;
-    redaxios
+    axios
       .get(`${process.env.REACT_APP_HOST}/EuclideV2/api/getSelectOptions`, {
         params: {
           dc: `com.euclide.sdc.${props.refsdcid}`,
@@ -165,7 +163,7 @@ const FAuto = (props) => {
             value={
               values[props.name] !== "" && values[props.name] !== null
                 ? moment(values[props.name], dateFormat)
-                : null
+                : ""
             }
           />
         );
@@ -194,8 +192,7 @@ const FAuto = (props) => {
       values[props.dependsOnField] &&
       values[props.dependsOnField].trim() !== ""
     ) {
-      console.log("dependsOnField:", values[props.dependsOnField]);
-      redaxios
+      axios
         .get("http://localhost:8080/EuclideV2/api/getDependFields", {
           params: {
             sdcId: props.fromSDC,
@@ -237,7 +234,6 @@ function NewRequest(props) {
   const [validationObject, setValidationObject] = useState(null);
   const [data, setData] = useState(null);
 
-
   React.useEffect(() => {
     if (!props.wizardid && !props.fluxId && !props.sdcid) return;
     axios
@@ -251,7 +247,6 @@ function NewRequest(props) {
       })
       .then((res) => setData(res.data));
   }, []);
-
 
   // React.useEffect(() => {
   // const validationObj = {};
@@ -310,47 +305,75 @@ function NewRequest(props) {
   //need to add props.step.id + "_" + to the mappedTemplate for it to work
 
   //validation
-React.useEffect(()=>{
-  console.log("settingInitialValues",stepInitialValues)
-},[stepInitialValues])
-
 
   React.useEffect(() => {
-    console.log("Templateconsole log",props.templateData)
     if (
       !props.templateData ||
       !props.step ||
       !props.sdcid ||
       !props.step.id ||
       !props.step.fields
-    ){
-      return
-    };
+    ) {
+      return;
+    }
+    //add workItems here
+    //[props.step.dataset.sdcid]
     let objToFill = {};
     const stepData = props.templateData[props.step.id];
+    console.log("stepData",stepData)
     if (props.step.dataset) {
-      for (var index = 0; index < props.templateData[props.step.id].lenght; index++) {
-        objToFill = props.step.fields.reduce(
-          (accumulateur, field) => ({
-            ...accumulateur,
-            [props.step.id + "_" + field.sdccolumnid + "_" + index]: stepData[props.sdcid][field.sdccolumnid],
-          }),
-          {}
-        );
-      }
+      objToFill = {
+        [props.step.id]: stepData.map((elem, index) => ({
+          ...props.step.fields.reduce(
+            (accum, field) => ({
+              ...accum,
+              [field.sdccolumnid]: lodash.get(
+                elem[props.sdcid][field.sdccolumnid],
+                "id",
+                elem[props.sdcid][field.sdccolumnid]
+              ),
+            }),
+            {}
+          ),
+          ...(props.step.dataset.sdcid !== null
+            ? {
+                [props.step.dataset.sdcid]: elem[props.step.dataset.sdcid].map(
+                  (dataset) => ({
+                    datasetName: dataset.datasetName,
+                  })
+                ),
+              }
+            : {}),
+        })),
+      };
     } else {
       objToFill = props.step.fields.reduce(
         (accumulateur, field) => ({
           ...accumulateur,
-          [props.step.id + "_" + field.sdccolumnid]: lodash.get(stepData[props.sdcid][field.sdccolumnid],"id",stepData[props.sdcid][field.sdccolumnid]),
+          [props.step.id + "_" + field.sdccolumnid]: lodash.get(
+            stepData[props.sdcid][field.sdccolumnid],
+            "id",
+            stepData[props.sdcid][field.sdccolumnid]
+          ),
         }),
         {}
       );
-      console.log("ObjectToFill",objToFill)
     }
     setStepInitialValues(objToFill);
-  }, [props.templateData, props.step]);
-  console.log("initialValues",stepInitialValues)
+  }, [props.step.id, props.templateData, props.step.dataset]);
+
+  React.useEffect(() => {
+    if (
+      !props.templateData ||
+      !props.step ||
+      !props.sdcid ||
+      !props.step.id ||
+      !props.step.fields
+    ) {
+      return;
+    }
+  }, [props.step.id, stepInitialValues]);
+
 
   const renderFields = (formikProps) => {
     return (
@@ -383,13 +406,17 @@ React.useEffect(()=>{
                   name={props.step.id + "_" + field.sdccolumnid}
                   label={field.columntitle || field.sdccolumnid}
                   readonly={field.readonly}
-                  templateData={props.templateData && props.templateData[props.step.id][props.sdcid][field.sdccolumnid]}
+                  templateData={
+                    props.templateData &&
+                    props.templateData[props.step.id][props.sdcid][
+                      field.sdccolumnid
+                    ]
+                  }
                   hidden={field.hidden}
                   instructionaltext={field.columnInstructionalText}
                   display={field.selectproperties.display}
                   step={props.step.id}
                   refsdcid={field.selectproperties.refsdcid}
-                  initialValues={formikProps.values[props.step.id + "_" + field.sdccolumnid]}
                 />
               );
             case "auto":
@@ -457,13 +484,14 @@ React.useEffect(()=>{
                 onSubmit={(val) => {
                   console.log("submitting.......");
                   console.log("val:", val);
+                  console.log("wizardData", props.wizardData);
                   props.setWizardData([{ ...props.wizardData, ...val }]);
                   props.next();
                 }}
               >
                 {(formikProps) => (
                   <Form>
-                    {props.step.dataset === null && renderFields(formikProps) }
+                    {props.step.dataset === null && renderFields(formikProps)}
                     <>
                       {props.step.dataset !== null && (
                         <Portlet
@@ -474,10 +502,13 @@ React.useEffect(()=>{
                             <div className="row d-flex justify content-center">
                               <div className="col-md-12">
                                 <DatatableWizard
+                                  formikProps={formikProps}
                                   columns={props.step.fields}
                                   step={props.step.id}
                                   dataset={props.step.dataset}
                                   FAuto={FAuto}
+                                  templateData={props.templateData}
+                                  sdcid={props.sdcid}
                                 />
                               </div>
                             </div>

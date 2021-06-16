@@ -7,44 +7,15 @@ import queryString from "query-string";
 import redaxios from "redaxios";
 import { Form, Formik } from "formik";
 import Axios from "axios";
+import Confirmation from "./Confirmation";
 
 export default function StepsNewRequest(props) {
   const [data, setData] = useState(null);
   const [current, setCurrent] = useState(0);
   const [wizardData, setWizardData] = useState([]);
-  const [columns, setColumns] = useState([]);
   const [templateData, setTemplateData] = useState(null);
   const parsed = queryString.parse(props.location.search);
-
-
-  const Confirmation = () => {
-    React.useEffect(() => {
-      const mapColumns = wizardData.map((column) => ({
-        title: column.title,
-        dataIndex: column.data,
-        key: column.name,
-      }));
-      setColumns(mapColumns);
-    }, []);
-    return (
-      <Form>
-        <Table
-          rowKey={(row, index) => "" + index}
-          pagination={false}
-          rowSelection={{
-            columnWidth: 100,
-          }}
-          columns={columns}
-        />
-        <Button type="primary" onClick={() => prev()}>
-          Previous
-        </Button>
-        <Button type="submit" style={{ float: "left" }}>
-          Submit
-        </Button>
-      </Form>
-    );
-  };
+  console.log("props",props)
 
   React.useEffect(() => {
     redaxios
@@ -72,8 +43,10 @@ export default function StepsNewRequest(props) {
       {/* add step save (send a request with save API)  */}
       <Portlet>
         {data !== null && data.steps && (
-          <PortletBody  className="kt-portlet--height-fluid kt-portlet--border-bottom-dark"
-          fluidHeight={true}>
+          <PortletBody
+            className="kt-portlet--height-fluid kt-portlet--border-bottom-dark"
+            fluidHeight={true}
+          >
             <Steps style={{ margin: 5 }} current={current}>
               {data.steps.map((step) => (
                 <Steps.Step key={step.title} title={step.title} />
@@ -81,7 +54,6 @@ export default function StepsNewRequest(props) {
               <Step title="confirmation" />
             </Steps>
             {current !== data.steps.length && (
-              
               <NewRequest
                 prev={prev}
                 next={next}
@@ -93,14 +65,27 @@ export default function StepsNewRequest(props) {
                 key={data.steps[current].id}
                 step={data.steps[current]}
                 sdcid={data.steps[current].sdcid}
+                datset={
+                  data.steps[current].dataset &&
+                  data.steps[current].dataset.sdcid
+                }
                 stepsLength={data.steps.length}
                 templateData={templateData}
                 setTemplateData={setTemplateData}
-                
               />
             )}
+            {current >= data.steps.length && wizardData && (
+              <>
+                {/* <Confirmation
+                  templateData={templateData}
+                  current={current}
+                  data={data}
+                  step=
 
-            {current >= data.steps.length && wizardData && Confirmation()}
+                /> */}
+                <p>hhhhhhhhhhh</p>
+              </>
+            )}
           </PortletBody>
         )}
       </Portlet>
