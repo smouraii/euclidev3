@@ -37,7 +37,7 @@ export default function MultipleSelect(props) {
           ? values[props.step][props.valueIndex][props.dataset.sdcid].map(
               (elem, index) => elem.datasetName
             )
-          : []
+          :  selectedItems
       }
       onChange={handleChange}
       style={{ width: "100%" }}
