@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Select } from "antd";
 import Axios from "axios";
-import { useFormikContext } from "formik";
+import { useFormikContext, Field } from "formik";
 
 export default function MultipleSelect(props) {
   const [selectedItems, setSelectedItems] = useState([]);
   const [data, setData] = useState([]);
 
   const { values } = useFormikContext();
-  console.log(
-    "MultipleSelectValues",values,
-  );
 
   const handleChange = (selectedItems) => {
     setSelectedItems(selectedItems);
@@ -28,16 +25,18 @@ export default function MultipleSelect(props) {
 
   // const filteredOptions = data.filter((o) => !selectedItems.includes(o.name));
   return (
-    <Select
+    <Field
+      component={Select}
       mode="multiple"
       placeholder="Choose a Dataset"
+      name={props.name}
       value={
         values[props.step][props.valueIndex][props.dataset.sdcid] &&
         values[props.step][props.valueIndex][props.dataset.sdcid] !== []
           ? values[props.step][props.valueIndex][props.dataset.sdcid].map(
               (elem, index) => elem.datasetName
             )
-          :  selectedItems
+          : selectedItems
       }
       onChange={handleChange}
       style={{ width: "100%" }}
@@ -47,6 +46,6 @@ export default function MultipleSelect(props) {
           {item.name}
         </Select.Option>
       ))}
-    </Select>
+    </Field>
   );
 }

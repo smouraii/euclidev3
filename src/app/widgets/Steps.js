@@ -15,8 +15,8 @@ export default function StepsNewRequest(props) {
   const [wizardData, setWizardData] = useState([]);
   const [templateData, setTemplateData] = useState(null);
   const parsed = queryString.parse(props.location.search);
-  console.log("propsStep",props)
-  console.log("StepWizardData",wizardData)
+  console.log("propsStep", props);
+  console.log("StepWizardData", wizardData);
 
   React.useEffect(() => {
     redaxios
@@ -77,14 +77,26 @@ export default function StepsNewRequest(props) {
             )}
             {current >= data.steps.length && wizardData && (
               <>
-                {/* <Confirmation
-                  templateData={templateData}
-                  current={current}
-                  data={data}
-                  step=
-
-                /> */}
-                <p>hhhhhhhhhhh</p>
+                {data.steps.map((step) => (
+                  <Confirmation
+                    templateData={templateData}
+                    current={current}
+                    data={data}
+                    wizardData={wizardData}
+                    prev={prev}
+                    step={step}
+                  />
+                ))}
+                <Button
+                  type="primary"
+                  style={{ float: "left" }}
+                  onClick={() => prev()}
+                >
+                  Previous
+                </Button>
+                <Button type="submit" style={{ float: "right" }}>
+                  Submit
+                </Button>
               </>
             )}
           </PortletBody>

@@ -6,6 +6,7 @@ import {
   useField,
   useFormikContext,
   ErrorMessage,
+  submitForm,
 } from "formik";
 import FInput from "../../widgets/inputs/FInput";
 import FSelect from "../../widgets/inputs/FSelect";
@@ -233,8 +234,9 @@ function NewRequest(props) {
   const [stepInitialValues, setStepInitialValues] = useState([]);
   const [validationObject, setValidationObject] = useState(null);
   const [data, setData] = useState(null);
+  const [saveData, setSaveData] = useState(null);
 
-console.log("propsNewRequest",props)
+  console.log("propsNewRequest", props);
 
   React.useEffect(() => {
     if (!props.wizardid && !props.fluxId && !props.sdcid) return;
@@ -304,8 +306,6 @@ console.log("propsNewRequest",props)
 
   // input, select, auto, numeric, date
 
-  //need to add props.step.id + "_" + to the mappedTemplate for it to work
-
   //validation
 
   React.useEffect(() => {
@@ -319,11 +319,10 @@ console.log("propsNewRequest",props)
       return;
     }
     //add workItems here
-    //[props.step.dataset.sdcid]
     let objToFill = {};
     const stepData = props.templateData[props.step.id];
-    console.log("stepData",stepData)
-    if (props.step.dataset) {
+    console.log("stepData", stepData);
+    if (props.step.dataset!==null) {
       objToFill = {
         [props.step.id]: stepData.map((elem, index) => ({
           ...props.step.fields.reduce(
@@ -362,20 +361,23 @@ console.log("propsNewRequest",props)
       );
     }
     setStepInitialValues(objToFill);
+    console.log("StepInitialValues", stepInitialValues);
+    console.log("ObjtoFill", objToFill);
   }, [props.step.id, props.templateData, props.step.dataset]);
 
-  React.useEffect(() => {
-    if (
-      !props.templateData ||
-      !props.step ||
-      !props.sdcid ||
-      !props.step.id ||
-      !props.step.fields
-    ) {
-      return;
-    }
-  }, [props.step.id, stepInitialValues]);
-
+  //save UseEffect
+  // React.useEffect(() => {
+  //   if (
+  //     !props.templateData ||
+  //     !props.step ||
+  //     !props.sdcid ||
+  //     !props.step.id ||
+  //     !props.step.fields
+  //   ) {
+  //     return;
+  //   }
+  //   const mapsaveData=props.wizardData
+  // }, [props.step.id, props.wizardData]);
 
   const renderFields = (formikProps) => {
     return (
@@ -410,8 +412,9 @@ console.log("propsNewRequest",props)
                   readonly={field.readonly}
                   templateData={
                     props.templateData &&
-                    props.templateData[props.step.id][props.sdcid]
-                    [field.sdccolumnid]
+                    props.templateData[props.step.id][props.sdcid][
+                      field.sdccolumnid
+                    ]
                   }
                   hidden={field.hidden}
                   instructionaltext={field.columnInstructionalText}
@@ -471,7 +474,7 @@ console.log("propsNewRequest",props)
       </>
     );
   };
-
+  //add a SubmitForm function and an onclick to everybutton and a save button to confirmation and
   return (
     <>
       <div className="row d-flex justify-content-center">
@@ -485,11 +488,13 @@ console.log("propsNewRequest",props)
                 onSubmit={(val) => {
                   console.log("submitting.......");
                   console.log("val:", val);
-                  props.setWizardData([{ ...props.wizardData, ...val }]);
+                  props.setWizardData({
+                    ...props.wizardData,
+                    [props.step.id]: val,
+                  });
                   console.log("wizardData*", props.wizardData);
-                  props.next();
-                }
-                }
+                  console.log("StepInitialValues", stepInitialValues);
+                }}
               >
                 {(formikProps) => (
                   <Form>
@@ -532,6 +537,8 @@ console.log("propsNewRequest",props)
                         type="primary"
                         htmlType="submit"
                         style={{ float: "right" }}
+                        onClick={() =>{formikProps.submitForm();
+                         props.next()}}
                       >
                         Next
                       </Button>
@@ -539,12 +546,12 @@ console.log("propsNewRequest",props)
                     <Button
                       type="primary"
                       style={{ float: "right" }}
-                      onClick={() =>
-                        axios.post(
-                          process.env.REACT_APP_HOST + "/EuclideV2/Savelink",
-                          { param1: "param1", param2: "param2" }
-                        )
-                      }
+                      // onClick={() =>
+                      //   axios.post(
+                      //     process.env.REACT_APP_HOST + "/EuclideV2/Savelink",
+                      //     { param1: "param1", param2: "param2" }
+                      //   )
+                      // }
                     >
                       Save
                     </Button>

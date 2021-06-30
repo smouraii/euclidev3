@@ -15,6 +15,7 @@ function FSelect(props) {
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState("");
   const [page, setPage] = useState(0);
+  const [selectedItem,setSelectedItem]= useState([])
   const [scrollPosition, setScrollPosition] = useState(window.pageYOffset);
   const parsed = queryString.parse(props.location.search);
   //setHasMore to false set page 0 set data null on closing dropdown
@@ -25,6 +26,14 @@ function FSelect(props) {
     setFilter(val);
     setPage(0);
   }
+
+
+
+  const morePage = () => {
+    setPage(page + 1);
+  };
+
+
   React.useEffect(() => {
     if (props === null) return;
     axios
@@ -50,9 +59,7 @@ function FSelect(props) {
   }, [props, page]);
 
 
-  const morePage = () => {
-    setPage(page + 1);
-  };
+ 
 
 
   React.useEffect(() => {

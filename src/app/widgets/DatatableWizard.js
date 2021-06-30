@@ -11,22 +11,14 @@ import { useFormikContext } from "formik";
 
 export default function DatatableWizard(props) {
   const [columns, setColumns] = useState([]);
-  const [count, setCount] = useState(0);
-  const [dataSource, setDataSource] = useState([]);
   const dateFormat = "YYYY-MM-DD hh:mm:ss.S";
 
-  console.log("propsDatatableWizard",props.sdcid, props.templateData);
-
-  const { setFieldValue, values } = useFormikContext();
-
-  const renderswitch = (field, index) => {
+  const rendercolumn = (field, index) => {
     switch (field.columntype) {
       case "input":
         return (
           <div className="d-flex align-baseline">
             <FInput
-              // onPressEnter={save}
-              // onBlur={save}
               key={`${props.step}.${index}.${field.sdccolumnid}`}
               name={`${props.step}.${index}.${field.sdccolumnid}`}
               readonly={field.readonly}
@@ -142,7 +134,7 @@ export default function DatatableWizard(props) {
       key: field.sdccolumnid,
       title: field.columntitle || field.sdccolumnid,
       dataIndex: field.sdccolumnid,
-      render: (text, record, index) => renderswitch(field, index),
+      render: (text, record, index) => rendercolumn(field, index),
     }));
     if (props.dataset !== null && props.dataset.sdcid !== null) {
       mapColumns.push({
@@ -156,10 +148,7 @@ export default function DatatableWizard(props) {
             sdcid={props.sdcid}
             valueIndex={index}
             record={record}
-            // templateData={
-            //     props.templateData &&
-            //     props.templateData[props.step][index][props.sdcid][field.sdccolumnid]
-            //   }
+            name={props.dataset.sdcid}
           />
         ),
       });
